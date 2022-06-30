@@ -1,0 +1,1 @@
+//Component For Singular Pokemon card

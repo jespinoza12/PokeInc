@@ -1,0 +1,18 @@
+{
+  "name": "poke-inc-backend",
+  "version": "1.0.0",
+  "description": "Poke Inc Database",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Julian E Espinoza",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.1",
+    "nodemon": "^2.0.18"
+  }
+}

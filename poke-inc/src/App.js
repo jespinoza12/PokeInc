@@ -1,25 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from "./Components/Navbar"
+import Home from "./pages/home"
+import Login from "./pages/login"
+import Signup from "./pages/signup"
+
+
 
 function App() {
+  //For Api Data
+  const [cards, setCards] = useState([]);
+
+  let Component
+  switch (window.location.pathname) {
+    case "/" :
+      Component = <Home />
+      break
+    case "/Signup" :
+      Component = <Signup />
+      break
+    case "/Login" :
+      Component = <Login />
+      break
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+      <Navbar />
+      </div>
+      {Component}
+
+      <footer>
+      <p>Copyright 2022 Julian Espinoza, Bungie</p>
+      </footer>
     </div>
-  );
+  );  
 }
 
 export default App;
