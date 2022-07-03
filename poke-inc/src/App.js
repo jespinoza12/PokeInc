@@ -1,39 +1,31 @@
-import './App.css';
 import { useEffect, useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./Components/Navbar"
-import Home from "./pages/home"
-import Login from "./pages/login"
+import Login from "./pages/Login"
 import Signup from "./pages/signup"
 
 
 
 function App() {
-  //For Api Data
-  const [cards, setCards] = useState([]);
 
+  
+  //For Api Data
   let Component
   switch (window.location.pathname) {
-    case "/" :
-      Component = <Home />
-      break
-    case "/Signup" :
-      Component = <Signup />
-      break
-    case "/Login" :
+    case "/login" :
       Component = <Login />
+      break
+    case "/" :
+      Component = <Signup />
       break
   }
 
   return (
-    <div className="App">
+    <div>
       <div>
-      <Navbar />
-      </div>
       {Component}
-
-      <footer>
-      <p>Copyright 2022 Julian Espinoza, Bungie</p>
+      </div>
+      <footer class="page-footer font-small blue">
+        <div class="footer-copyright text-center py-3">© 2022 Copyright: Julian Espinoza</div>
       </footer>
     </div>
   );  
