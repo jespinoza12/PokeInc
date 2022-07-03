@@ -1,19 +1,17 @@
 {
-  "name": "poke-inc-backend",
+  "name": "login-and-register-backend",
   "version": "1.0.0",
-  "description": "Poke Inc Database",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Julian E Espinoza",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "mongoose": "^6.4.1",
-    "nodemon": "^2.0.18"
+    "express": "^4.17.1",
+    "mongoose": "^5.12.10"
   }
 }

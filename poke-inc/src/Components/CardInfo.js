@@ -1,1 +1,0 @@
-//Extention of Card that shows card info more clearly
