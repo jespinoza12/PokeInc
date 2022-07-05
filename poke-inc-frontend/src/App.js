@@ -16,11 +16,6 @@ function App() {
 
   const [ user, setLoginUser] = useState({})
 
-  useEffect(() => {
-    setLoginUser(user);
-  }, [setLoginUser])
-  
-
   return (
     <div className="App">
       <Router>
@@ -39,20 +34,17 @@ function App() {
           </Route>
           <Route exact path="/home">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser}/>
-              : <Login setLoginUser={setLoginUser}/>
+              <Homepage setLoginUser={setLoginUser}/>
             }
           </Route>
           <Route exact path="/collection">
             {
-              user && user._id ? <Collection setLoginUser={setLoginUser}/>
-              : <Login setLoginUser={setLoginUser}/>
+              <Collection setLoginUser={setLoginUser}/>  
             }
           </Route>
           <Route exact path="/profile">
             {
-              user && user._id ? <Profile setLoginUser={setLoginUser}/>
-              : <Login setLoginUser={setLoginUser}/>
+              <Profile setLoginUser={setLoginUser}/>       
             }
           </Route> 
         </Switch>

@@ -10,7 +10,6 @@ const Homepage = ({setLoginUser}) => {
             <div className="homepage">
                 <Navbar />
                 <h1>Hello Welcome to my Home page</h1>
-                <div className="button" onClick={() => setLoginUser({})}>Logout</div>
             </div>
         </div>
     )

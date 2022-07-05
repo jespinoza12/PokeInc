@@ -7,7 +7,6 @@ const Collection = ({setLoginUser}) => {
         <div>
             <div className="homepage">
                 <Navbar />
-                <div className="button" onClick={() => setLoginUser({})} >Logout</div>
             </div>
         </div>
     )

@@ -7,7 +7,6 @@ const Profile = ({setLoginUser}) => {
             <div className="homepage">
                 <Navbar />
                 <h1>Welecome to Profile</h1>
-            <div className="button" onClick={() => setLoginUser({})} >Logout</div>
             </div>
     )
 }

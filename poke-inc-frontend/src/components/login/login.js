@@ -26,6 +26,9 @@ const Login = ({ setLoginUser}) => {
             alert(res.data.message)
             setLoginUser(res.data.user)
             localStorage.setItem('user', res.data.user)
+            if (history.current === "http://localhost:3000/logout"){
+                history.push("/home")
+            }
         })
     }
 
