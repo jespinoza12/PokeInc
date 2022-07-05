@@ -3,5 +3,10 @@
 }
 
 .width {
-    width: 99%;
+    width: 100%;
 }
+
+.border {
+    border-radius: 10px;
+}
+
