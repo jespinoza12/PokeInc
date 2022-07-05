@@ -8,10 +8,11 @@ const Homepage = ({setLoginUser}) => {
     return (
         <div>
             <div className="homepage">
-                <Navbar />
                 <h1>Hello Welcome to my Home page</h1>
+                <Navbar />
             </div>
         </div>
+        
     )
 }
 
