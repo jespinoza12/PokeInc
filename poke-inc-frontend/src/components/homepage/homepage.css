@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 1550px;
-    height: 770px;
+    width: calc(100vw);
+    height: calc(100vh - 20px);
     border-radius: 20px;
     box-shadow: 0 0 5px grey;
     background: white;
