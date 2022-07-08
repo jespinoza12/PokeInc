@@ -26,14 +26,11 @@ const Login = ({ setLoginUser}) => {
             alert(res.data.message)
             setLoginUser(res.data.user)
             localStorage.setItem('user', res.data.user)
-            if (history.current === "http://localhost:3000/logout"){
-                history.push("/home")
-            }
         })
     }
 
     return (
-        <div className="login">
+        <div className="login logincenter">
             <h1>Login</h1>
             <input type="text" name="email" value={user.email} onChange={handleChange} placeholder="Enter your Email"></input>
             <input type="password" name="password" value={user.password} onChange={handleChange}  placeholder="Enter your Password" ></input>

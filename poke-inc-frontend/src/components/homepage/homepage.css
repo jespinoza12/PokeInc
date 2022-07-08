@@ -4,9 +4,8 @@
     align-items: center;
     width: calc(100vw);
     height: calc(100vh - 1vh);
-    border-radius: 20px;
     box-shadow: 0 0 5px grey;
-    background: white;
+    background: lightblue;
     position: relative
 }
 

@@ -16,11 +16,37 @@ mongoose.connect("mongodb+srv://Frosty:7piercerS@pokecluster.fec6buu.mongodb.net
 
 const userSchema = new mongoose.Schema({
     name: String,
+    username: String,
     email: String,
-    password: String
+    password: String,
+    picture: String
+
 })
 
 const User = new mongoose.model("User", userSchema)
+
+app.post("/edit", (req,res) => {
+    const { id, name, email, username, password, picture} = req.body
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            res.send({message: "User already registerd"})
+        } else {
+            const user = new User({
+                name,
+                username,
+                email,
+                password,
+                picture: ''
+            })
+            user.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send( { message: "Successfully Registered, Please login now." })
+                }
+            })
+        }
+})})
 
 //Routes
 app.post("/login", (req, res)=> {
@@ -39,15 +65,17 @@ app.post("/login", (req, res)=> {
 }) 
 
 app.post("/register", (req, res)=> {
-    const { name, email, password} = req.body
+    const { name, email, password, username} = req.body
     User.findOne({email: email}, (err, user) => {
         if(user){
             res.send({message: "User already registerd"})
         } else {
             const user = new User({
                 name,
+                username,
                 email,
-                password
+                password,
+                picture: ''
             })
             user.save(err => {
                 if(err) {
