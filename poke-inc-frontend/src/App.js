@@ -97,7 +97,7 @@ function App() {
                 <label>Name: </label>
                 <input type='text' placeholder='name filter'
                 value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-        </div>
+            </div>
             </div>
              <Cards setLoginUser={setLoginUser} card = {cards}/> 
             
