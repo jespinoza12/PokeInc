@@ -3,8 +3,6 @@ body{
     background-color: lightgray;
   }
 
-
-  
   .container{
     border: solid 1px black;
     display: inline-block;
@@ -17,7 +15,6 @@ body{
     text-align: center;
     align-items: center;
   }
-  
   
   .footer {
     position: fixed;

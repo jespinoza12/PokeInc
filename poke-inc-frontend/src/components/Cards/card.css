@@ -5,12 +5,12 @@ body{
   .container{
     border: solid 1px lightblue;
     justify-content: center;
+    align-items: center;
     display: inline-block;
-    margin-left: 160px;
+    margin-left: 155px;
     margin-top: 20px;
     margin-bottom: 20px;
     margin-right: -100px;
-    padding: 10px;
     width: 270px;
     border-radius: 5px;
     background-color: lightblue;

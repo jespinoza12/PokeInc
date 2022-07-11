@@ -10,23 +10,40 @@ import Profile from "./components/profile/profile"
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
+// import Colorless from './images/Colorless-attack.png'
+// import Dark from './images/Darkness-attack.png'
+// import Fighting from './images/Fighting-attack.png'
+// import Fire from './images/Fire-attack.png'
+// import Grass from './images/Grass-attack.png'
+// import Electric from './images/Lightning-attack.png'
+// import Steel from './images/Metal-attack.png'
+// import Psychic from './images/Psychic-attack.png'
+// import Water from './images/Water-attack.png'
 import Navbar from './components/navbar/navbar';
-
-
-
 
 function App() {
 
+  //State Variable
   const [user, setLoginUser] = useState({})
   const [cards, setCards] = useState([])
+  const [filtered, setFiltered] = useState(false);
+  const [filteredCards, setFilteredCards] = useState([])
   const [pageNum, setPageNum] = useState(1)
+
+
+  //Filters
+  const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
 
   pokemon.configure({apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63'})
   
+
+
   useEffect(() => {
     getData()
-  }, [pageNum]);
+    getFilteredCards()
+    getCardsByType()
+  }, [pageNum], []);
 
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
@@ -40,30 +57,64 @@ function App() {
 
   useEffect(() => {
     console.log(`Name: ${nameFilter}`)
-    var tempCards = cards.filter((card) => { 
-      return card.name.toLowerCase().includes(nameFilter.toLowerCase())
-      }
-    );
 
-    if (nameFilter == ""){
+    if (nameFilter === ""){
+      setFiltered(false)
+      setPageNum(1)
       getData()
+      getFilteredCards()
     }else{
-      setCards(tempCards);
+      setPageNum(1)
+      setFiltered(true);
+      getFilteredCards();
+      console.log(cards)
     }
 
   }, [nameFilter]);
 
 
+  useEffect(() => {
+    console.log(`type: ${typeFilter}`)
+    
+    if (typeFilter === ""){
+      setFiltered(false);
+      getData()
+      setPageNum(1)
+    }else{
+      getCardsByType();
+      setPageNum(1)
+      setFiltered(true);
+      console.log(cards)
+    }
+
+  }, [typeFilter]);
+
+
   const getData = () => {
     pokemon.card.where({pageSize: 50, page: pageNum })
     .then(data =>  {
-      //Page 1 in the Api
       setCards(data.data)
       console.log(data.data)
-      console.log(cards)
+    })
+  }
+
+  const getFilteredCards = () => {
+    pokemon.card.where({ q: "name:" + nameFilter.toLowerCase(), pageSize: 50, page: pageNum  })
+    .then(result => {
+    setFilteredCards(result.data)
+    console.log(result.data)
+
   })
   }
- 
+
+  const getCardsByType = () => {
+    pokemon.card.where({ q: "types:" + typeFilter.toLowerCase(), pageSize: 50, page: pageNum})
+    .then(result => {
+    console.log(result.data)
+    setFilteredCards(result.data)
+  })
+  }
+
   return (
     <div className="App">
       <Router>
@@ -92,14 +143,33 @@ function App() {
               <button onClick={decreasePageNum}>Previous Page</button>
               <button onClick={increasePageNum}>Next Page</button>
             </div>
-            <div className='filters'>
+            <h2 className='center'>Filters</h2>
+            <div className='filters center'>
               <div className='center'>
-                <label>Name: </label>
-                <input type='text' placeholder='name filter'
+                <label>Name: </label> <input type='text' placeholder='name filter'
                 value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                <p> </p>
+                <label>Type: </label> <input type='text' placeholder='type filter'
+                value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
             </div>
+            {/* <div class="center">
+              <img id='1' src={Colorless} onClick={clickHandler}/>
+              <img id='2' src={Grass} onClick={clickHandler}/>
+              <img id='3' src={Fire} onClick={clickHandler}/>
+              <img id='4' src={Electric} onClick={clickHandler}/>
+              <img id='5' src={Fighting} onClick={clickHandler}/>
+              <img id='6' src={Dark} onClick={clickHandler}/>
+              <img id='7' src={Water} onClick={clickHandler}/>
+              <img id='8' src={Steel} onClick={clickHandler}/>
+              <img id='9' src={Psychic} onClick={clickHandler}/>
+              <button onClick={clearFilters}>Clear Filters</button>
+            </div> */}
             </div>
-             <Cards setLoginUser={setLoginUser} card = {cards}/> 
+            <div>
+            {
+             filtered ? <Cards setLoginUser={setLoginUser} card = {filteredCards}/> : <Cards setLoginUser={setLoginUser} card = {cards}/> 
+            }
+            </div>
             
           </Route>
           <Route path="/profile">
