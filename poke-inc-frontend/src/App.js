@@ -80,7 +80,7 @@ function App() {
       setFiltered(false);
       getData()
       setPageNum(1)
-    }else{
+    } else{
       getCardsByType();
       setPageNum(1)
       setFiltered(true);
@@ -141,6 +141,7 @@ function App() {
             <Navbar/>
             <div class="pagination">
               <button onClick={decreasePageNum}>Previous Page</button>
+              <h2 className='center'>Page: {pageNum} </h2>
               <button onClick={increasePageNum}>Next Page</button>
             </div>
             <h2 className='center'>Filters</h2>
