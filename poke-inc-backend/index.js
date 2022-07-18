@@ -6,7 +6,6 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors())
-
 mongoose.connect("mongodb+srv://Frosty:7piercerS@pokecluster.fec6buu.mongodb.net/user?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -26,10 +25,9 @@ const userSchema = new mongoose.Schema({
 const User = new mongoose.model("User", userSchema)
 
 app.post("/edit", (req, res) => {
-    const { _id, name, email, username, password, picture} = req.body
-    User.findOneAndUpdate( {_id: `ObjectId(${_id})`}, {name: name, email: email, 
-    username: username, password: password, picture: picture})           
-})
+    const {id, username, name, email, password, picture} = req.body
+    
+});
 
 //Routes
 app.post("/login", (req, res)=> {
