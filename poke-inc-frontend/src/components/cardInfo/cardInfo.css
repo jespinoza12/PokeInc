@@ -1,8 +1,22 @@
-div{
-    width: 100vw,
-
-}
 .pokeBall{
     width: 50px;
 }
+
+
+.center{
+    align-items: center;
+    justify-content: center;
+}
+
+.container-1{
+    width: 100vw;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-2{
+    width: 93vw;
+}
+
 

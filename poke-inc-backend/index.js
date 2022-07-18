@@ -6,6 +6,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors())
+mongoose.set('useFindAndModify', false);
 mongoose.connect("mongodb+srv://Frosty:7piercerS@pokecluster.fec6buu.mongodb.net/user?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -25,15 +26,15 @@ const userSchema = new mongoose.Schema({
 const User = new mongoose.model("User", userSchema)
 
 app.post("/edit", (req, res) => {
-    const {username, name, email, password, picture} = req.body
-    try {
-        User.findOneAndUpdate({ email: email }, {$set:{name: name, username: username, password: password, picture: picture}});
-        res.send("Update Complete")
-    }
-    catch (e){
-        print(e);
-    }
-    
+    const {id, username, name, email, password, picture} = req.body
+    User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: password, email: email, picture: picture }, function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send("Update Complete")
+        }
+    })
+        
 });
 
 //Routes 

@@ -7,16 +7,47 @@ const CardInfo = ({card}) => {
   
 
 return (
-    <div className=''>
+    <div className='container-1'>
         <Navbar/>
-        <img className='pokeBall m-3' alt='' src={logo}/><label><h2 className=''>{card.nationalPokedexNumbers[0]}</h2></label>
-        <div className='cardImage m-3'>
+        <h1 className='center'>{card.name}</h1>
+
+        <p className='center'><img className='pokeBall m-1 center' alt='' src={logo}/><label><h2 className=''>{card.nationalPokedexNumbers[0]}</h2></label></p>
+        <div className='cardImage m-3 center'>
             <img src={card.images.large} alt={card.name}></img>
         </div>
-        <div className='pokemonDetails'>
-            <label><h1>{card.name}, Lvl: {card.level}</h1></label>
-            <label>HP: <h2>{card.hp}</h2></label>
-            <label>Attacks: <h2>{card.attacks[0].name}</h2><p>{card.attacks[0].text}</p></label>
+        <div className='container-2 m-5 center'>
+            <p><label>Type: <h2>{card.types}</h2></label></p>
+            <p>
+                <label>Attacks: 
+                    <h2>{card.attacks[0].name}</h2>
+                    <p>{card.attacks[0].text}</p>
+                </label>
+            </p>
+            <p>
+                <label>Rarity: 
+                    <h2>{card.rarity}</h2>
+                </label>
+            </p>
+            <p>
+                <label>Rarity: 
+                    <h2>{card.rarity}</h2>
+                </label>
+            </p>
+            <p>
+                <label>Average Price: 
+                    <h2>${card.cardmarket.prices.averageSellPrice}</h2>
+                </label>
+            </p>
+            <p>
+                <label>Card Set: 
+                    <h2>{card.set.name}</h2>
+                </label>
+            </p>
+            <p>
+                <label>Card Series: 
+                    <h2>{card.set.series}</h2>
+                </label>
+            </p>            
         </div>
     </div>
     )
