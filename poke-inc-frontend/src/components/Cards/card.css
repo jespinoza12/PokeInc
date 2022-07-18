@@ -20,7 +20,7 @@ body{
     text-align: center;
     align-items: center;
   }
-  
+
   .footer {
     position: fixed;
     left: 0;
@@ -49,8 +49,8 @@ body{
     flex-wrap: wrap;
   }
   
-  .userImage img{
-    width: 50px;
+  .cardImage img{
+    width: 400px;
   }
   
   .userDetails{

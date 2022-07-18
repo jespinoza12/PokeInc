@@ -1,25 +1,16 @@
-import './App.css'
 import React from 'react';
 import Homepage from "./components/homepage/homepage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/login/login"
 import Register from "./components/register/register"
 import Cards from "./components/Cards/Cards"
-import CardInfo from "./components/Cards/CardInfo"
+import CardInfo from "./components/cardInfo/CardInfo"
 import Profile from "./components/profile/profile"
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
-// import Colorless from './images/Colorless-attack.png'
-// import Dark from './images/Darkness-attack.png'
-// import Fighting from './images/Fighting-attack.png'
-// import Fire from './images/Fire-attack.png'
-// import Grass from './images/Grass-attack.png'
-// import Electric from './images/Lightning-attack.png'
-// import Steel from './images/Metal-attack.png'
-// import Psychic from './images/Psychic-attack.png'
-// import Water from './images/Water-attack.png'
 import Navbar from './components/navbar/navbar';
+import logo from './images/gif.gif'
 
 function App() {
 
@@ -29,6 +20,8 @@ function App() {
   const [filtered, setFiltered] = useState(false);
   const [filteredCards, setFilteredCards] = useState([])
   const [pageNum, setPageNum] = useState(1)
+  const [clickedCard, setCard] = useState([])
+  const [isLoading, setLoading] = useState(false);
 
 
   //Filters
@@ -91,28 +84,38 @@ function App() {
 
 
   const getData = () => {
+    setLoading(true)
     pokemon.card.where({pageSize: 50, page: pageNum })
     .then(data =>  {
+      setLoading(false)
       setCards(data.data)
       console.log(data.data)
     })
   }
 
   const getFilteredCards = () => {
+    setLoading(true)
     pokemon.card.where({ q: "name:" + nameFilter.toLowerCase(), pageSize: 50, page: pageNum  })
     .then(result => {
     setFilteredCards(result.data)
+    setLoading(false)
     console.log(result.data)
 
   })
   }
 
   const getCardsByType = () => {
+    setLoading(true)
     pokemon.card.where({ q: "types:" + typeFilter.toLowerCase(), pageSize: 50, page: pageNum})
     .then(result => {
-    console.log(result.data)
+      console.log(result.data)
+      setLoading(false)
     setFilteredCards(result.data)
   })
+  }
+
+  const getCard = (card) => {
+    setCard(card)
   }
 
   return (
@@ -140,9 +143,9 @@ function App() {
             <h1 className='center'>Welcome to the Pokemon Collection</h1>
             <Navbar/>
             <div class="pagination">
-              <button onClick={decreasePageNum}>Previous Page</button>
+              <button onClick={decreasePageNum} className="btn btn-dark">Previous Page</button>
               <h2 className='center'>Page: {pageNum} </h2>
-              <button onClick={increasePageNum}>Next Page</button>
+              <button onClick={increasePageNum} className="btn btn-dark">Next Page</button>
             </div>
             <h2 className='center'>Filters</h2>
             <div className='filters center'>
@@ -153,32 +156,24 @@ function App() {
                 <label>Type: </label> <input type='text' placeholder='type filter'
                 value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
             </div>
-            {/* <div class="center">
-              <img id='1' src={Colorless} onClick={clickHandler}/>
-              <img id='2' src={Grass} onClick={clickHandler}/>
-              <img id='3' src={Fire} onClick={clickHandler}/>
-              <img id='4' src={Electric} onClick={clickHandler}/>
-              <img id='5' src={Fighting} onClick={clickHandler}/>
-              <img id='6' src={Dark} onClick={clickHandler}/>
-              <img id='7' src={Water} onClick={clickHandler}/>
-              <img id='8' src={Steel} onClick={clickHandler}/>
-              <img id='9' src={Psychic} onClick={clickHandler}/>
-              <button onClick={clearFilters}>Clear Filters</button>
-            </div> */}
             </div>
             <div>
             {
-             filtered ? <Cards setLoginUser={setLoginUser} card = {filteredCards}/> : <Cards setLoginUser={setLoginUser} card = {cards}/> 
+              isLoading ? <img className='pokeBall' src={logo} alt="loading..."/> : 
+              filtered ? <Cards setLoginUser={setLoginUser} card = {filteredCards} rawr = {getCard}/> 
+              : <Cards setLoginUser={setLoginUser} card = {cards} rawr={getCard}/> 
             }
             </div>
-            
           </Route>
           <Route path="/profile">
           {
               user && user._id ? <Profile user = {user}/>
               : <Login setLoginUser={setLoginUser}/>
             }
-          </Route> 
+          </Route>
+          <Route path="/cardInfo">
+            <CardInfo card={clickedCard}/>
+          </Route>  
         </Switch>
       </Router>
       <div class="footer">

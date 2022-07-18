@@ -33,7 +33,6 @@ const Register = () => {
         } else {
             alert("invlid input")
         }
-        
     }
 
     return (
