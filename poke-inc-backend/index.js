@@ -25,11 +25,18 @@ const userSchema = new mongoose.Schema({
 const User = new mongoose.model("User", userSchema)
 
 app.post("/edit", (req, res) => {
-    const {id, username, name, email, password, picture} = req.body
+    const {username, name, email, password, picture} = req.body
+    try {
+        User.findOneAndUpdate({ email: email }, {$set:{name: name, username: username, password: password, picture: picture}});
+        res.send("Update Complete")
+    }
+    catch (e){
+        print(e);
+    }
     
 });
 
-//Routes
+//Routes 
 app.post("/login", (req, res)=> {
     const { email, password} = req.body
     User.findOne({ email: email}, (err, user) => {

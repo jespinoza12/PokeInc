@@ -9,9 +9,8 @@ const Profile = ({setLoginUser, user}) => {
     const history = useHistory()
 
     const [ updatedUser, setUser] = useState({
-        id: user._id,
         name: "",
-        email:"",
+        email: user.email,
         password:"",
         reEnterPassword: "",
         picture: ""
@@ -27,13 +26,11 @@ const Profile = ({setLoginUser, user}) => {
 
 
     const editUser = () => {
-        const {id, name, email,username, password, reEnterPassword } = updatedUser
-        if(id && name && email && username && password && (password === reEnterPassword)){
+        const {name, email, username, password, reEnterPassword, picture} = updatedUser
+        if(name && picture && email && username && password && (password === reEnterPassword)){
             axios.post("http://localhost:9002/edit", updatedUser)
             .then( res => {
                 alert(res.data.message)
-                history.push("/")
-
             })
         } else {
             alert("invlid input")
@@ -42,7 +39,7 @@ const Profile = ({setLoginUser, user}) => {
 
     return (
         <div>
-            <h1 className="center">Welecome {user.name}</h1>
+            <h1 className="center">Welcome {user.name}</h1>
             <Navbar/>
                 <label><img alt="" class="image" src={user.picture}></img></label>
                 <label> Name <input type="name" name="name" value={updatedUser.name} placeholder={user.name} onChange={handleChange} ></input></label>
