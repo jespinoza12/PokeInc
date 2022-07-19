@@ -71,7 +71,7 @@ const Profile = ({setLoginUser, user}) => {
                     </label>
                 </p>
                 <p className="center">
-                    <label> Picture Url 
+                    <label> Picture Url &nbsp; 
                         <input type="picture" name="picture" value={User.picture} placeholder={user.picture} onChange={handleChange}/>
                     </label>
                     <button type="button" className="btn-primary m-5" onClick={editUser}>Submit</button>

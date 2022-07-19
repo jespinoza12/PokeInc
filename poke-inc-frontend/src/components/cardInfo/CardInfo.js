@@ -12,7 +12,7 @@ const CardInfo = ({ card }) => {
             <Navbar />
             <h1 className='m-2 center pokeFont'>{card.name}</h1>
             <p className='m-2 center pokeFont'><img className='pokeBall center-1' src={logo} alt="loading..."/><label><h2 className=''>#{card.nationalPokedexNumbers[0]}</h2></label></p>
-            <div class="container detailBox center-1">
+            <div class="container detailBox center-1 mb-5">
                 <div class="row">
                     <div class="col-sm-3">
                         <div className='float-left center-1 img'>
