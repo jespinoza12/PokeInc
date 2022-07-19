@@ -1,22 +1,31 @@
-.pokeBall{
+.body {
+    width: 100vw;
+    height: 100vh;
+    background-color: lightblue;
+}
+.pokeBall {
     width: 50px;
 }
-
-
-.center{
+.center {
     align-items: center;
     justify-content: center;
 }
 
-.container-1{
-    width: 100vw;
+.container-1 {
+    width: 500px;
     display: inline-block;
     align-items: center;
     justify-content: center;
 }
 
-.container-2{
-    width: 93vw;
+.detailBox {
+    font-family: Pokemon;
+    border: solid 10px salmon;
+    width: 800px;
+    background-color: lightgray;
+    border-radius: 50px;
 }
 
-
+.img img {
+    width: 450px;
+}
