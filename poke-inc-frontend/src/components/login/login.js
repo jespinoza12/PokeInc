@@ -30,7 +30,7 @@ const Login = ({ setLoginUser}) => {
     }
 
     return (
-        <div className="center m-5">
+        <div className="center m-5 pokeFont">
             <div className="login">
                 <h1>Login</h1>
                 <input type="text" name="email" value={user.email} onChange={handleChange} placeholder="Enter your Email"></input>

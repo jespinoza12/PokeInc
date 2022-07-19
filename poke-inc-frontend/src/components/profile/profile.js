@@ -41,17 +41,41 @@ const Profile = ({setLoginUser, user}) => {
     }
 
     return (
-        <div>
-            <h1 className="center">Welcome {user.name}</h1>
+        <div className="pokeFont">
             <Navbar/>
+                <h1 className="center">Welcome, {user.name}</h1>
                 <img alt="" class="image center-1" src={user.picture}></img>
-                <p className="center"><label> Name <input type="name" name="name" value={User.name} placeholder={user.name} onChange={handleChange} ></input></label></p>
-                <p className="center"><label> Username <input type="username" name="username" value={User.username} placeholder={user.username} onChange={handleChange}></input></label>
-                <label> Email <input type="email" name="email" value={User.email} placeholder={user.email} onChange={handleChange}></input></label></p>
-                <p className="center"><label> Password <input type="password" name="password" value={User.password} placeholder="password" onChange={handleChange}></input></label>
-                <label> Re-enter password <input type="password" name="reEnterPassword" value={User.reEnterPassword} placeholder="password" onChange={handleChange}></input></label></p>
-                <p className="center"><label> Picture Url <input type="picture" name="picture" value={User.picture} placeholder={user.picture} onChange={handleChange}></input></label>
-                <button type="button" className="btn-primary m-5" onClick={editUser}>Submit</button></p>
+                <p className="center">
+                    <label> Name &nbsp;
+                        <input type="name" name="name" value={User.name} placeholder={user.name} onChange={handleChange} />
+                    </label>
+                </p>
+                <p className="center">
+                    <label> Username &nbsp;
+                        <input type="username" name="username" value={User.username} placeholder={user.username} onChange={handleChange}/>
+                        &nbsp;
+                    </label>
+                    <label> Email &nbsp;
+                        <input type="email" name="email" value={User.email} placeholder={user.email} onChange={handleChange}/>
+                        &nbsp;
+                    </label>
+                </p>
+                <p className="center">
+                    <label> Password &nbsp;
+                        <input type="password" name="password" value={User.password} placeholder="password" onChange={handleChange}/>
+                        &nbsp;
+                    </label>
+                    &nbsp;
+                    <label> Re-enter password &nbsp;
+                        <input type="password" name="reEnterPassword" value={User.reEnterPassword} placeholder="password" onChange={handleChange}/>
+                    </label>
+                </p>
+                <p className="center">
+                    <label> Picture Url 
+                        <input type="picture" name="picture" value={User.picture} placeholder={user.picture} onChange={handleChange}/>
+                    </label>
+                    <button type="button" className="btn-primary m-5" onClick={editUser}>Submit</button>
+                </p>
         </div>
             
     )

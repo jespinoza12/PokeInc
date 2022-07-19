@@ -3,6 +3,10 @@
     height: 100vh;
     background-color: lightblue;
 }
+
+.pokeFont {
+    font-family: Pokemon;
+}
 .pokeBall {
     width: 50px;
 }
@@ -20,7 +24,7 @@
 
 .detailBox {
     font-family: Pokemon;
-    border: solid 10px salmon;
+    border: solid 15px salmon;
     width: 800px;
     background-color: lightgray;
     border-radius: 50px;

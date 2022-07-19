@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
+import { useHistory } from "react-router-dom"
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const history = useHistory()
 
   pokemon.configure({apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63'})
   
@@ -45,7 +47,11 @@ function App() {
   }
   const decreasePageNum = () => {
     const decreasedPageNum = pageNum - 1
-    setPageNum(decreasedPageNum)
+    if (decreasedPageNum < 1){
+      setPageNum(1)
+    }else{
+      setPageNum(decreasedPageNum)
+    }
   }
 
   useEffect(() => {
@@ -114,6 +120,8 @@ function App() {
   })
   }
 
+ 
+
   const getCard = (card) => {
     setCard(card)
   }
@@ -140,29 +148,31 @@ function App() {
             }
           </Route> 
           <Route path={"/collection"}>
-            <h1 className='center'>Welcome to the Pokemon Collection</h1>
-            <Navbar/>
-            <div class="pagination">
-              <button onClick={decreasePageNum} className="btn btn-dark">Previous Page</button>
-              <h2 className='center'>Page: {pageNum} </h2>
-              <button onClick={increasePageNum} className="btn btn-dark">Next Page</button>
-            </div>
-            <h2 className='center'>Filters</h2>
-            <div className='filters center'>
-              <div className='center'>
-                <label>Name: </label> <input type='text' placeholder='name filter'
-                value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                <p> </p>
-                <label>Type: </label> <input type='text' placeholder='type filter'
-                value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-            </div>
-            </div>
-            <div>
-            {
-              isLoading ? <img className='pokeBall' src={logo} alt="loading..."/> : 
-              filtered ? <Cards setLoginUser={setLoginUser} card = {filteredCards} rawr = {getCard}/> 
-              : <Cards setLoginUser={setLoginUser} card = {cards} rawr={getCard}/> 
-            }
+            <div className='pokeFont'>
+              <h1 className='center'>Welcome to the Pokemon Collection</h1>
+              <Navbar/>
+              <div class="pagination">
+                <button onClick={decreasePageNum} className="btn btn-dark">Previous Page</button>
+                <h2 className='center'>Page: {pageNum} </h2>
+                <button onClick={increasePageNum} className="btn btn-dark">Next Page</button>
+              </div>
+              <h2 className='center'>Filters</h2>
+              <div className='filters center'>
+                <div className='center'>
+                  <label>Name: </label> <input type='text' placeholder='name filter'
+                  value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                  <p> </p>
+                  <label>Type: </label> <input type='text' placeholder='type filter'
+                  value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+              </div>
+              </div>
+              <div>
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..."/> : 
+                filtered ? <Cards setLoginUser={setLoginUser} card = {filteredCards} rawr = {getCard}/> 
+                : <Cards setLoginUser={setLoginUser} card = {cards} rawr={getCard}/> 
+              }
+              </div>
             </div>
           </Route>
           <Route path="/profile">

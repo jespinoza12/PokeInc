@@ -37,7 +37,7 @@ const Register = () => {
     }
 
     return (
-        <div className="center m-5">
+        <div className="center m-5 pokeFont">
             <div className="register">
                 {console.log("User", user)}
                 <h1>Register</h1>

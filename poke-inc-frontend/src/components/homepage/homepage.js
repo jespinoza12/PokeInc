@@ -4,7 +4,7 @@ import Navbar from "../navbar/navbar";
 const Homepage = ({setLoginUser}) => {
 
     return (
-        <div className="homepage">
+        <div className="homepage pokeFont">
             <h1>Hello Welcome to my Home page</h1>
             <Navbar />  
         </div>

@@ -15,7 +15,7 @@ const Card = ({cards, rawr}) => {
 
 return (
           <div>
-            <img className='mt-2' onClick={cardHandler} src={cards.images.small} alt={cards.name}></img>
+            <img className='mt-2 btn ' onClick={cardHandler} src={cards.images.small} alt={cards.name}></img>
           </div>
     )}
 

@@ -10,8 +10,8 @@ const CardInfo = ({ card }) => {
     return (
         <body className='body'>
             <Navbar />
-            <h1 className='m-2 center'>{card.name}</h1>
-            <p className='m-2 center'><img className='pokeBall' alt='' src={logo} /><label><h2 className=''>{card.nationalPokedexNumbers[0]}</h2></label></p>
+            <h1 className='m-2 center pokeFont'>{card.name}</h1>
+            <p className='m-2 center pokeFont'><img className='pokeBall center-1' src={logo} alt="loading..."/><label><h2 className=''>#{card.nationalPokedexNumbers[0]}</h2></label></p>
             <div class="container detailBox center-1">
                 <div class="row">
                     <div class="col-sm-3">
@@ -40,6 +40,7 @@ const CardInfo = ({ card }) => {
                                 <label> Average Price:
                                     <h3>${card.cardmarket.prices.averageSellPrice}</h3>
                                 </label>
+                                <a class="btn btn-primary" href="/collection">&#8678; Back</a>
                             </p>
                         </p>
                     </div>
