@@ -151,20 +151,21 @@ function App() {
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
               <Navbar/>
-              <div class="pagination">
-                <button onClick={decreasePageNum} className="btn btn-dark">Previous Page</button>
-                <h2 className='center'>Page: {pageNum} </h2>
-                <button onClick={increasePageNum} className="btn btn-dark">Next Page</button>
-              </div>
               <h2 className='center'>Filters</h2>
-              <div className='filters center'>
-                <div className='center'>
-                  <label>Name: </label> <input type='text' placeholder='name filter'
-                  value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                  <p> </p>
-                  <label>Type: </label> <input type='text' placeholder='type filter'
-                  value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-              </div>
+                <div className='filters center'>
+                  <div className='center'>
+                    <label>Name: </label> <input type='text' placeholder='name filter'
+                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                    <p> </p>
+                    <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
+                    value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                  
+                    <div class="pagination center mt-2">
+                      <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                      <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                      <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                    </div>
+                </div>
               </div>
               <div>
               {

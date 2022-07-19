@@ -2,8 +2,6 @@ import React from 'react'
 import Card from "./Card"
 import "./card.css"
 
-import { useHistory } from "react-router-dom"
-
 const Cards = ({card, rawr}) => {
   
 
