@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useReducer } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./navbar.css"
-const Navbar = (setLoginUser) => {
+const Navbar = (setLoginUser, user) => {
 
 
   return (
@@ -21,7 +21,13 @@ const Navbar = (setLoginUser) => {
         <a class="nav-link color-me" href="/profile">Profile</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link color-me" href="/createDeck">Create Deck</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link color-me" href="/">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link color-me" href="/profile"></a>
       </li>
     </ul>
   </div>

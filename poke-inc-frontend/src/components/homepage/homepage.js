@@ -1,12 +1,12 @@
 import React from "react"
 import "./homepage.css"
 import Navbar from "../navbar/navbar";
-const Homepage = ({setLoginUser}) => {
+const Homepage = ({setLoginUser, user}) => {
 
     return (
         <div className="homepage pokeFont">
             <h1>Hello Welcome to my Home page</h1>
-            <Navbar />  
+            <Navbar user = {user}/>  
         </div>
         
     )

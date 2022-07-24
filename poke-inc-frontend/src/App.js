@@ -5,6 +5,7 @@ import Login from "./components/login/login"
 import Register from "./components/register/register"
 import Cards from "./components/Cards/Cards"
 import CardInfo from "./components/cardInfo/CardInfo"
+import CreateDeck from "./components/deckCreation/Deck"
 import Profile from "./components/profile/profile"
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -18,6 +19,7 @@ function App() {
   //State Variable
   const [user, setLoginUser] = useState({})
   const [cards, setCards] = useState([])
+  const [deck, setDeck] = useState([]);
   const [filtered, setFiltered] = useState(false);
   const [filteredCards, setFilteredCards] = useState([])
   const [pageNum, setPageNum] = useState(1)
@@ -32,19 +34,20 @@ function App() {
 
   pokemon.configure({apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63'})
   
-
-
+  //Gets data whenever page is changed
   useEffect(() => {
     getData()
     getFilteredCards()
     getCardsByType()
   }, [pageNum], []);
 
+  //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
     setPageNum(increasedPageNum)
     console.log(pageNum)
   }
+  //Decreases Page num
   const decreasePageNum = () => {
     const decreasedPageNum = pageNum - 1
     if (decreasedPageNum < 1){
@@ -53,7 +56,7 @@ function App() {
       setPageNum(decreasedPageNum)
     }
   }
-
+  //Name Filter
   useEffect(() => {
     console.log(`Name: ${nameFilter}`)
 
@@ -70,8 +73,7 @@ function App() {
     }
 
   }, [nameFilter]);
-
-
+  //Type Filter
   useEffect(() => {
     console.log(`type: ${typeFilter}`)
     
@@ -87,8 +89,7 @@ function App() {
     }
 
   }, [typeFilter]);
-
-
+  //Gets Cards
   const getData = () => {
     setLoading(true)
     pokemon.card.where({pageSize: 50, page: pageNum })
@@ -98,7 +99,7 @@ function App() {
       console.log(data.data)
     })
   }
-
+  //Gets Filtered Cards
   const getFilteredCards = () => {
     setLoading(true)
     pokemon.card.where({ q: "name:" + nameFilter.toLowerCase(), pageSize: 50, page: pageNum  })
@@ -109,7 +110,7 @@ function App() {
 
   })
   }
-
+  //Gets card by type
   const getCardsByType = () => {
     setLoading(true)
     pokemon.card.where({ q: "types:" + typeFilter.toLowerCase(), pageSize: 50, page: pageNum})
@@ -120,8 +121,7 @@ function App() {
   })
   }
 
- 
-
+  //Rawr for cards
   const getCard = (card) => {
     setCard(card)
   }
@@ -132,7 +132,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser}/>
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user}/>
               : <Login setLoginUser={setLoginUser}/>
             }
           </Route>
@@ -144,13 +144,13 @@ function App() {
           </Route>
           <Route path="/home">
             {
-              <Homepage setLoginUser={setLoginUser}/>
+              <Homepage setLoginUser={setLoginUser} user = {user}/>
             }
           </Route> 
           <Route path={"/collection"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
-              <Navbar/>
+              <Navbar user={user.picture}/>
               <h2 className='center'>Filters</h2>
                 <div className='filters center'>
                   <div className='center'>
@@ -184,7 +184,36 @@ function App() {
           </Route>
           <Route path="/cardInfo">
             <CardInfo card={clickedCard}/>
-          </Route>  
+          </Route> 
+          <Route path="/createDeck">
+            <div className='pokeFont'>
+                <h1 className='center'>Create A Deck</h1>
+                <Navbar user={user.picture}/>
+                <h2 className='center'>Filters</h2>
+                  <div className='filters center'>
+                    <div className='center'>
+                      <label>Name: </label> <input type='text' placeholder='name filter'
+                      value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                      <p> </p>
+                      <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
+                      value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                    
+                      <div class="pagination center mt-2">
+                        <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                        <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                        <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                      </div>
+                  </div>
+                </div>
+                <div>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..."/> : 
+                  filtered ? <CreateDeck setLoginUser={setLoginUser} card = {filteredCards} rawr = {getCard}/> 
+                  : <CreateDeck setLoginUser={setLoginUser} card = {cards} rawr={getCard}/> 
+                }
+                </div>
+          </div>
+          </Route>   
         </Switch>
       </Router>
       <div class="footer">

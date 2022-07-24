@@ -19,11 +19,45 @@ const userSchema = new mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    picture: String
+    picture: String,
 
 })
 
+const deckSchema = new mongoose.Schema({
+    name: String,
+    userId: String, 
+    cards: [{cardId:String, cardPic:String}], 
+    standard: String, 
+    comments: [{commenterUsername:String, comment:String, date:String}]
+})
+
 const User = new mongoose.model("User", userSchema)
+const Deck = new mongoose.model("Decks", deckSchema)
+
+app.post("/createDeck", (req, res) => {
+    const {name, userId, cards, standard} = req.body
+    Deck.findOne({name: name, id:userId}, (err, deck) => {
+        if(deck){
+            res.send({message: "You already have this deckname"})
+        } else {
+            const deck = new Deck({
+                name,
+                userId,
+                cards,
+                standard,
+                comments: ''
+            })
+            deck.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send( { message: "Successfully Created" })
+                }
+            })
+        }
+    })        
+});
+
 
 app.post("/edit", (req, res) => {
     const {id, username, name, email, password, picture} = req.body
