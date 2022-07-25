@@ -1,9 +1,6 @@
-import React, { useState } from "react"
-import axios from "axios"
-import { useHistory } from "react-router-dom"
+import React from "react"
 
-const Card = ({cards, rawr, user, deckname, deckcards, num}) => {
-  const history = useHistory()
+const Card = ({cards, rawr, num}) => {
 
   
   function cardHandler(e){  

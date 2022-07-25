@@ -10,15 +10,12 @@ import CreateDeck from "./components/deckCreation/Deck"
 import Profile from "./components/profile/profile"
 import DeckView from './components/DeckView/DeckView'
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
 import axios from "axios"
-import { useHistory } from "react-router-dom"
-
 function App() {
-  const history = useHistory()
   //State Variable
   const [user, setLoginUser] = useState({})
   const [userId1, setUserId] = useState("")
@@ -45,15 +42,13 @@ function App() {
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   pokemon.configure({ apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63' })
-  const path = `/myDecks/${userId1}`
-
   //Gets data whenever page is changed
   useEffect(() => {
-    if (filter == "Energy") {
+    if (filter === "Energy") {
       getAllEnergy()
-    } else if (filter == "Pokemon") {
+    } else if (filter === "Pokemon") {
       getAllPokemon()
-    } else if (filter == "Trainer") {
+    } else if (filter === "Trainer") {
       getAllTrainer()
     } else {
       getData()

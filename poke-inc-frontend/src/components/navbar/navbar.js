@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import "./navbar.css"
 
 const Navbar = (setLoginUser, picture, userId) => {
@@ -31,7 +31,7 @@ const Navbar = (setLoginUser, picture, userId) => {
         <a class="nav-link color-me" href="/">Logout</a>
       </li>
     </ul>
-    <a href="/profile"><img class="width1 rounded-circle" src={picture}/></a>
+    <a href="/profile"><img class="width1 rounded-circle" alt="" src={picture}/></a>
   </div>
 </nav>
   );
