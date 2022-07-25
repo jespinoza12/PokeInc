@@ -1,8 +1,8 @@
 import React, { useReducer } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./navbar.css"
-const Navbar = (setLoginUser, user) => {
 
+const Navbar = (setLoginUser, picture) => {
+  picture = localStorage.getItem("picture")
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border">
@@ -18,18 +18,19 @@ const Navbar = (setLoginUser, user) => {
         <a class="nav-link color-me" href="/collection">All Cards</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color-me" href="/profile">Profile</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link color-me" href="/createDeck">Create Deck</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color-me" href="/">Logout</a>
+        <a class="nav-link color-me" href="/myDecks">My Decks</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color-me" href="/profile"></a>
+        <a class="nav-link color-me" href="/allDecks">All Decks</a>
+      </li>
+      <li class="nav-item navbar-right">
+        <a class="nav-link color-me" href="/">Logout</a>
       </li>
     </ul>
+    <a  class="rounded" href="/profile"><img class="rounded" src={picture}/></a>
   </div>
 </nav>
   );

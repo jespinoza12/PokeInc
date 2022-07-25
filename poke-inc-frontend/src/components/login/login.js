@@ -25,7 +25,11 @@ const Login = ({ setLoginUser}) => {
         .then(res => {
             alert(res.data.message)
             setLoginUser(res.data.user)
-            localStorage.setItem('user', res.data.user)
+            localStorage.setItem('user', res.data.user._id)
+            localStorage.setItem('user1', res.data.user)
+            localStorage.setItem('username', res.data.user.username)
+            localStorage.setItem('picture', res.data.user.picture)
+
         })
     }
 

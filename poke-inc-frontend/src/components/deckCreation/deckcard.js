@@ -1,16 +1,19 @@
-import React from 'react'
+import React, { useState } from "react"
+import axios from "axios"
 import { useHistory } from "react-router-dom"
 
-const Card = ({cards, rawr}) => {
+const Card = ({cards, rawr, user, deckname, deckcards, num}) => {
   const history = useHistory()
+
   
   function cardHandler(e){  
     e.preventDefault();
     console.log('Card Clicked!');
-    console.log(cards);
-    rawr(cards);
-    
-
+    if (num === 60){
+      alert("Cannot Add More than 60")
+    }else {
+      rawr(cards)
+    }
 
   }
 

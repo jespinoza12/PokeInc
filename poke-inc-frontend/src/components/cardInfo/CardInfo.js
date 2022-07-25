@@ -4,12 +4,12 @@ import "./cardInfo.css"
 import Navbar from '../navbar/navbar'
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const CardInfo = ({ card }) => {
+const CardInfo = ({ card, picture }) => {
 
 
     return (
         <body className='body'>
-            <Navbar />
+            <Navbar picture = {picture} />
             <h1 className='m-2 center pokeFont'>{card.name}</h1>
             <p className='m-2 center pokeFont'><img className='pokeBall center-1' src={logo} alt="loading..."/><label><h2 className=''>#{card.nationalPokedexNumbers[0]}</h2></label></p>
             <p>:</p>

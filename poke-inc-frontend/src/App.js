@@ -12,35 +12,50 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
+import axios from "axios"
 import { useHistory } from "react-router-dom"
-
 function App() {
-
+  const history = useHistory()
   //State Variable
   const [user, setLoginUser] = useState({})
+  const [userId1, setUserId] = useState("")
+  const [username1, setUsername] = useState("")
+  const [picture, setPicture] = useState("")
+
   const [cards, setCards] = useState([])
-  const [deck, setDeck] = useState([]);
+  const [num, setNum] = useState(0)
+  const [deck, setDeck] = useState([])
+  const [filter, setFilter] = useState("")
+  const [deckname, setDeckName] = useState("");
   const [filtered, setFiltered] = useState(false);
+  const [canCreate, setCanCreate] = useState(false);
   const [filteredCards, setFilteredCards] = useState([])
   const [pageNum, setPageNum] = useState(1)
   const [clickedCard, setCard] = useState([])
   const [isLoading, setLoading] = useState(false);
-
-
+  const [Deck, setDeck1] = useState({});
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
-  const history = useHistory()
-
   pokemon.configure({apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63'})
-  
   //Gets data whenever page is changed
   useEffect(() => {
-    getData()
-    getFilteredCards()
-    getCardsByType()
+    if (filter == "Energy"){
+      getAllEnergy()
+    }else if(filter == "Pokemon"){
+      getAllPokemon()
+    }else if (filter == "Trainer"){
+      getAllTrainer()
+    }else {
+      getData()
+      getFilteredCards()
+      getCardsByType()
+    }
+    setUserId(localStorage.getItem('user'))
+    setUsername(localStorage.getItem('username'))
+    setPicture(localStorage.getItem('picture'))
+    setLoginUser(localStorage.getItem('user1'))
   }, [pageNum], []);
-
   //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
@@ -59,19 +74,18 @@ function App() {
   //Name Filter
   useEffect(() => {
     console.log(`Name: ${nameFilter}`)
-
     if (nameFilter === ""){
       setFiltered(false)
       setPageNum(1)
       getData()
       getFilteredCards()
     }else{
+      setFilter("")
       setPageNum(1)
       setFiltered(true);
       getFilteredCards();
       console.log(cards)
     }
-
   }, [nameFilter]);
   //Type Filter
   useEffect(() => {
@@ -89,6 +103,10 @@ function App() {
     }
 
   }, [typeFilter]);
+  useEffect(() => {
+    console.log(`DeckName: ${deckname}`)
+  
+  }, [deckname]);
   //Gets Cards
   const getData = () => {
     setLoading(true)
@@ -119,13 +137,84 @@ function App() {
       setLoading(false)
     setFilteredCards(result.data)
   })
-  }
+}
+  const getAllPokemon = () => {
+    setLoading(true)
+    setFilter("Pokemon")
 
+    pokemon.card.where({ q: "supertype:Pokémon", pageSize: 50, page: pageNum})
+    .then(result => {
+      console.log(result.data)
+      setLoading(false)
+    setFilteredCards(result.data)
+    setFiltered(true);
+
+  })
+}
+  const getAllEnergy = () => {
+    setLoading(true)
+    setFilter("Energy")
+
+    pokemon.card.where({ q: "supertype:Energy", pageSize: 50, page: pageNum})
+    .then(result => {
+      console.log(result.data)
+      setLoading(false)
+    setFilteredCards(result.data)
+    setFiltered(true);
+
+  })
+}
+  const getAllTrainer = () => {
+    setLoading(true)
+    setFilter("Trainer")
+    pokemon.card.where({ q: "supertype:Trainer", pageSize: 50, page: pageNum})
+    .then(result => {
+      console.log(result.data)
+      setLoading(false)
+    setFilteredCards(result.data)
+    setFiltered(true);
+
+  })
+}
   //Rawr for cards
   const getCard = (card) => {
     setCard(card)
   }
+  const addCardToDeck = (card) => {
+    if (num > 60){
+      alert("You have more than 60 cards")
+      setNum(60)
+    }else {
+      setDeck(current => [...current, card]);
+      console.log(deck)
+      setNum(num + 1)
+    }
+  }
+  const createDeck = () => {
+    console.log(Deck)
+    if(canCreate === true){
+      axios.post("http://localhost:9002/createDeck", Deck)
+      .then(res => {
+          alert(res.data.message)
+      })
+      setCanCreate(false)
+  } else {
+      alert("Update First")
+  }
+  }
+  const updateDeck = () => {
+    setDeck1({
+      name: deckname,
+      userId : userId1,
+      username : username1,
+      cards: deck,
+      standard: '',
+    })
+    console.log(Deck)
+    setCanCreate(true);
+    alert("Ready to create")
 
+  }
   return (
     <div className="App">
       <Router>
@@ -144,13 +233,13 @@ function App() {
           </Route>
           <Route path="/home">
             {
-              <Homepage setLoginUser={setLoginUser} user = {user}/>
+              <Homepage setLoginUser={setLoginUser} picture = {picture}/>
             }
           </Route> 
           <Route path={"/collection"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
-              <Navbar user={user.picture}/>
+              <Navbar user={picture}/>
               <h2 className='center'>Filters</h2>
                 <div className='filters center'>
                   <div className='center'>
@@ -159,12 +248,16 @@ function App() {
                     <p> </p>
                     <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
                     value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                  
                     <div class="pagination center mt-2">
                       <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
                       <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
                       <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
                     </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                      </div>
                 </div>
               </div>
               <div>
@@ -183,33 +276,43 @@ function App() {
             }
           </Route>
           <Route path="/cardInfo">
-            <CardInfo card={clickedCard}/>
+            <CardInfo card={clickedCard} picture = {picture}/>
           </Route> 
           <Route path="/createDeck">
             <div className='pokeFont'>
                 <h1 className='center'>Create A Deck</h1>
-                <Navbar user={user.picture}/>
-                <h2 className='center'>Filters</h2>
+                <Navbar picture={picture}/>
                   <div className='filters center'>
+                    <p>Number of cards {num}/60</p>
+                    <p>Note: Update Before Creation</p>
+                    <p className='center'><label className='center'>Deck Name: <input onChange={(e) => setDeckName(e.target.value)}></input></label></p>
                     <div className='center'>
                       <label>Name: </label> <input type='text' placeholder='name filter'
                       value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
                       <p> </p>
                       <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
                       value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                    
                       <div class="pagination center mt-2">
                         <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
                         <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
                         <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
                       </div>
+                      <p></p>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                      </div>
+                      <p></p>
+                      <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
+                      <button type="button" class="btn btn-secondary" onClick={createDeck}>Create Deck</button>
                   </div>
                 </div>
                 <div>
                 {
                   isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..."/> : 
-                  filtered ? <CreateDeck setLoginUser={setLoginUser} card = {filteredCards} rawr = {getCard}/> 
-                  : <CreateDeck setLoginUser={setLoginUser} card = {cards} rawr={getCard}/> 
+                  filtered ? <CreateDeck setLoginUser={setLoginUser} card = {filteredCards} rawr = {addCardToDeck} user = {user} deckname = {deckname} deckCards = {deck} num = {num}/> 
+                  : <CreateDeck setLoginUser={setLoginUser} card = {cards} rawr={addCardToDeck} user = {userId1} deckname = {deckname} deckCard = {deck} num = {num}/> 
                 }
                 </div>
           </div>
@@ -222,5 +325,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
