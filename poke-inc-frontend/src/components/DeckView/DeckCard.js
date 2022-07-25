@@ -1,11 +1,13 @@
 import React from 'react'
 import { useHistory } from "react-router-dom"
 
-const DeckCard = ({deck}) => {
+const DeckCard = ({deck, rawr}) => {
   const history = useHistory()
   
   function onClick(e){  
     e.preventDefault();
+    rawr(deck)
+    history.push("/deckInfo")
 
   }
 

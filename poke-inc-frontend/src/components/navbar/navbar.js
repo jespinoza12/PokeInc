@@ -31,7 +31,7 @@ const Navbar = (setLoginUser, picture, userId) => {
         <a class="nav-link color-me" href="/">Logout</a>
       </li>
     </ul>
-    <a  class="rounded" href="/profile"><img class="rounded" src={picture}/></a>
+    <a href="/profile"><img class="width1 rounded-circle" src={picture}/></a>
   </div>
 </nav>
   );

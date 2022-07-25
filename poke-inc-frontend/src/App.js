@@ -4,12 +4,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/login/login"
 import Register from "./components/register/register"
 import Cards from "./components/Cards/Cards"
+import DeckInfo from './components/DeckInfo/deckInfo';
 import CardInfo from "./components/cardInfo/CardInfo"
 import CreateDeck from "./components/deckCreation/Deck"
 import Profile from "./components/profile/profile"
 import DeckView from './components/DeckView/DeckView'
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
@@ -36,6 +37,7 @@ function App() {
   const [filteredCards, setFilteredCards] = useState([])
   const [pageNum, setPageNum] = useState(1)
   const [clickedCard, setCard] = useState([])
+  const [clickedDeck, setClickedDeck] = useState([])
   const [isLoading, setLoading] = useState(false);
   const [Deck, setDeck1] = useState({});
   //Filters
@@ -187,6 +189,9 @@ function App() {
   const getCard = (card) => {
     setCard(card)
   }
+  const getDeck = (deck) => {
+    setClickedDeck(deck)
+  }
   const addCardToDeck = (card) => {
     if (num > 60){
       alert("You have more than 60 cards")
@@ -262,7 +267,6 @@ function App() {
     setDeckDescription("")
   }
 
-
   return (
     <div className="App">
       <Router>
@@ -331,6 +335,7 @@ function App() {
                 <h1 className='center'>Create A Deck</h1>
                 <Navbar picture={picture} userId = {userId1}/>
                   <div className='filters center'>
+                    <p></p>
                     <p>Number of cards {num}/60</p>
                     <p>Note: Update Before Creation</p>
                     <p className='center'><label className='center'>Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label></p>
@@ -373,17 +378,36 @@ function App() {
           </Route>   
           <Route path="/allDecks">
             <div className='pokeFont'>
-              <h1 className='center'>All Decks</h1>
-              <Navbar picture={picture} userId = {userId1}/>
-              <DeckView decks={decks}/>
+            {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..."/> : 
+                <div>
+                  <h1 className='center'>All Decks</h1>
+                  <Navbar picture={picture} userId = {userId1}/>
+                  <DeckView decks={decks} rawr={getDeck}/>
+                </div>
+              }
             </div>
           </Route> 
           <Route path='/myDecks'>
             <div className='pokeFont'>
-              <h1 className='center'>My Decks</h1>
-              <Navbar picture={picture} userId = {userId1}/>
-              <DeckView decks={mydecks}/>
+            {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..."/> : 
+                <div>
+                  <h1 className='center'>My Decks</h1>
+                  <Navbar picture={picture} userId = {userId1}/>
+                  <DeckView decks={mydecks} rawr={getDeck}/>
+                </div>
+              }
             </div>
+          </Route> 
+          <Route path="/deckInfo">
+                <div className='pokeFont'>
+                  <h1 className='center'>Deck Name: {clickedDeck.name}</h1>
+                  <Navbar picture={picture} userId = {userId1}/>
+                  <h1 className='center'>Created By: {clickedDeck.username}</h1>
+                  <p className='center'>Description: {clickedDeck.description}</p>
+                  <DeckInfo deck = {clickedDeck}/>
+                </div>
           </Route> 
         </Switch>
       </Router>

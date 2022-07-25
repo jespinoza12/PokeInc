@@ -3,7 +3,7 @@ import "./login.css"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
 
-const Login = ({ setLoginUser}) => {
+const Login = ({ setLoginUser, LoggedIn}) => {
 
     const history = useHistory()
 
@@ -26,7 +26,7 @@ const Login = ({ setLoginUser}) => {
             alert(res.data.message)
             setLoginUser(res.data.user)
             localStorage.setItem('user', res.data.user._id)
-            localStorage.setItem('user1', res.data.user)
+            localStorage.setItem('login', true)
             localStorage.setItem('username', res.data.user.username)
             localStorage.setItem('picture', res.data.user.picture)
 
