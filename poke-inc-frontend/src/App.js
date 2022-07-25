@@ -7,6 +7,7 @@ import Cards from "./components/Cards/Cards"
 import CardInfo from "./components/cardInfo/CardInfo"
 import CreateDeck from "./components/deckCreation/Deck"
 import Profile from "./components/profile/profile"
+import DeckView from './components/DeckView/DeckView'
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
@@ -20,8 +21,11 @@ function App() {
   const [user, setLoginUser] = useState({})
   const [userId1, setUserId] = useState("")
   const [username1, setUsername] = useState("")
+  const [deckFlavor, setDeckDescription] = useState("")
   const [picture, setPicture] = useState("")
-
+  const [mydecks, setMyDecks] = useState([])
+  const [deckStandard, setDeckStandard] = useState("")
+  const [decks, setDecks] = useState([])
   const [cards, setCards] = useState([])
   const [num, setNum] = useState(0)
   const [deck, setDeck] = useState([])
@@ -38,6 +42,8 @@ function App() {
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   pokemon.configure({apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63'})
+  const path = `/myDecks/${userId1}`
+
   //Gets data whenever page is changed
   useEffect(() => {
     if (filter == "Energy"){
@@ -51,10 +57,11 @@ function App() {
       getFilteredCards()
       getCardsByType()
     }
+    getAllDecks()
+    getMyDecks()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
-    setLoginUser(localStorage.getItem('user1'))
   }, [pageNum], []);
   //Increases Page num
   const increasePageNum = () => {
@@ -208,20 +215,61 @@ function App() {
       userId : userId1,
       username : username1,
       cards: deck,
-      standard: '',
+      standard: deckStandard,
+      description: deckFlavor,
+      cardNum: num
     })
     console.log(Deck)
     setCanCreate(true);
     alert("Ready to create")
 
   }
+  const getAllDecks = () => {
+    axios.get('http://localhost:9002/allDecks')
+    .then((response) => {
+      setDecks(response.data)
+      console.log(decks)
+      console.log('Data has been received!!');
+    })
+    .catch((error) => {
+      console.log(error)
+      alert('Error retrieving data!!!');
+    });
+  }
+  const getMyDecks = () => {
+    axios.get('http://localhost:9002/allDecks')
+    .then((response) => {
+      var tempDecks = response.data.filter((deck) => {
+        return deck.userId === localStorage.getItem('user')
+      }) 
+      setMyDecks(tempDecks)
+      console.log(mydecks)
+      console.log('Data has been received!!');
+    })
+    .catch((error) => {
+      console.log(error)
+      alert('Error retrieving data!!!');
+    });
+  }
+  const clearDeck = () => {
+    setDeck([])
+    setDeckName("")
+    setDeckStandard("")
+    setNameFilter("")
+    setFilter("")
+    setTypeFilter("")
+    setNum(0)
+    setDeckDescription("")
+  }
+
+
   return (
     <div className="App">
       <Router>
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user}/>
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId = {userId1}/>
               : <Login setLoginUser={setLoginUser}/>
             }
           </Route>
@@ -233,13 +281,13 @@ function App() {
           </Route>
           <Route path="/home">
             {
-              <Homepage setLoginUser={setLoginUser} picture = {picture}/>
+              <Homepage setLoginUser={setLoginUser} picture = {picture} userId = {userId1}/>
             }
           </Route> 
           <Route path={"/collection"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
-              <Navbar user={picture}/>
+              <Navbar user={picture} userId = {userId1}/>
               <h2 className='center'>Filters</h2>
                 <div className='filters center'>
                   <div className='center'>
@@ -276,20 +324,21 @@ function App() {
             }
           </Route>
           <Route path="/cardInfo">
-            <CardInfo card={clickedCard} picture = {picture}/>
+            <CardInfo card={clickedCard} picture = {picture} userId = {userId1}/>
           </Route> 
           <Route path="/createDeck">
             <div className='pokeFont'>
                 <h1 className='center'>Create A Deck</h1>
-                <Navbar picture={picture}/>
+                <Navbar picture={picture} userId = {userId1}/>
                   <div className='filters center'>
                     <p>Number of cards {num}/60</p>
                     <p>Note: Update Before Creation</p>
-                    <p className='center'><label className='center'>Deck Name: <input onChange={(e) => setDeckName(e.target.value)}></input></label></p>
+                    <p className='center'><label className='center'>Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label></p>
+                    <p className='center'><label className='center'>Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label></p>
                     <div className='center'>
                       <label>Name: </label> <input type='text' placeholder='name filter'
                       value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                      <p> </p>
+                      <p></p>
                       <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
                       value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
                       <div class="pagination center mt-2">
@@ -304,8 +353,13 @@ function App() {
                         <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
                       </div>
                       <p></p>
-                      <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
-                      <button type="button" class="btn btn-secondary" onClick={createDeck}>Create Deck</button>
+                      <p className='center'>
+                        <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
+                        <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
+                        <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Create Deck</button>
+                      </p>
+                      <p className='center'>Deck Description</p>
+                      <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
                   </div>
                 </div>
                 <div>
@@ -317,6 +371,20 @@ function App() {
                 </div>
           </div>
           </Route>   
+          <Route path="/allDecks">
+            <div className='pokeFont'>
+              <h1 className='center'>All Decks</h1>
+              <Navbar picture={picture} userId = {userId1}/>
+              <DeckView decks={decks}/>
+            </div>
+          </Route> 
+          <Route path='/myDecks'>
+            <div className='pokeFont'>
+              <h1 className='center'>My Decks</h1>
+              <Navbar picture={picture} userId = {userId1}/>
+              <DeckView decks={mydecks}/>
+            </div>
+          </Route> 
         </Switch>
       </Router>
       <div class="footer">

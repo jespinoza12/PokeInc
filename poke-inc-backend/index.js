@@ -22,20 +22,35 @@ const userSchema = new mongoose.Schema({
     picture: String,
 
 })
-
 const deckSchema = new mongoose.Schema({
     name: String,
     username:String,
     userId: String, 
     cards: [], 
     standard: String, 
+    description: String,
+    cardNum: String,
 })
 
 const User = new mongoose.model("User", userSchema)
 const Deck = new mongoose.model("Decks", deckSchema)
+const UserId = ""
+
+
+
+app.get('/allDecks', (req, res) => {
+    Deck.find({})
+    .then((data) => {
+        console.log('All Data: ', data);
+        res.json(data);
+    })
+    .catch((error) => {
+        console.log('error: ', error);
+    });
+})
 
 app.post("/createDeck", (req, res) => {
-    const { name, userId, cards, username } = req.body
+    const { name, userId, cards, username, description, standard, cardNum } = req.body
     Deck.findOne({name:name, userId:userId}, (err, deck) => {
         if(deck){
             res.send({message: "You already have a deck named this"})
@@ -45,6 +60,9 @@ app.post("/createDeck", (req, res) => {
                         username,
                         userId,
                         cards,
+                        standard,
+                        description,
+                        cardNum
                     })
             deck.save(err => {
                 if(err) {
@@ -56,23 +74,6 @@ app.post("/createDeck", (req, res) => {
         }
     })
 })        
-
-// app.post("/createDeck", (req, res) => {
-//     const { name, userId, cards } = req.body
-//     const deck = new Deck({
-//         name,
-//         userId,
-//         cards,
-//     })
-//     deck.save(err => {
-//         if (err) {
-//             res.send(err)
-//         } else {
-//             res.send({ message: "Successfully Created" })
-//         }
-//     })
-
-// })        
 
 
 app.post("/edit", (req, res) => {

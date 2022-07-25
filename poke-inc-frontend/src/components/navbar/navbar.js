@@ -1,8 +1,9 @@
 import React, { useReducer } from "react";
 import "./navbar.css"
 
-const Navbar = (setLoginUser, picture) => {
+const Navbar = (setLoginUser, picture, userId) => {
   picture = localStorage.getItem("picture")
+  const path = `/myDecks`
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border">
@@ -21,7 +22,7 @@ const Navbar = (setLoginUser, picture) => {
         <a class="nav-link color-me" href="/createDeck">Create Deck</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color-me" href="/myDecks">My Decks</a>
+        <a class="nav-link color-me" href={path}>My Decks</a>
       </li>
       <li class="nav-item">
         <a class="nav-link color-me" href="/allDecks">All Decks</a>
