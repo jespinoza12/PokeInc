@@ -345,19 +345,17 @@ function App() {
                 <p></p>
                 <p>Number of cards {num}/60</p>
                 <p>Note: Update Before Creation</p>
-                <p className='center'><label className='center'>Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label></p>
-                <p className='center'><label className='center'>Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label></p>
                 <div className='center'>
-                  <label>Name: </label> <input type='text' placeholder='name filter'
-                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                  <label className='center'>&nbsp; Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label>
+                  <label className='center'>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
                   <p></p>
+                  <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
+                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
                   <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
                     value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                  <div class="pagination center mt-2">
-                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
-                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
-                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
-                  </div>
+                  <p></p>
+                  <p className='center'>Deck Description</p>
+                  <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
                   <p></p>
                   <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
@@ -370,8 +368,11 @@ function App() {
                     <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
                     <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Create Deck</button>
                   </p>
-                  <p className='center'>Deck Description</p>
-                  <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
+                  <div class="pagination center mt-2">
+                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                  </div>
                 </div>
               </div>
               <div>
