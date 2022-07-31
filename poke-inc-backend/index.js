@@ -32,11 +32,56 @@ const deckSchema = new mongoose.Schema({
     cardNum: String,
 })
 
+const forumSchema = new mongoose.Schema({
+    name: String,
+    authorId: String, 
+    username: String,
+    created: String,
+    deck: [],
+    content: String,
+    comments: String,
+})
+
 const User = new mongoose.model("User", userSchema)
 const Deck = new mongoose.model("Decks", deckSchema)
-const UserId = ""
+const Forum = new mongoose.model("Forum", forumSchema)
 
+app.get('/getForums', (req, res) => {
+    Forum.find({})
+    .then((data) => {
+        console.log('All Data: ', data);
+        res.json(data);
+    })
+    .catch((error) => {
+        console.log('error: ', error);
+    });
+})
 
+app.post('/createForum', (req, res) => {
+    const {name, authorId, username, created, deck, content} = req.body
+    Forum.findOne({name:name, authorId: authorId}, (err, forum) => {
+        if(forum){
+            res.send({message: "You already have a forum named this"})
+        } else {
+            const forum = new Forum({
+                        name,
+                        username,
+                        authorId,
+                        deck,
+                        created,
+                        content,
+                        comments: "",
+                    })
+            forum.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send( { message: "Successfully Created." })
+                }
+            })
+        }
+    })
+})
 
 app.get('/allDecks', (req, res) => {
     Deck.find({})

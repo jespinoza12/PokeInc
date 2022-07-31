@@ -25,6 +25,9 @@ const Navbar = (setLoginUser, picture, userId) => {
         <li class="nav-item">
           <a class="nav-link color-me" href="/allDecks">All Decks</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link color-me" href="/createForum">Create Forum</a>
+        </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">

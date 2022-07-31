@@ -1,6 +1,7 @@
 import React from 'react';
 import Homepage from "./components/homepage/homepage"
 import "bootstrap/dist/css/bootstrap.min.css";
+import Forum from "./components/createForum/forum"
 import Login from "./components/login/login"
 import Register from "./components/register/register"
 import Cards from "./components/Cards/Cards"
@@ -415,6 +416,16 @@ function App() {
               <h1 className='center'>Created By: {clickedDeck.username}</h1>
               <p className='center'>Description: {clickedDeck.description}</p>
               <DeckInfo deck={clickedDeck} />
+            </div>
+          </Route>
+          <Route path="/createForum">
+          <div className='pokeFont'>
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                  <div>
+                    <Forum decks={mydecks} rawr={getDeck} selectedDeck = {clickedDeck}/>
+                  </div>
+              }
             </div>
           </Route>
         </Switch>
