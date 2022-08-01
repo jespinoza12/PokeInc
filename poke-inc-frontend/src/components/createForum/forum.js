@@ -54,7 +54,7 @@ const Forum = ({decks, rawr, selectedDeck}) => {
                 <label>Selected Deck: {selectedDeck.name}</label>
                 <input type="text" name="name" value={user.name} placeholder="Forum Name" onChange={ handleChange }></input>
                 <textarea type="content" name="content" value={user.content} placeholder="Content" onChange={ handleChange }></textarea>
-                <div className="button" onClick={createForum} >Submit</div>
+                <div className="button" onClick={createForum} >Create Forum</div>
             </div>
             <h2>My Decks</h2>
             <DeckView decks = {decks} rawr = {rawr}/>
