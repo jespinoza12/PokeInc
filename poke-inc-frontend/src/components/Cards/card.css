@@ -8,11 +8,8 @@ body{
     justify-content: center;
     align-items: center;
     display: inline-block;
-    margin-left: 155px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: -100px;
-    width: 270px;
+    width: 200px;
+    margin-left: 5px;
     border-radius: 5px;
     background-color: lightblue;
   }

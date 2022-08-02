@@ -222,6 +222,7 @@ function App() {
   //Creates Deck
   const createDeck = () => {
     console.log(Deck)
+    const {descrption, name} = Deck
     if (canCreate === true) {
       axios.post("http://localhost:9002/createDeck", Deck)
         .then(res => {

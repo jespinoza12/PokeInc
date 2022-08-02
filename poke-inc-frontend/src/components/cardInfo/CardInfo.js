@@ -13,7 +13,7 @@ const CardInfo = ({ card, picture }) => {
             <h1 className='m-2 center pokeFont'>{card.name}</h1>
             <p className='m-2 center pokeFont'><img className='pokeBall center-1' src={logo} alt="loading..."/><label><h2 className=''>#{card.nationalPokedexNumbers[0]}</h2></label></p>
             <p>:</p>
-            <div class="container detailBox center-1">
+            <div class="detailBox center-1">
                 <div class="row">
                     <div class="col-sm-3">
                         <div className='float-left center-1 img'>
@@ -21,14 +21,12 @@ const CardInfo = ({ card, picture }) => {
                         </div>
                     </div>
                     <div class="col">
-                        <p className='center-1 container-1 pt-5'>
+                        <p className='center-1 pt-5'>
                             <label>Attacks:
                                 <h2>{card.attacks[0].name}</h2>
                                 <p>{card.attacks[0].text}</p>
                             </label>
-                            <label>Rarity:
-                                <h3>{card.rarity}</h3>
-                            </label>
+                            <p></p>
                             <p>
                                 <label> Card Series:
                                     <h3>{card.set.series}</h3>
@@ -41,6 +39,11 @@ const CardInfo = ({ card, picture }) => {
                                 <label> Average Price:
                                     <h3>${card.cardmarket.prices.averageSellPrice}</h3>
                                 </label>
+                                <p></p>
+                                <label>Rarity:
+                                    <h3>{card.rarity}</h3>
+                                </label>
+                                <p></p>
                                 <a class="btn btn-primary" href="/collection">&#8678; Back</a>
                             </p>
                         </p>

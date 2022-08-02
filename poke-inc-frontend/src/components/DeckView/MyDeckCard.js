@@ -13,7 +13,11 @@ const MyDeckCard = ({deck, rawr}) => {
   function onClick1(e){
     e.preventDefault();
     rawr(deck)
-    history.push("/editDeck")
+    history.push("/deckInfo")
+
+  }
+  function onClick2(e){
+    e.preventDefault();
 
   }
 
@@ -29,9 +33,10 @@ return (
                     <p></p>
                     <label>Standard: <p>{deck.standard}</p></label>
                     <p></p>
-                    <div className=''>
-                      <button className='btn btn-secondary' onClick={onClick}>View Deck</button>
-                      <button className='btn btn-secondary' onClick={onClick1}>Edit Deck</button>
+                    <div className='btn-group'>
+                      <button className='btn btn-secondary' onClick={onClick}>View</button>
+                      <button className='btn btn-secondary mx-auto' onClick={onClick1}>Edit</button>
+                      <button className='btn btn-secondary' onClick={onClick2}>Delete</button>
                     </div>
              </div>
           </div>
