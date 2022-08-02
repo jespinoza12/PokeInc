@@ -1,18 +1,18 @@
 import React from 'react'
 import { useHistory } from "react-router-dom"
-import "bootstrap/dist/css/bootstrap.min.css";
 
-const DeckCard = ({deck, rawr, update}) => {
+const DeckCard = ({deck, rawr}) => {
   const history = useHistory()
   
   function onClick(e){  
     e.preventDefault();
     rawr(deck)
-    update(false);
+    history.push("/deckInfo")
+
   }
 
 return (
-          <div className='card bg-dark text-white'>
+          <div className='card bg-dark text-white pokeFont'>
              <div class="card-body">
                     <h5 class="card-title">{deck.name}</h5>
                     <label>Creator:<p>{deck.username}</p></label>
@@ -23,7 +23,7 @@ return (
                     <p></p>
                     <label>Standard: <p>{deck.standard}</p></label>
                     <p></p>
-                    <button className='btn btn-secondary' onClick={onClick}>Select Deck</button>
+                    <button className='btn btn-secondary' onClick={onClick}>View Deck</button>
              </div>
           </div>
     )}

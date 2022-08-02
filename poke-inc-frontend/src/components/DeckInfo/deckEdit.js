@@ -1,8 +1,8 @@
 import React from 'react'
-import DeckCard from './deckCard';
+import DeckCard from './deckCardEdit';
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const DeckInfo = ({deck}) => {
+const DeckEdit = ({deck}) => {
 
     return (
         deck.cards.map((card) => (
@@ -15,4 +15,4 @@ const DeckInfo = ({deck}) => {
     )
 
 }
-export default DeckInfo
+export default DeckEdit

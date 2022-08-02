@@ -7,10 +7,11 @@ import { useHistory } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-const Forum = ({decks, rawr, selectedDeck}) => {
+const Forum = ({decks, rawr, sdeck}) => {
 
     const history = useHistory()
     const current = new Date();
+    const [updat, setUpdated] = useState(false)
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
   
     const [ user, setUser] = useState({
@@ -18,7 +19,14 @@ const Forum = ({decks, rawr, selectedDeck}) => {
         authorId: localStorage.getItem('user'),
         username: localStorage.getItem('username'),
         content:"",
-        deck: selectedDeck,
+        deck: [{
+            cards: sdeck.cards,
+            name: sdeck.name,
+            standard: sdeck.standard,
+            description: sdeck.description,
+            cardNum: sdeck.cardNum,
+            userId: sdeck.userId,
+        }],
         created: date
     })
 
@@ -31,8 +39,10 @@ const Forum = ({decks, rawr, selectedDeck}) => {
         console.log(user)
     }
 
+    
+
     const createForum = () => {
-        const { name, content, deck, created, username, authorId } = user
+        const { name, content } = user
         if( name && content){
             axios.post("http://localhost:9002/createForum", user)
             .then( res => {
@@ -44,20 +54,37 @@ const Forum = ({decks, rawr, selectedDeck}) => {
         }
     }
 
-  
+    const update = () => {
+        setUser({
+            name: user.name,
+            authorId: localStorage.getItem('user'),
+            username: localStorage.getItem('username'),
+            content: user.content,
+            deck: [{
+            cards: sdeck.cards,
+            name: sdeck.name,
+            standard: sdeck.standard,
+            description: sdeck.description,
+            cardNum: sdeck.cardNum,
+            userId: sdeck.userId,
+            }],
+            created: date
+        })
+        setUpdated(true)
+    }
 
     return (
         <div className="center pokeFont">
             <Navbar/>
             <div className="register center-1">
                 {console.log("User", user)}
-                <label>Selected Deck: {selectedDeck.name}</label>
+                <label>Selected Deck: {sdeck.name}</label>
                 <input type="text" name="name" value={user.name} placeholder="Forum Name" onChange={ handleChange }></input>
                 <textarea type="content" name="content" value={user.content} placeholder="Content" onChange={ handleChange }></textarea>
-                <div className="button" onClick={createForum} >Create Forum</div>
+                {updat? <div className="button" onClick={createForum} >Create Forum</div>: <div className="button" onClick={update} >Update</div>}
             </div>
             <h2>My Decks</h2>
-            <DeckView decks = {decks} rawr = {rawr}/>
+            <DeckView decks = {decks} rawr = {rawr} update = {setUpdated}/>
         </div>
     )
 }

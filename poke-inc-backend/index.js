@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
     picture: String,
 
 })
+
 const deckSchema = new mongoose.Schema({
     name: String,
     username:String,
@@ -39,14 +40,96 @@ const forumSchema = new mongoose.Schema({
     created: String,
     deck: [],
     content: String,
-    comments: String,
+    comments: [{
+        comment:{type: String},
+        commenter:{type:String},
+        commenterId:{type:String},
+    }],
 })
+const commentSchema = new mongoose.Schema({
+        fid:String,
+        comment:String,
+        commenter:String,
+        commenterId:String,
+        likes:Number,
+        dislikes:Number,
+})
+
 
 const User = new mongoose.model("User", userSchema)
 const Deck = new mongoose.model("Decks", deckSchema)
 const Forum = new mongoose.model("Forum", forumSchema)
+const Comments =  new mongoose.model("Comments", commentSchema)
 
-app.get('/getForums', (req, res) => {
+app.post("/like", (req, res) => {
+    const {id, likes} = req.body
+    const increased =  likes + 1
+    Comments.findByIdAndUpdate({ _id: id }, { likes: increased }, function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send("Thanks for the feedback")
+        }
+    })
+});
+
+app.post("/dislike", (req, res) => {
+    const {id, dislikes} = req.body
+    const decreased =  dislikes + 1
+    Comments.findByIdAndUpdate({ _id: id }, { dislikes: decreased }, function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send("Thanks for the Feedback")
+        }
+    })
+});
+
+// app.post('/removeCard', (req, res) => {
+//     const {id} = req.body
+//     Deck.cards.findByIdAndDeleteOne({ _id: id }, function (err, result) {
+//         if (err) {
+//             res.send(err)
+//         } else {
+//             res.send("Update Complete")
+//         }
+//     })
+        
+// });
+
+app.get('/allC', (req, res) => {
+    Comments.find({})
+    .then((data) => {
+        console.log('All Comments: ', data);
+        res.json(data);
+    })
+    .catch((error) => {
+        console.log('error: ', error);
+    });
+})
+
+app.post('/addC', (req, res) => {
+    const {fid, commenterId, commenter, comment, likes, dislikes} = req.body
+    Comments.find({}, (err) => {
+            const comment1 = new Comments({
+                        fid: fid,
+                        comment: comment,
+                        commenter: commenter, 
+                        commenterId: commenterId,
+                        likes: likes,
+                        dislikes: dislikes,
+                    })
+            comment1.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send( { message: "Successfully Created." })
+                }
+            })
+    })
+})
+
+app.get('/allForums', (req, res) => {
     Forum.find({})
     .then((data) => {
         console.log('All Data: ', data);
@@ -70,7 +153,6 @@ app.post('/createForum', (req, res) => {
                         deck,
                         created,
                         content,
-                        comments: "",
                     })
             forum.save(err => {
                 if(err) {
@@ -119,7 +201,6 @@ app.post("/createDeck", (req, res) => {
         }
     })
 })        
-
 
 app.post("/edit", (req, res) => {
     const {id, username, name, email, password, picture} = req.body

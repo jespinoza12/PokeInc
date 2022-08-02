@@ -1,6 +1,6 @@
 import React from 'react'
 
-const deckCard = ({cards, rawr}) => {
+const deckCard = ({cards}) => {
 
 
 return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import Homepage from "./components/homepage/homepage"
 import "bootstrap/dist/css/bootstrap.min.css";
+import Forums from "./components/viewForum/Forums"
 import Forum from "./components/createForum/forum"
 import Login from "./components/login/login"
 import Register from "./components/register/register"
@@ -10,6 +11,8 @@ import CardInfo from "./components/cardInfo/CardInfo"
 import CreateDeck from "./components/deckCreation/Deck"
 import Profile from "./components/profile/profile"
 import DeckView from './components/DeckView/DeckView'
+import DeckView1 from './components/DeckView/MyDeckView'
+import ForumInfo from './components/viewForum/forumInfo';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
@@ -19,6 +22,9 @@ import axios from "axios"
 function App() {
   //State Variable
   const [user, setLoginUser] = useState({})
+  const [comments, setComments] = useState({})
+  const [forums, setForums] = useState([])
+  const [myforums, setMyForums] = useState([])
   const [userId1, setUserId] = useState("")
   const [username1, setUsername] = useState("")
   const [deckFlavor, setDeckDescription] = useState("")
@@ -37,13 +43,17 @@ function App() {
   const [pageNum, setPageNum] = useState(1)
   const [clickedCard, setCard] = useState([])
   const [clickedDeck, setClickedDeck] = useState([])
+  const [clickedForum, setClickForum] = useState([])
   const [isLoading, setLoading] = useState(false);
   const [Deck, setDeck1] = useState({});
+  const [forumid, setFourmId] = useState("")
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   pokemon.configure({ apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63' })
   //Gets data whenever page is changed
+  
+
   useEffect(() => {
     if (filter === "Energy") {
       getAllEnergy()
@@ -52,16 +62,20 @@ function App() {
     } else if (filter === "Trainer") {
       getAllTrainer()
     } else {
+      getMyForums()
+      getComments()
+      getForums()
+      getAllDecks()
+      getMyDecks()
       getData()
       getFilteredCards()
       getCardsByType()
-    }
-    getAllDecks()
-    getMyDecks()
+    }  
+    getComments()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
-  }, [pageNum], []);
+  }, [pageNum], [], [user]);
   //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
@@ -274,6 +288,67 @@ function App() {
     setNum(0)
     setDeckDescription("")
   }
+  const getForums = () => {
+    setLoading(true)
+    axios.get('http://localhost:9002/allForums')
+      .then((response) => {
+        setForums(response.data)
+        console.log(forums)
+        console.log('Data has been received!!');
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        alert('Error retrieving data!!!');
+        setLoading(false)
+      });
+  }
+  const setForum = (forum) => {
+    setClickForum(forum)
+  }
+
+  const getComments = () => {
+    setLoading(true)
+    
+    axios.get('http://localhost:9002/allC')
+      .then((response) => {
+          var tempDecks = response.data.filter((comment) => {
+            return comment.fid === localStorage.getItem('forum')
+          })
+          setComments(tempDecks)
+          console.log('Data has been received!!');
+          console.log(comments);
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.log(error)
+          alert('Error retrieving data!!!');
+          alert(error)
+          setLoading(false)
+        });
+  }
+
+  const getMyForums = () => {
+    setLoading(true)
+    
+    axios.get('http://localhost:9002/allForums')
+      .then((response) => {
+          var tempDecks = response.data.filter((forum) => {
+            return forum.authorId === localStorage.getItem('user')
+          })
+          setMyForums(tempDecks)
+          console.log('Data has been received!!');
+          console.log(myforums);
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.log(error)
+          alert('Error retrieving data!!!');
+          alert(error)
+          setLoading(false)
+        });
+  }
+
 
   return (
     <div className="App">
@@ -281,19 +356,23 @@ function App() {
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} />
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} forums = {forums} rawr ={setForum}/> 
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
           <Route path="/login">
-            <Login setLoginUser={setLoginUser} />
+            <Login setLoginUser={setLoginUser} rawr = {getForums} />
           </Route>
           <Route path="/register">
             <Register />
           </Route>
           <Route path="/home">
             {
-              <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} />
+              <div>
+                {
+                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} forums = {forums} rawr ={setForum}/>
+                }
+              </div>        
             }
           </Route>
           <Route path={"/collection"}>
@@ -404,7 +483,7 @@ function App() {
                   <div>
                     <h1 className='center'>My Decks</h1>
                     <Navbar picture={picture} userId={userId1} />
-                    <DeckView decks={mydecks} rawr={getDeck} />
+                    <DeckView1 decks={mydecks} rawr={getDeck} />
                   </div>
               }
             </div>
@@ -423,10 +502,27 @@ function App() {
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
                   <div>
-                    <Forum decks={mydecks} rawr={getDeck} selectedDeck = {clickedDeck}/>
+                    <Forum decks={mydecks} rawr={getDeck} sdeck = {clickedDeck}/>
                   </div>
               }
             </div>
+          </Route>
+          <Route path="/forumInfo">
+              <div className='pokeFont'>
+                <Navbar/>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <ForumInfo forum = {clickedForum} rawr = {getDeck} comments={comments}/>
+                }
+
+              </div>
+          </Route>
+          <Route path="/myForums">
+              <div className='pokeFont'>
+                <Navbar/>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {myforums} rawr = {setForum}/>
+                }
+              </div>
           </Route>
         </Switch>
       </Router>
