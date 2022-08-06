@@ -4,7 +4,7 @@ const DeckView = ({picture, decks, rawr}) => {
 
     return (
         decks.map((deck) => (
-            <div key={deck._id} className='container'>
+            <div key={deck._id} className='container center'>
               <div>
                 <DeckCard deck = {deck} rawr = {rawr}/>
               </div>

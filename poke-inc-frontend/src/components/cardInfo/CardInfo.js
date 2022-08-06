@@ -25,6 +25,8 @@ const CardInfo = ({ card, picture }) => {
                             <label>Attacks:
                                 <h2>{card.attacks[0].name}</h2>
                                 <p>{card.attacks[0].text}</p>
+                                <h2>{card.attacks[1]?.name}</h2>
+                                <p>{card.attacks[1]?.text}</p>
                             </label>
                             <p></p>
                             <p>
