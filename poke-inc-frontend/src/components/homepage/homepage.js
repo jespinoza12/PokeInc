@@ -8,8 +8,6 @@ const Homepage = ({picture, forums, rawr}) => {
         <div className="homepage pokeFont">
             <h1>Hello Welcome to my Home page</h1>
             <Navbar picture = {picture}/>
-            <h1>Forums</h1>
-            <Forums forums = {forums} rawr = {rawr}/>
         </div>
         
     )

@@ -1,8 +1,12 @@
-import React from 'react'
+import axios from 'axios';
+import {useState} from 'react'
 import { useHistory } from "react-router-dom"
 
 const MyDeckCard = ({deck, rawr}) => {
   const history = useHistory()
+
+  const [decks, setDeck] = useState({
+  })
   
   function onClick(e){  
     e.preventDefault();
@@ -17,8 +21,19 @@ const MyDeckCard = ({deck, rawr}) => {
 
   }
   function onClick2(e){
-    e.preventDefault();
-
+        setDeck({
+          deckId: deck._id
+        })
+        const {deckId} = decks
+        if (deckId){
+          axios.post("http://localhost:9002/deleteDeck", decks)
+          .then( res => {
+            alert(res.data.message)
+          })
+        }else{
+          console.log("Oops")
+        }
+    
   }
 
 return (

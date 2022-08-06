@@ -22,6 +22,9 @@ const Navbar = (setLoginUser, picture, userId) => {
         <li class="nav-item">
           <a class="nav-link color-me" href="/allDecks">All Decks</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link color-me" href="/allForums">All Forums</a>
+        </li>
         </ul>
         <ul class="navbar-nav center">
         <Dropdown>
@@ -42,8 +45,11 @@ const Navbar = (setLoginUser, picture, userId) => {
               My Forums
             </Dropdown.Item>
             <NavDropdown.Divider varient="secondary" />
+            <Dropdown.Item href="/myPage">
+              My Profile Page
+            </Dropdown.Item>
             <Dropdown.Item href="/profile">
-              Profile
+              Profile Settings
             </Dropdown.Item>
             <Dropdown.Item href="/">
               Logout

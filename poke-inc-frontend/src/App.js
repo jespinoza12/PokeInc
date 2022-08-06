@@ -517,12 +517,30 @@ function App() {
 
               </div>
           </Route>
+          <Route path="/allForums">
+              <div className='pokeFont'>
+                <Navbar/>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {forums} rawr = {setForum}/>
+                }
+              </div>
+          </Route>
           <Route path="/myForums">
               <div className='pokeFont'>
                 <Navbar/>
                 {
                   isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {myforums} rawr = {setForum}/>
                 }
+              </div>
+          </Route>
+          <Route path="/createPost">
+              <div className='pokeFont'>
+                <Navbar/>
+              </div>
+          </Route>
+          <Route path="/myPage">
+              <div className='pokeFont'>
+                <Navbar/>
               </div>
           </Route>
         </Switch>

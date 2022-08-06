@@ -41,9 +41,10 @@ const Profile = ({setLoginUser, user}) => {
     }
 
     return (
-        <div className="pokeFont">
+        <div className="pokeFont center">
             <Navbar/>
-                <h1 className="center">Welcome, {user.name}</h1>
+                <div className="container bg-dark text-white m-2 ">
+                <h1 className="center m-2">Welcome, {user.name}</h1>
                 <img alt="" class="image center-1" src={user.picture}></img>
                 <p className="center">
                     <label> Name &nbsp;
@@ -76,6 +77,7 @@ const Profile = ({setLoginUser, user}) => {
                     </label>
                     <button type="button" className="btn-primary m-5" onClick={editUser}>Submit</button>
                 </p>
+                </div>
         </div>
             
     )

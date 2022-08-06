@@ -3,9 +3,12 @@ import cors from "cors"
 import mongoose from "mongoose"
 
 const app = express()
+//Misc
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors())
+
+//Mongoose Connection
 mongoose.set('useFindAndModify', false);
 mongoose.connect("mongodb+srv://Frosty:7piercerS@pokecluster.fec6buu.mongodb.net/user?retryWrites=true&w=majority", {
     useNewUrlParser: true,
@@ -14,6 +17,7 @@ mongoose.connect("mongodb+srv://Frosty:7piercerS@pokecluster.fec6buu.mongodb.net
     console.log("DB connected")
 })
 
+//Schemas
 const userSchema = new mongoose.Schema({
     name: String,
     username: String,
@@ -22,7 +26,6 @@ const userSchema = new mongoose.Schema({
     picture: String,
 
 })
-
 const deckSchema = new mongoose.Schema({
     name: String,
     username:String,
@@ -32,7 +35,6 @@ const deckSchema = new mongoose.Schema({
     description: String,
     cardNum: String,
 })
-
 const forumSchema = new mongoose.Schema({
     name: String,
     authorId: String, 
@@ -54,13 +56,55 @@ const commentSchema = new mongoose.Schema({
         likes:Number,
         dislikes:Number,
 })
+const postSchema = new mongoose.Schema({
+    deck: [],
+    authorId: String, 
+    postDetails: String,
+    hashtags: String, 
+    authorName: String, 
+    authorUsername: String, 
+})
 
-
+//Collections
 const User = new mongoose.model("User", userSchema)
 const Deck = new mongoose.model("Decks", deckSchema)
 const Forum = new mongoose.model("Forum", forumSchema)
 const Comments =  new mongoose.model("Comments", commentSchema)
+const Posts =  new mongoose.model("Post", postSchema)
 
+//Posts
+app.get('/allPosts', (req, res) => {
+    Posts.find({})
+    .then((data) => {
+        console.log('All Posts: ', data);
+        res.json(data);
+    })
+    .catch((error) => {
+        console.log('error: ', error);
+    });
+})
+app.post("/createPost", (req, res) => {
+    const {authorId, deck, postDetails, hashtags, authorName, authorUsername} = req.body
+    Posts.find({}, (err, post) => {
+            const post = new Posts({
+                        deck,
+                        authorId, 
+                        postDetails,
+                        hashtags,
+                        authorName,
+                        authorUsername,
+                    })
+            post.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send( { message: "Successfully Created." })
+                }
+            })
+    })
+})
+
+//Comment
 app.post("/like", (req, res) => {
     const {id, likes} = req.body
     const increased =  likes + 1
@@ -72,7 +116,6 @@ app.post("/like", (req, res) => {
         }
     })
 });
-
 app.post("/dislike", (req, res) => {
     const {id, dislikes} = req.body
     const decreased =  dislikes + 1
@@ -84,19 +127,6 @@ app.post("/dislike", (req, res) => {
         }
     })
 });
-
-// app.post('/removeCard', (req, res) => {
-//     const {id} = req.body
-//     Deck.cards.findByIdAndDeleteOne({ _id: id }, function (err, result) {
-//         if (err) {
-//             res.send(err)
-//         } else {
-//             res.send("Update Complete")
-//         }
-//     })
-        
-// });
-
 app.get('/allC', (req, res) => {
     Comments.find({})
     .then((data) => {
@@ -107,7 +137,6 @@ app.get('/allC', (req, res) => {
         console.log('error: ', error);
     });
 })
-
 app.post('/addC', (req, res) => {
     const {fid, commenterId, commenter, comment, likes, dislikes} = req.body
     Comments.find({}, (err) => {
@@ -129,6 +158,18 @@ app.post('/addC', (req, res) => {
     })
 })
 
+//Edit
+app.post('/addCard', (req, res) => {
+    const {deckId, card} = req.body
+    Deck.findOneAndUpdate({ _id: deckId }, {$push : {deck: card}})
+});
+app.post('/deleteCard', (req, res) => {
+    const {deckId, card} = req.body
+    //first false is for upsert and second is so only on gets pulled
+    Deck.findOneAndUpdate({ _id: deckId }, {$pull : {deck: card}}, false, false)
+});
+
+//Forums
 app.get('/allForums', (req, res) => {
     Forum.find({})
     .then((data) => {
@@ -139,7 +180,6 @@ app.get('/allForums', (req, res) => {
         console.log('error: ', error);
     });
 })
-
 app.post('/createForum', (req, res) => {
     const {name, authorId, username, created, deck, content} = req.body
     Forum.findOne({name:name, authorId: authorId}, (err, forum) => {
@@ -165,6 +205,7 @@ app.post('/createForum', (req, res) => {
     })
 })
 
+//Decks
 app.get('/allDecks', (req, res) => {
     Deck.find({})
     .then((data) => {
@@ -175,7 +216,17 @@ app.get('/allDecks', (req, res) => {
         console.log('error: ', error);
     });
 })
-
+app.post("/deleteDeck", (req, res) => {
+    const {deckId} = req.body
+    Deck.findOne({_id: deckId}, (err, deck) => {
+        if (deck){
+            deck.delete()
+            console.log("Deleted")
+        }else {
+            console.log("Oops" + err)
+        }
+    })
+}) 
 app.post("/createDeck", (req, res) => {
     const { name, userId, cards, username, description, standard, cardNum } = req.body
     Deck.findOne({name:name, userId:userId}, (err, deck) => {
@@ -202,6 +253,7 @@ app.post("/createDeck", (req, res) => {
     })
 })        
 
+//Edit User
 app.post("/edit", (req, res) => {
     const {id, username, name, email, password, picture} = req.body
     User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: password, email: email, picture: picture }, function (err, result) {
@@ -214,7 +266,7 @@ app.post("/edit", (req, res) => {
         
 });
 
-//Routes 
+//Login & Register
 app.post("/login", (req, res)=> {
     const { email, password} = req.body
     User.findOne({ email: email}, (err, user) => {
@@ -229,7 +281,6 @@ app.post("/login", (req, res)=> {
         }
     })
 }) 
-
 app.post("/register", (req, res)=> {
     const { name, email, password, username} = req.body
     User.findOne({email: email}, (err, user) => {
@@ -255,6 +306,7 @@ app.post("/register", (req, res)=> {
     
 }) 
 
+//Listining at LocalHost:9002
 app.listen(9002,() => {
     console.log("BE started at port 9002")
 })
