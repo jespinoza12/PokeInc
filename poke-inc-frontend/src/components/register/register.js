@@ -1,11 +1,15 @@
 import React, { useState } from "react"
 import "./register.css"
 import axios from "axios"
+import Alert from 'react-bootstrap/Alert';
 import { useHistory } from "react-router-dom"
 
 const Register = () => {
 
     const history = useHistory()
+    const [message, setMessage] = useState("")
+    const [hidden, setHidden] = useState(true)
+
 
     const [ user, setUser] = useState({
         name: "",
@@ -28,17 +32,21 @@ const Register = () => {
         if( name && email && username && password && (password === reEnterPassword)){
             axios.post("http://localhost:9002/register", user)
             .then( res => {
-                alert(res.data.message)
-                history.push("/")
+                setHidden(false)
+                setMessage(res.data.message)
             })
         } else {
-            alert("invlid input")
+            setMessage("Oops")
         }
     }
 
     return (
         <div className="center m-5 pokeFont">
-            <div className="register">
+            <div className="register center-1">
+                <h1>Register</h1>
+                <Alert key="info" variant="info" hidden={hidden}>
+                    {message}
+                </Alert>
                 {console.log("User", user)}
                 <input type="text" name="name" value={user.name} placeholder="Your Name" onChange={ handleChange }></input>
                 <input type="text" name="email" value={user.email} placeholder="Your Email" onChange={ handleChange }></input>

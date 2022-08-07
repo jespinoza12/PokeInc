@@ -1,6 +1,6 @@
 import React from "react"
 
-const Card = ({cards, rawr, num}) => {
+const Card = ({cards, rawr, num, check, rawr2}) => {
 
   
   function cardHandler(e){  
@@ -14,9 +14,26 @@ const Card = ({cards, rawr, num}) => {
 
   }
 
+  function cardHandler2(e){  
+    e.preventDefault();
+    console.log('Card Clicked!');
+    if (num === 0){
+      alert("Cannot remove")
+    }else {
+      rawr2(cards._id)
+    }
+
+  }
+
 return (
           <div>
-            <img className='mt-2 btn ' onClick={cardHandler} src={cards.images.small} alt={cards.name}></img>
+            {
+              check? <img className='mt-2 btn ' onClick={cardHandler2} src={cards.card.images.small} alt={cards.card.name}></img> : <img className='mt-2 btn ' onClick={cardHandler} src={cards.images.small} alt={cards.name}></img>
+            }
+            <p></p>
+            {
+              check? <button className="center-1 btn btn-secondary" onClick={cardHandler2}>Delete</button> : <button  className="center-1 btn btn-secondary" onClick={cardHandler}>Add</button>
+            }
           </div>
     )}
 

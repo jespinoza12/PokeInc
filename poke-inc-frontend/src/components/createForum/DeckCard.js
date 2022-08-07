@@ -1,9 +1,7 @@
 import React from 'react'
-import { useHistory } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const DeckCard = ({deck, rawr, update}) => {
-  const history = useHistory()
   
   function onClick(e){  
     e.preventDefault();

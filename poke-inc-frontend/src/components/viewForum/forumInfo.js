@@ -3,7 +3,6 @@
     import Comments from "../comments/comments";
     import "./forum.css";
     import axios from "axios";
-    import { useHistory } from "react-router-dom";
 
     const ForumInfo = ({ forum, rawr, comments }) => {
     const [commentList, setComments] = useState([]);
@@ -27,7 +26,7 @@
         } catch (e) {
             console.log(e);
         }
-    }, []);
+    }, [forum.deck]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

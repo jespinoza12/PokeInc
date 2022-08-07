@@ -2,6 +2,7 @@ import React from 'react';
 import Homepage from "./components/homepage/homepage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Forums from "./components/viewForum/Forums"
+import EditDeck from "./components/editDeck/Deck"
 import Forum from "./components/createForum/forum"
 import Login from "./components/login/login"
 import Register from "./components/register/register"
@@ -19,9 +20,17 @@ import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
 import axios from "axios"
+import Alert from 'react-bootstrap/Alert';
+
 function App() {
   //State Variable
   const [user, setLoginUser] = useState({})
+  const [varient, setVarient] = useState("info")
+  const [i, setI] = useState(0)
+  const [check, setCheck] = useState(false)
+  const [message, setMessage] = useState("")
+  const [hidden, setHidden] = useState(true)
+  const [viewDeck, setViewDeck] = useState(false)
   const [comments, setComments] = useState({})
   const [forums, setForums] = useState([])
   const [myforums, setMyForums] = useState([])
@@ -46,14 +55,13 @@ function App() {
   const [clickedForum, setClickForum] = useState([])
   const [isLoading, setLoading] = useState(false);
   const [Deck, setDeck1] = useState({});
-  const [forumid, setFourmId] = useState("")
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   pokemon.configure({ apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63' })
   //Gets data whenever page is changed
   
-
+ 
   useEffect(() => {
     if (filter === "Energy") {
       getAllEnergy()
@@ -75,7 +83,19 @@ function App() {
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
+  //eslint-disable-next-line
   }, [pageNum], [], [user]);
+
+  useEffect(() => {
+    setUserId(localStorage.getItem('user'))
+    setUsername(localStorage.getItem('username'))
+    setPicture(localStorage.getItem('picture'))
+  //eslint-disable-next-line
+  }, [user]);
+
+
+
+
   //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
@@ -106,6 +126,7 @@ function App() {
       getFilteredCards();
       console.log(cards)
     }
+     //eslint-disable-next-line
   }, [nameFilter]);
   //Type Filter
   useEffect(() => {
@@ -122,7 +143,7 @@ function App() {
       setFiltered(true);
       console.log(cards)
     }
-
+  //eslint-disable-next-line
   }, [typeFilter]);
   useEffect(() => {
     console.log(`DeckName: ${deckname}`)
@@ -210,27 +231,50 @@ function App() {
   }
   //Adds card to deck
   const addCardToDeck = (card) => {
+
     if (num > 60) {
       alert("You have more than 60 cards")
       setNum(60)
     } else {
-      setDeck(current => [...current, card]);
+      setI(i + 1)
+      setDeck(current => [...current, {_id: i, card}]);
       console.log(deck)
+      setCanCreate(false)
       setNum(num + 1)
+    }
+  }
+
+  const deleteCardFromDeck = (cardId) => {
+    if (num < 0) {
+      alert("You have no cards")
+      setNum(0)
+    } else {
+      setDeck(current =>
+        current.filter(card => {
+          setNum(num - 1)
+          return card._id !== cardId;
+        }),
+        
+      );
+      setVarient("danger")
+      setMessage("Card Deleted")
+      setNum(num - 1)
+      console.log(deck)
     }
   }
   //Creates Deck
   const createDeck = () => {
     console.log(Deck)
-    const {descrption, name} = Deck
     if (canCreate === true) {
       axios.post("http://localhost:9002/createDeck", Deck)
         .then(res => {
-          alert(res.data.message)
+          setMessage(res.data.message)
+          setHidden(false)
         })
       setCanCreate(false)
     } else {
-      alert("Update First")
+      setMessage("Update First")
+      setHidden(false)
     }
   }
   //Updates Deck for creation
@@ -246,9 +290,11 @@ function App() {
     })
     console.log(Deck)
     setCanCreate(true);
-    alert("Ready to create")
-
+    setMessage("Deck Updated")
+    setVarient("success")
+    setHidden(false)
   }
+ 
   //Get all Decks
   const getAllDecks = () => {
     axios.get('http://localhost:9002/allDecks')
@@ -288,6 +334,8 @@ function App() {
     setTypeFilter("")
     setNum(0)
     setDeckDescription("")
+    setMessage("Deck Cleared")
+    setHidden(false)
   }
   const getForums = () => {
     setLoading(true)
@@ -350,6 +398,30 @@ function App() {
         });
   }
 
+  const changeCards = () => {
+    if (canCreate === true) {
+      if (viewDeck === false) {
+        updateDeck()
+        setVarient("info")
+        setCards([])
+        setViewDeck(true)
+        setFilteredCards(deck)
+        setCards(deck)
+        setCheck(true)
+      }else if (viewDeck === true){
+        setVarient("info")
+        updateDeck()
+        setCards([])
+        setFilteredCards([])
+        setViewDeck(false)
+        getData()
+        setCheck(false)
+      }
+    }else{
+      setMessage("Update First")
+      setVarient("danger")
+    }
+  }
 
   return (
     <div className="App">
@@ -422,6 +494,9 @@ function App() {
             <div className='pokeFont'>
               <h1 className='center'>Create A Deck</h1>
               <Navbar picture={picture} userId={userId1} />
+              <Alert key={varient} variant={varient} hidden={hidden} className="center mt-2">
+                    {message}
+              </Alert>
               <div className='filters center'>
                 <p></p>
                 <p>Number of cards {num}/60</p>
@@ -454,13 +529,14 @@ function App() {
                     <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
                     <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
                   </div>
+                  <button onClick={changeCards} className="btn-sm btn-dark">View/Hide Deck</button>
                 </div>
               </div>
               <div>
                 {
                   isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                    filtered ? <CreateDeck setLoginUser={setLoginUser} card={filteredCards} rawr={addCardToDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
-                      : <CreateDeck setLoginUser={setLoginUser} card={cards} rawr={addCardToDeck} user={userId1} deckname={deckname} deckCard={deck} num={num} />
+                    filtered ? <CreateDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
+                      : <CreateDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
                 }
               </div>
             </div>
@@ -521,7 +597,7 @@ function App() {
               <div className='pokeFont'>
                 <Navbar/>
                 {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {forums} rawr = {setForum}/>
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {forums} rawr = {setForum} myforum = {false}/>
                 }
               </div>
           </Route>
@@ -529,7 +605,7 @@ function App() {
               <div className='pokeFont'>
                 <Navbar/>
                 {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {myforums} rawr = {setForum}/>
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {myforums} rawr = {setForum} myforum = {true}/>
                 }
               </div>
           </Route>
@@ -543,6 +619,57 @@ function App() {
                 <Navbar/>
               </div>
           </Route>
+          {/* <Route path="/editDeck">
+            <div className='pokeFont'>
+              <h1 className='center'>Create A Deck</h1>
+              <Navbar picture={picture} userId={userId1} />
+              <Alert key="info" variant="info" hidden={hidden} className="center mt-2">
+                    {message}
+              </Alert>
+              <div className='filters center'>
+                <p></p>
+                <p>Number of cards {clickedDeck.cardNum}/60</p>
+                <p>Note: Update Before Creation</p>
+                <div className='center'>
+                  <label className='center'>&nbsp; Standard: <input value={clickedDeck.standard} placeholder={clickedDeck.standard} onChange={(e) => setDeckStandard(e.target.value)}></input></label>
+                  <label className='center'>&nbsp; Deck Name: <input placeholder={clickedDeck.name} value={clickedDeck.name} onChange={(e) => setDeckName(e.target.value)}></input></label>
+                  <p></p>
+                  <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
+                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                  <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
+                    value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                  <p></p>
+                  <p className='center'>Deck Description</p>
+                  <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
+                  <p></p>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                    <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                    <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                  </div>
+                  <p></p>
+                  <p className='center'>
+                    <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
+                    <button type="button" class="btn btn-secondary m-2" onClick={updateDeck2}>Update Deck</button>
+                    <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Edit Deck</button>
+                  </p>
+                  <div class="pagination center mt-2">
+                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                  </div>
+                  <button onClick={changeCards2} className="btn-sm btn-dark">View/Hide Deck</button>
+                </div>
+              </div>
+              <div>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                    filtered ? <EditDeck setLoginUser={setLoginUser} bruh = {updateDeck2} card={filteredCards} rawr={addCardToDeck2} user={user} deckname={deckname} deckCards={clickedDeck.cards} num={clickedDeck.cardNum} deckView={check}  />
+                      : <EditDeck setLoginUser={setLoginUser} bruh = {updateDeck2} card={cards} rawr={addCardToDeck2} user={userId1} deckname={deckname} deckCard={clickedDeck.cards} num={clickedDeck.cardNum} deckView={check}/>
+                }
+              </div>
+            </div>
+          </Route> */}
         </Switch>
       </Router>
       <div class="footer">

@@ -86,7 +86,7 @@ app.get('/allPosts', (req, res) => {
 app.post("/createPost", (req, res) => {
     const {authorId, deck, postDetails, hashtags, authorName, authorUsername} = req.body
     Posts.find({}, (err, post) => {
-            const post = new Posts({
+            const posts = new Posts({
                         deck,
                         authorId, 
                         postDetails,
@@ -94,7 +94,7 @@ app.post("/createPost", (req, res) => {
                         authorName,
                         authorUsername,
                     })
-            post.save(err => {
+            posts.save(err => {
                 if(err) {
                     res.send(err)
                 } else {
@@ -204,6 +204,19 @@ app.post('/createForum', (req, res) => {
         }
     })
 })
+app.post("/deleteForum", (req, res) => {
+    const {forumId} = req.body
+    Forum.findOne({_id: forumId}, (err, forum) => {
+        if (forum){
+            forum.delete()
+            console.log("Deleted")
+            res.send({message: "Deleted"})
+        }else {
+            console.log("Oops" + err)
+        }
+    })
+}) 
+
 
 //Decks
 app.get('/allDecks', (req, res) => {
@@ -222,6 +235,7 @@ app.post("/deleteDeck", (req, res) => {
         if (deck){
             deck.delete()
             console.log("Deleted")
+            res.send({message: "Deleted"})
         }else {
             console.log("Oops" + err)
         }
@@ -232,7 +246,9 @@ app.post("/createDeck", (req, res) => {
     Deck.findOne({name:name, userId:userId}, (err, deck) => {
         if(deck){
             res.send({message: "You already have a deck named this"})
-        } else {
+        } else if (name === "" || description === "" || standard === ""){
+            res.send({message: "You either have no name, description or standard"})
+        }else {
             const deck = new Deck({
                         name,
                         username,
@@ -285,7 +301,7 @@ app.post("/register", (req, res)=> {
     const { name, email, password, username} = req.body
     User.findOne({email: email}, (err, user) => {
         if(user){
-            res.send({message: "User already registerd"})
+            res.send({message: "Email Already Exists"})
         } else {
             const user = new User({
                 name,

@@ -6,6 +6,7 @@ const MyDeckCard = ({deck, rawr}) => {
   const history = useHistory()
 
   const [decks, setDeck] = useState({
+    deckId: deck._id
   })
   
   function onClick(e){  
@@ -17,7 +18,7 @@ const MyDeckCard = ({deck, rawr}) => {
   function onClick1(e){
     e.preventDefault();
     rawr(deck)
-    history.push("/deckInfo")
+    history.push("/editDeck")
 
   }
   function onClick2(e){
@@ -27,9 +28,7 @@ const MyDeckCard = ({deck, rawr}) => {
         const {deckId} = decks
         if (deckId){
           axios.post("http://localhost:9002/deleteDeck", decks)
-          .then( res => {
-            alert(res.data.message)
-          })
+          window.location.reload()
         }else{
           console.log("Oops")
         }

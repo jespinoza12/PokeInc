@@ -11,7 +11,7 @@ const Navbar = (setLoginUser, picture, userId) => {
   const path = `/myDecks`
 
   return (
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link color-me" href="/home">Home</a>
@@ -29,9 +29,12 @@ const Navbar = (setLoginUser, picture, userId) => {
         <ul class="navbar-nav center">
         <Dropdown>
           <Dropdown.Toggle id="dropdown-button-dark-example1" variant="">
-            <img class="width1 rounded-circle" src={picture}/>
+            <img class="width1 rounded-circle" src={picture} alt=""/>
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
+          <Dropdown.Item href="/createForum">
+              Post
+            </Dropdown.Item>
             <Dropdown.Item href="/createForum">
               Create Forum
             </Dropdown.Item>

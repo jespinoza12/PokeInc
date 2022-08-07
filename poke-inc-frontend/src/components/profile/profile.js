@@ -2,12 +2,14 @@ import React, { useState } from "react"
 import Navbar from "../navbar/navbar";
 import './profile.css'
 import axios from "axios"
-import { useHistory } from "react-router-dom"
+import Alert from 'react-bootstrap/Alert';
+
 
 const Profile = ({setLoginUser, user}) => {
 
-    const history = useHistory()
-
+    const [message, setMessage] = useState("")
+    const [varient, setVarient] = useState("")
+    const [hidden, setHidden] = useState(true)
     const [ User, setUser] = useState({
         id: user._id,
         name: user.name,
@@ -32,17 +34,24 @@ const Profile = ({setLoginUser, user}) => {
         if(picture && id && name && email && username && password && (password === reEnterPassword)){
             axios.post("http://localhost:9002/edit", User)
             .then( res => {
-                alert(res.data)
-                history.push("/")
+                // alert(res.data)
+                setMessage(res.data)
+                setHidden(false)
+                setVarient("success")
             })
         } else {
-            alert("invlid input")
+            setVarient("danger")
+            setMessage("Oopsie, that not supposed to happen, try again")
+            setHidden(false)
         }
     }
 
     return (
         <div className="pokeFont center">
             <Navbar/>
+            <Alert key={varient} variant={varient} hidden={hidden}>
+                    {message}
+            </Alert>
                 <div className="container bg-dark text-white m-2 ">
                 <h1 className="center m-2">Welcome, {user.name}</h1>
                 <img alt="" class="image center-1" src={user.picture}></img>

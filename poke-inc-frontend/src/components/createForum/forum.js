@@ -5,12 +5,16 @@ import DeckView from "./DeckView"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.min.css";
+import Alert from 'react-bootstrap/Alert';
 
 
 const Forum = ({decks, rawr, sdeck}) => {
 
     const history = useHistory()
     const current = new Date();
+    const [message, setMessage] = useState("")
+    const [varient, setVarient] = useState("")
+    const [hidden, setHidden] = useState(true)
     const [updat, setUpdated] = useState(false)
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
   
@@ -46,11 +50,15 @@ const Forum = ({decks, rawr, sdeck}) => {
         if( name && content){
             axios.post("http://localhost:9002/createForum", user)
             .then( res => {
-                alert(res.data.message)
-                history.push("/home")
+                // alert(res.data.message)
+                setMessage(res.data.message)
+                setVarient("success")
+                setHidden(false)
             })
         } else {
-            alert("invlid input")
+            setVarient("danger")
+            setMessage("Oopsies thats not supposed to happen, you might have no name or context")
+            setHidden(false)
         }
     }
 
@@ -76,6 +84,9 @@ const Forum = ({decks, rawr, sdeck}) => {
     return (
         <div className="center pokeFont">
             <Navbar/>
+            <Alert key={varient} variant={varient} hidden={hidden}>
+                    {message}
+            </Alert>
             <div className="register center-1">
                 {console.log("User", user)}
                 <label>Selected Deck: {sdeck.name}</label>

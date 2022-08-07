@@ -1,11 +1,14 @@
 import React, {useState} from "react"
 import "./login.css"
 import axios from "axios"
+import Alert from 'react-bootstrap/Alert';
 import { useHistory } from "react-router-dom"
 
 const Login = ({ setLoginUser, LoggedIn, rawr}) => {
 
     const history = useHistory()
+    const [message, setMessage] = useState("")
+    const [hidden, setHidden] = useState(true)
 
     const [ user, setUser] = useState({
         email:"",
@@ -23,12 +26,17 @@ const Login = ({ setLoginUser, LoggedIn, rawr}) => {
     const login = () => {
         axios.post("http://localhost:9002/login", user)
         .then(res => {
-            alert(res.data.message)
             setLoginUser(res.data.user)
-            localStorage.setItem('user', res.data.user._id)
-            localStorage.setItem('login', true)
-            localStorage.setItem('username', res.data.user.username)
-            localStorage.setItem('picture', res.data.user.picture)
+            setMessage(res.data.message)
+            setHidden(false)
+            try{
+                localStorage.setItem('user', res.data.user._id)
+                localStorage.setItem('login', true)
+                localStorage.setItem('username', res.data.user.username)
+                localStorage.setItem('picture', res.data.user.picture)
+            }catch (err){
+                console.log(err)
+            }
 
         })
     }
@@ -36,6 +44,9 @@ const Login = ({ setLoginUser, LoggedIn, rawr}) => {
     return (
         <div className="center m-5 pokeFont">
             <div className="login">
+                <Alert key="info" variant="info" hidden={hidden}>
+                        {message}
+                </Alert>
                 <h1>Login</h1>
                 <input type="text" name="email" value={user.email} onChange={handleChange} placeholder="Enter your Email"></input>
                 <input type="password" name="password" value={user.password} onChange={handleChange}  placeholder="Enter your Password" ></input>
