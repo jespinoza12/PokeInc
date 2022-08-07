@@ -5,7 +5,7 @@ const DeckView = ({picture, decks, rawr}) => {
     
     return (
         decks.map((deck) => (
-            <div key={deck._id} className='container-1 m-2'>
+            <div key={deck._id} className=''>
               <div>
                 <DeckCard deck = {deck} rawr = {rawr}/>
               </div>

@@ -5,7 +5,7 @@ const Comments = ({fourm, comments}) => {
     console.log(comments)
     return (
         comments.map((comment) => (
-            <div key={comment._id} className=''>
+            <div key={comment._id} className='center'>
               <div>
                 <Comment comment = {comment}/>
               </div>

@@ -26,6 +26,14 @@
     background-color: lightblue;
   }
 
+  .container-2{
+    border: solid 1px lightblue;
+    width: 500px;
+    background-color: lightblue;
+    display: inline-block;
+
+  }
+
 .box {
     border: solid 1px lightblue;
     margin-bottom: 400px;

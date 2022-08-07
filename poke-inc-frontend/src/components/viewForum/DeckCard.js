@@ -12,8 +12,8 @@ const DeckCard = ({deck, rawr}) => {
   }
 
 return (
-          <div className='card bg-dark text-white pokeFont'>
-             <div class="card-body">
+          <div className='card bg-dark text-white pokeFont center'>
+             <div class="card-body ">
                     <h5 class="card-title">{deck.name}</h5>
                     <label>Creator:<p>{deck.username}</p></label>
                     <p></p>

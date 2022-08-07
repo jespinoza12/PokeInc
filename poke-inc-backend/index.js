@@ -59,10 +59,15 @@ const commentSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
     deck: [],
     authorId: String, 
-    postDetails: String,
+    caption: String,
     hashtags: String, 
-    authorName: String, 
-    authorUsername: String, 
+    username: String, 
+    comments: [{
+        comment:{type: String},
+        commenter:{type:String},
+        commenterId:{type:String},
+    }],
+    created: String,
 })
 
 //Collections
@@ -83,24 +88,28 @@ app.get('/allPosts', (req, res) => {
         console.log('error: ', error);
     });
 })
-app.post("/createPost", (req, res) => {
-    const {authorId, deck, postDetails, hashtags, authorName, authorUsername} = req.body
-    Posts.find({}, (err, post) => {
-            const posts = new Posts({
+app.post('/createPost', (req, res) => {
+    const {caption, authorId, username, created, deck, hashtags} = req.body
+    Forum.findOne({caption:caption, authorId: authorId}, (err, post) => {
+        if(post){
+            res.send({message: "You already have a forum named this"})
+        } else {
+            const post1 = new Posts({
+                        caption,
+                        username,
+                        authorId,
                         deck,
-                        authorId, 
-                        postDetails,
+                        created,
                         hashtags,
-                        authorName,
-                        authorUsername,
                     })
-            posts.save(err => {
+            post1.save(err => {
                 if(err) {
                     res.send(err)
                 } else {
                     res.send( { message: "Successfully Created." })
                 }
             })
+        }
     })
 })
 
@@ -159,15 +168,7 @@ app.post('/addC', (req, res) => {
 })
 
 //Edit
-app.post('/addCard', (req, res) => {
-    const {deckId, card} = req.body
-    Deck.findOneAndUpdate({ _id: deckId }, {$push : {deck: card}})
-});
-app.post('/deleteCard', (req, res) => {
-    const {deckId, card} = req.body
-    //first false is for upsert and second is so only on gets pulled
-    Deck.findOneAndUpdate({ _id: deckId }, {$pull : {deck: card}}, false, false)
-});
+
 
 //Forums
 app.get('/allForums', (req, res) => {

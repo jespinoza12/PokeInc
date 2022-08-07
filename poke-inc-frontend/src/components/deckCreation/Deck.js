@@ -7,7 +7,7 @@ const Deck = ({card, rawr, deckname, deckCards, user, num, check, rawr2}) => {
 
 return (
     card.map((card) => (
-      <div key={card.id} className='container m-2'>
+      <div key={card.id} className='container center'>
         <div>
           <Card cards = {card} rawr = {rawr} userId = {user} deckname = {deckname} deckcards = {deckCards} num = {num} check={check} rawr2 = {rawr2}/>
         </div>

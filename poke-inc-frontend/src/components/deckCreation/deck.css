@@ -1,0 +1,8 @@
+.container{
+    border: solid 1px lightblue;
+    justify-content: center;
+    width: fit-content;
+    align-items: center;
+    display: inline-block;
+    background-color: lightblue;
+  }

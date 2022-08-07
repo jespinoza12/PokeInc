@@ -21,9 +21,11 @@ import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
 import axios from "axios"
 import Alert from 'react-bootstrap/Alert';
-
+import CreatePost from './components/posts/createPost';
+import PostList from './components/posts/postList';
 function App() {
   //State Variable
+  const [postNameFilter, setPostNameFilter] = useState("")
   const [user, setLoginUser] = useState({})
   const [varient, setVarient] = useState("info")
   const [i, setI] = useState(0)
@@ -55,6 +57,8 @@ function App() {
   const [clickedForum, setClickForum] = useState([])
   const [isLoading, setLoading] = useState(false);
   const [Deck, setDeck1] = useState({});
+  const [posts, setPosts] = useState([])
+  const [myPosts, setMyPosts] = useState([])
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
@@ -70,6 +74,7 @@ function App() {
     } else if (filter === "Trainer") {
       getAllTrainer()
     } else {
+      getPosts()
       getMyForums()
       getComments()
       getForums()
@@ -79,6 +84,7 @@ function App() {
       getFilteredCards()
       getCardsByType()
     }  
+    getPosts()
     getComments()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
@@ -87,14 +93,12 @@ function App() {
   }, [pageNum], [], [user]);
 
   useEffect(() => {
+    getPosts()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
   //eslint-disable-next-line
   }, [user]);
-
-
-
 
   //Increases Page num
   const increasePageNum = () => {
@@ -111,6 +115,24 @@ function App() {
       setPageNum(decreasedPageNum)
     }
   }
+
+  //Post Filter
+  useEffect(() => {
+    console.log(`Post Filter: ${[postNameFilter]}`)
+    if (postNameFilter === "") {
+      setFiltered(false)
+      setPageNum(1)
+      getData()
+      getFilteredCards()
+    } else {
+      setFilter("")
+      setPageNum(1)
+      setFiltered(true);
+      getFilteredCards();
+      console.log(cards)
+    }
+     //eslint-disable-next-line
+  }, [postNameFilter]);
   //Name Filter
   useEffect(() => {
     console.log(`Name: ${nameFilter}`)
@@ -231,7 +253,6 @@ function App() {
   }
   //Adds card to deck
   const addCardToDeck = (card) => {
-
     if (num > 60) {
       alert("You have more than 60 cards")
       setNum(60)
@@ -240,6 +261,9 @@ function App() {
       setDeck(current => [...current, {_id: i, card}]);
       console.log(deck)
       setCanCreate(false)
+      setHidden(false)
+      setMessage("Card Added")
+      setVarient("success")
       setNum(num + 1)
     }
   }
@@ -356,6 +380,7 @@ function App() {
     setClickForum(forum)
   }
 
+
   const getComments = () => {
     setLoading(true)
     
@@ -392,8 +417,8 @@ function App() {
         })
         .catch((error) => {
           console.log(error)
-          alert('Error retrieving data!!!');
-          alert(error)
+          console.log('Error retrieving data!!!');
+          console(error)
           setLoading(false)
         });
   }
@@ -423,13 +448,30 @@ function App() {
     }
   }
 
+  const getPosts = () => {
+    axios.get('http://localhost:9002/allPosts')
+      .then((response) => {
+        setPosts(response.data)
+        var tempPosts = response.data.filter((post) => {
+          return post.authorId === localStorage.getItem('user')
+        })
+        setMyPosts(tempPosts)
+        console.log(posts)
+        console.log('Data has been received!!');
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('Error retrieving data!!!');
+      });
+  }
+
   return (
     <div className="App">
       <Router>
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} forums = {forums} rawr ={setForum}/> 
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts = {posts} /> 
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
@@ -443,7 +485,7 @@ function App() {
             {
               <div>
                 {
-                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} forums = {forums} rawr ={setForum}/>
+                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts = {posts} rawr/>
                 }
               </div>        
             }
@@ -492,11 +534,11 @@ function App() {
           </Route>
           <Route path="/createDeck">
             <div className='pokeFont'>
-              <h1 className='center'>Create A Deck</h1>
               <Navbar picture={picture} userId={userId1} />
-              <Alert key={varient} variant={varient} hidden={hidden} className="center mt-2">
+              <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
                     {message}
               </Alert>
+              <h1 className='center'>Create A Deck</h1>
               <div className='filters center'>
                 <p></p>
                 <p>Number of cards {num}/60</p>
@@ -610,13 +652,20 @@ function App() {
               </div>
           </Route>
           <Route path="/createPost">
-              <div className='pokeFont'>
-                <Navbar/>
-              </div>
+          <div className='pokeFont'>
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                  <div>
+                    <CreatePost decks={decks} rawr={getDeck} sdeck = {clickedDeck}/>
+                  </div>
+              }
+            </div>
           </Route>
           <Route path="/myPage">
               <div className='pokeFont'>
+                <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
                 <Navbar/>
+                <PostList posts={myPosts}/>
               </div>
           </Route>
           {/* <Route path="/editDeck">

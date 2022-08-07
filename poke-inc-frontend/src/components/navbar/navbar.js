@@ -32,7 +32,7 @@ const Navbar = (setLoginUser, picture, userId) => {
             <img class="width1 rounded-circle" src={picture} alt=""/>
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
-          <Dropdown.Item href="/createForum">
+          <Dropdown.Item href="/createPost">
               Post
             </Dropdown.Item>
             <Dropdown.Item href="/createForum">
