@@ -471,7 +471,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts = {posts} /> 
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts = {posts} rawr={getDeck} /> 
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
@@ -485,7 +485,7 @@ function App() {
             {
               <div>
                 {
-                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts = {posts} rawr/>
+                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts = {posts} rawr={getDeck}/>
                 }
               </div>        
             }

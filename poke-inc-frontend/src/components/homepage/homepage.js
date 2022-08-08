@@ -8,7 +8,7 @@ const Homepage = ({picture, forums, rawr, posts}) => {
         <div className="pokeFont">
             <h1 className="center">Welcome to PokeInc</h1>
             <Navbar picture = {picture}/>
-            <PostList posts={posts}/>
+            <PostList posts={posts} rawr={rawr}/>
         </div>
         
     )
