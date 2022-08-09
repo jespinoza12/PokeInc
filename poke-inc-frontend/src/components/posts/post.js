@@ -59,6 +59,12 @@ const Post = ({posts, rawr}) => {
             return comment.fid === localStorage.getItem("post");
             });
             setComments(tempDecks);
+            if (hidden === true){
+                setHidden(false)
+            }else if (hidden === false){
+                setHidden(true)
+
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -76,24 +82,28 @@ const Post = ({posts, rawr}) => {
             <p>Posted by: {posts.username}</p>
             <p>Date: {posts.created}</p>
         <div className="center-1 center ">
-            <h2>Comments</h2>
-            <label className="center">Comment:</label>
-            <p></p>
             <textarea
             onChange={handleChange}
             name="comment"
             value={user.comment}
             ></textarea>
             <p></p>
-            <button className="btn btn-dark" onClick={addComment}>
-            Create Comment
+            <button className="btn btn-secondary" onClick={addComment}>
+            Comment
             </button>
             <p></p>
-            <button className="btn btn-dark" onClick={getComments}>
-            View Comments/Update
-            </button>
+            {
+                hidden ? <button className="btn btn-secondary" onClick={getComments}>
+                View Comments/Update
+                </button> : <button className="btn btn-secondary" onClick={getComments}>
+                Hide Comments
+                </button>
+            }
             <div className="forumBox center-1 " >
-            <Comments comments={commentList}  />
+            <h1>Comments</h1>
+            {
+                hidden ? "" : <Comments comments={commentList}  />
+            }
             </div>
         </div>
         </div>

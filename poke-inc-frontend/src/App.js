@@ -90,7 +90,7 @@ function App() {
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
   //eslint-disable-next-line
-  }, [pageNum], [], [user]);
+  }, [pageNum], [], [user], [comments]);
 
   useEffect(() => {
     getPosts()
