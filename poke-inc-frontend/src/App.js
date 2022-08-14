@@ -3,6 +3,7 @@ import Homepage from "./components/homepage/homepage"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Forums from "./components/viewForum/Forums"
 import EditDeck from "./components/editDeck/Deck"
+import UserList from './components/allUsers/UserList';
 import Forum from "./components/createForum/forum"
 import Login from "./components/login/login"
 import Register from "./components/register/register"
