@@ -25,8 +25,12 @@ import CreatePost from './components/posts/createPost';
 import PostList from './components/posts/postList';
 function App() {
   //State Variable
+  const [users, setUsers] = useState([])
+  const [fusers, setfUsers] = useState([])
+  const [editCheck, setEditCheck] = useState(false)
   const [postNameFilter, setPostNameFilter] = useState("")
   const [user, setLoginUser] = useState({})
+  const [clickedUser, setClickedUser] = useState([])
   const [varient, setVarient] = useState("info")
   const [i, setI] = useState(0)
   const [check, setCheck] = useState(false)
@@ -58,14 +62,14 @@ function App() {
   const [isLoading, setLoading] = useState(false);
   const [Deck, setDeck1] = useState({});
   const [posts, setPosts] = useState([])
+  const [usersPosts, setUPosts] = useState([])
   const [myPosts, setMyPosts] = useState([])
+  const [userFilter, setUserFilter] = useState("")
   //Filters
   const [typeFilter, setTypeFilter] = useState('')
   const [nameFilter, setNameFilter] = useState('')
   pokemon.configure({ apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63' })
   //Gets data whenever page is changed
-  
- 
   useEffect(() => {
     if (filter === "Energy") {
       getAllEnergy()
@@ -74,7 +78,10 @@ function App() {
     } else if (filter === "Trainer") {
       getAllTrainer()
     } else {
+      updateDeck()
+      getClickedUserPost()
       getPosts()
+      getAllUsers()
       getMyForums()
       getComments()
       getForums()
@@ -83,23 +90,22 @@ function App() {
       getData()
       getFilteredCards()
       getCardsByType()
-    }  
+    }
+    setEditCheck(false)
     getPosts()
     getComments()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [pageNum], [], [user], [comments]);
-
   useEffect(() => {
     getPosts()
     setUserId(localStorage.getItem('user'))
     setUsername(localStorage.getItem('username'))
     setPicture(localStorage.getItem('picture'))
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [user]);
-
   //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
@@ -115,7 +121,6 @@ function App() {
       setPageNum(decreasedPageNum)
     }
   }
-
   //Post Filter
   useEffect(() => {
     console.log(`Post Filter: ${[postNameFilter]}`)
@@ -131,8 +136,12 @@ function App() {
       getFilteredCards();
       console.log(cards)
     }
-     //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [postNameFilter]);
+  useEffect(() => {
+    getClickedUserPost()
+    //eslint-disable-next-line
+  }, [clickedUser]);
   //Name Filter
   useEffect(() => {
     console.log(`Name: ${nameFilter}`)
@@ -148,7 +157,7 @@ function App() {
       getFilteredCards();
       console.log(cards)
     }
-     //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [nameFilter]);
   //Type Filter
   useEffect(() => {
@@ -165,12 +174,32 @@ function App() {
       setFiltered(true);
       console.log(cards)
     }
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [typeFilter]);
   useEffect(() => {
+    console.log(`Username: ${userFilter}`)
+    if (userFilter === "") {
+      setFiltered(false);
+      getAllUsers()
+    } else {
+      filterUsers()
+      setFiltered(true);
+    }
+    //eslint-disable-next-line
+  }, [userFilter]);
+  useEffect(() => {
     console.log(`DeckName: ${deckname}`)
-
   }, [deckname]);
+  useEffect(() => {
+    console.log(`Standard: ${deckStandard}`)
+  }, [deckStandard]);
+  useEffect(() => {
+    if (editCheck === false){
+      updateDeck()
+    }else if (editCheck === true){
+      updateDeck1()
+    }
+  }, [editCheck]);
   //Gets Cards
   const getData = () => {
     setLoading(true)
@@ -258,7 +287,7 @@ function App() {
       setNum(60)
     } else {
       setI(i + 1)
-      setDeck(current => [...current, {_id: i, card}]);
+      setDeck(current => [...current, { _id: i, card }]);
       console.log(deck)
       setCanCreate(false)
       setHidden(false)
@@ -267,7 +296,6 @@ function App() {
       setNum(num + 1)
     }
   }
-
   const deleteCardFromDeck = (cardId) => {
     if (num < 0) {
       alert("You have no cards")
@@ -278,7 +306,7 @@ function App() {
           setNum(num - 1)
           return card._id !== cardId;
         }),
-        
+
       );
       setVarient("danger")
       setMessage("Card Deleted")
@@ -301,6 +329,25 @@ function App() {
       setHidden(false)
     }
   }
+  const editDeck = () => {
+    console.log(Deck)
+    if (canCreate === true) {
+      axios.post("http://localhost:9002/editDeck", Deck)
+        .then(res => {
+          setMessage(res.data.message)
+          setHidden(false)
+        })
+      setCanCreate(false)
+    } else {
+      setMessage("Update First")
+      setHidden(false)
+    }
+  }
+
+  //Gets Selected User
+  const getUser = (user) => {
+    setClickedUser(user)
+  }
   //Updates Deck for creation
   const updateDeck = () => {
     setDeck1({
@@ -318,7 +365,6 @@ function App() {
     setVarient("success")
     setHidden(false)
   }
- 
   //Get all Decks
   const getAllDecks = () => {
     axios.get('http://localhost:9002/allDecks')
@@ -379,50 +425,46 @@ function App() {
   const setForum = (forum) => {
     setClickForum(forum)
   }
-
-
   const getComments = () => {
     setLoading(true)
-    
+
     axios.get('http://localhost:9002/allC')
       .then((response) => {
-          var tempDecks = response.data.filter((comment) => {
-            return comment.fid === localStorage.getItem('forum')
-          })
-          setComments(tempDecks)
-          console.log('Data has been received!!');
-          console.log(comments);
-          setLoading(false)
+        var tempDecks = response.data.filter((comment) => {
+          return comment.fid === localStorage.getItem('forum')
         })
-        .catch((error) => {
-          console.log(error)
-          alert('Error retrieving data!!!');
-          alert(error)
-          setLoading(false)
-        });
+        setComments(tempDecks)
+        console.log('Data has been received!!');
+        console.log(comments);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        alert('Error retrieving data!!!');
+        alert(error)
+        setLoading(false)
+      });
   }
-
   const getMyForums = () => {
     setLoading(true)
-    
+
     axios.get('http://localhost:9002/allForums')
       .then((response) => {
-          var tempDecks = response.data.filter((forum) => {
-            return forum.authorId === localStorage.getItem('user')
-          })
-          setMyForums(tempDecks)
-          console.log('Data has been received!!');
-          console.log(myforums);
-          setLoading(false)
+        var tempDecks = response.data.filter((forum) => {
+          return forum.authorId === localStorage.getItem('user')
         })
-        .catch((error) => {
-          console.log(error)
-          console.log('Error retrieving data!!!');
-          console(error)
-          setLoading(false)
-        });
+        setMyForums(tempDecks)
+        console.log('Data has been received!!');
+        console.log(myforums);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('Error retrieving data!!!');
+        console(error)
+        setLoading(false)
+      });
   }
-
   const changeCards = () => {
     if (canCreate === true) {
       if (viewDeck === false) {
@@ -431,23 +473,24 @@ function App() {
         setCards([])
         setViewDeck(true)
         setFilteredCards(deck)
+        setHidden(true)
         setCards(deck)
         setCheck(true)
-      }else if (viewDeck === true){
+      } else if (viewDeck === true) {
         setVarient("info")
         updateDeck()
         setCards([])
+        setHidden(false)
         setFilteredCards([])
         setViewDeck(false)
         getData()
         setCheck(false)
       }
-    }else{
+    } else {
       setMessage("Update First")
       setVarient("danger")
     }
   }
-
   const getPosts = () => {
     axios.get('http://localhost:9002/allPosts')
       .then((response) => {
@@ -464,19 +507,72 @@ function App() {
         console.log('Error retrieving data!!!');
       });
   }
-
+  const getAllUsers = () => {
+    axios.get('http://localhost:9002/allUsers')
+      .then((response) => {
+        setUsers(response.data)
+        console.log(response.data)
+        console.log('Data has been received!!');
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('Error retrieving data!!!');
+      });
+  }
+  const filterUsers = () => {
+    axios.get('http://localhost:9002/allUsers')
+      .then((response) => {
+        var tempUsers = response.data.filter((user) => {
+          return user.username.toLowerCase().includes(userFilter.toLowerCase())
+        })
+        setfUsers(tempUsers)
+        console.log(tempUsers)
+        console.log('Data has been received!!');
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('Error retrieving data!!!');
+      });
+  }
+  const getClickedUserPost = () => {
+    setLoading(true)
+    axios.get('http://localhost:9002/allPosts')
+      .then((response) => {
+        var tempPosts = response.data.filter((post) => {
+          return post.authorId === clickedUser._id
+        })
+        setUPosts(tempPosts)
+        console.log(tempPosts)
+        console.log('Data has been received!!');
+        setLoading(false)
+      })
+      .catch((error) => {
+        setLoading(false)
+        console.log(error)
+        console.log('Error retrieving data!!!');
+      });
+  }
+  const updateDeck1 = () => {
+    setNum(parseInt(clickedDeck.cardNum))
+    setDeckName(clickedDeck.name)
+    setDeckStandard(clickedDeck.standard)
+    setDeckDescription(clickedDeck.description)
+    setDeck(clickedDeck.cards)
+  }
+  
+  
   return (
     <div className="App">
       <Router>
         <Switch>
           <Route exact path="/">
             {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts = {posts} rawr={getDeck} /> 
+              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
           <Route path="/login">
-            <Login setLoginUser={setLoginUser} rawr = {getForums} />
+            <Login setLoginUser={setLoginUser} rawr={getForums} />
           </Route>
           <Route path="/register">
             <Register />
@@ -485,9 +581,9 @@ function App() {
             {
               <div>
                 {
-                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts = {posts} rawr={getDeck}/>
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts={posts} rawr={getDeck} />
                 }
-              </div>        
+              </div>
             }
           </Route>
           <Route path={"/collection"}>
@@ -536,7 +632,7 @@ function App() {
             <div className='pokeFont'>
               <Navbar picture={picture} userId={userId1} />
               <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
-                    {message}
+                {message}
               </Alert>
               <h1 className='center'>Create A Deck</h1>
               <div className='filters center'>
@@ -602,7 +698,7 @@ function App() {
                   <div>
                     <h1 className='center'>My Decks</h1>
                     <Navbar picture={picture} userId={userId1} />
-                    <DeckView1 decks={mydecks} rawr={getDeck} />
+                    <DeckView1 decks={mydecks} rawr={getDeck} rawr2={updateDeck1} edit = {setEditCheck}/>
                   </div>
               }
             </div>
@@ -617,108 +713,127 @@ function App() {
             </div>
           </Route>
           <Route path="/createForum">
-          <div className='pokeFont'>
+            <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
                   <div>
-                    <Forum decks={mydecks} rawr={getDeck} sdeck = {clickedDeck}/>
+                    <Forum decks={mydecks} rawr={getDeck} sdeck={clickedDeck} />
                   </div>
               }
             </div>
           </Route>
           <Route path="/forumInfo">
-              <div className='pokeFont'>
-                <Navbar/>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <ForumInfo forum = {clickedForum} rawr = {getDeck} comments={comments}/>
-                }
+            <div className='pokeFont'>
+              <Navbar />
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <ForumInfo forum={clickedForum} rawr={getDeck} comments={comments} />
+              }
 
-              </div>
+            </div>
           </Route>
           <Route path="/allForums">
-              <div className='pokeFont'>
-                <Navbar/>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {forums} rawr = {setForum} myforum = {false}/>
-                }
-              </div>
+            <div className='pokeFont'>
+              <Navbar />
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={forums} rawr={setForum} myforum={false} />
+              }
+            </div>
           </Route>
           <Route path="/myForums">
-              <div className='pokeFont'>
-                <Navbar/>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums = {myforums} rawr = {setForum} myforum = {true}/>
-                }
-              </div>
+            <div className='pokeFont'>
+              <Navbar />
+              {
+                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={myforums} rawr={setForum} myforum={true} />
+              }
+            </div>
           </Route>
           <Route path="/createPost">
-          <div className='pokeFont'>
+            <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
                   <div>
-                    <CreatePost decks={decks} rawr={getDeck} sdeck = {clickedDeck}/>
+                    <CreatePost decks={decks} rawr={getDeck} sdeck={clickedDeck} />
                   </div>
               }
             </div>
           </Route>
           <Route path="/myPage">
-              <div className='pokeFont'>
-                <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
-                <Navbar/>
-                <PostList posts={myPosts}/>
-              </div>
-          </Route>
-          {/* <Route path="/editDeck">
             <div className='pokeFont'>
-              <h1 className='center'>Create A Deck</h1>
-              <Navbar picture={picture} userId={userId1} />
-              <Alert key="info" variant="info" hidden={hidden} className="center mt-2">
-                    {message}
-              </Alert>
-              <div className='filters center'>
-                <p></p>
-                <p>Number of cards {clickedDeck.cardNum}/60</p>
-                <p>Note: Update Before Creation</p>
-                <div className='center'>
-                  <label className='center'>&nbsp; Standard: <input value={clickedDeck.standard} placeholder={clickedDeck.standard} onChange={(e) => setDeckStandard(e.target.value)}></input></label>
-                  <label className='center'>&nbsp; Deck Name: <input placeholder={clickedDeck.name} value={clickedDeck.name} onChange={(e) => setDeckName(e.target.value)}></input></label>
+              <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
+              <Navbar />
+              <PostList posts={myPosts} rawr = {getDeck}/>
+            </div>
+          </Route>
+          <Route path="/editDeck">
+            <div className='pokeFont'>
+                <Navbar picture={picture} userId={userId1} />
+                <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
+                  {message}
+                </Alert>
+                <h1 className='center'>Edit {clickedDeck.name}</h1>
+                <div className='filters center'>
                   <p></p>
-                  <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
-                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                  <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
-                    value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                  <p></p>
-                  <p className='center'>Deck Description</p>
-                  <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
-                  <p></p>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                  <p>Number of cards {num}/60</p>
+                  <p>Note: Update Before Creation</p>
+                  <div className='center'>
+                    <label className='center' hidden={hidden}>&nbsp; Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label>
+                    <label className='center'  hidden={hidden}>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
+                    <p></p>
+                    <label  hidden={hidden}>&nbsp; Name: </label> <input  hidden={hidden} type='text' placeholder='name filter'
+                      value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                    <label  hidden={hidden} className='m-2'>Type: </label> <input type='text'  hidden={hidden} placeholder='type filter'
+                      value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                    <p></p>
+                    <p className='center'>Deck Description</p>
+                    <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
+                    <p></p>
+                    <div class="btn-group" role="group" aria-label="Basic example"  hidden={hidden}>
+                      <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                      <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                      <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                    </div>
+                    <p></p>
+                    <p className='center'>
+                      <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
+                      <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
+                      <button type="button" class="btn btn-secondary m-2" onClick={editDeck}>Finish Editing</button>
+                    </p>
+                    <div class="pagination center mt-2" hidden={hidden}>
+                      <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                      <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                      <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                    </div>
+                    <button onClick={changeCards} className="btn-sm btn-dark">View/Hide Deck</button>
                   </div>
-                  <p></p>
-                  <p className='center'>
-                    <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
-                    <button type="button" class="btn btn-secondary m-2" onClick={updateDeck2}>Update Deck</button>
-                    <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Edit Deck</button>
-                  </p>
-                  <div class="pagination center mt-2">
-                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
-                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
-                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
-                  </div>
-                  <button onClick={changeCards2} className="btn-sm btn-dark">View/Hide Deck</button>
+                </div>
+                <div>
+                  {
+                    isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                      filtered ? <EditDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
+                        : <EditDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
+                  }
                 </div>
               </div>
-              <div>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                    filtered ? <EditDeck setLoginUser={setLoginUser} bruh = {updateDeck2} card={filteredCards} rawr={addCardToDeck2} user={user} deckname={deckname} deckCards={clickedDeck.cards} num={clickedDeck.cardNum} deckView={check}  />
-                      : <EditDeck setLoginUser={setLoginUser} bruh = {updateDeck2} card={cards} rawr={addCardToDeck2} user={userId1} deckname={deckname} deckCard={clickedDeck.cards} num={clickedDeck.cardNum} deckView={check}/>
-                }
-              </div>
+          </Route>
+          <Route path="/allUsers">
+            <div className='pokeFont'>
+              <Navbar/>
+              <input className='center-1' placeholder='search by username' name="userFilter" onChange={(e) => setUserFilter(e.target.value)} ></input>
+              {
+                filtered ? <UserList users={fusers} rawr = {getUser}  rawr2 = {getClickedUserPost}/> : <UserList users={users} rawr = {getUser} rawr2 = {getClickedUserPost}/>
+              }
             </div>
-          </Route> */}
+          </Route>
+          <Route path="/usersPage">
+            <div className='pokeFont'>
+              <h1 className='center'>Welcome, to {clickedUser.username}'s page</h1>
+              <Navbar />
+              {
+                isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <PostList posts={usersPosts} rawr = {getDeck} />
+              }
+         
+            </div>
+          </Route>
         </Switch>
       </Router>
       <div class="footer">

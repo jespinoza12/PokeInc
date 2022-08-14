@@ -1,9 +1,10 @@
 import React from "react"
+import "./deck.css"
 
-const Card = ({cards, rawr, num, deckView, deckCards, bruh}) => {
+const Card = ({cards, rawr, num, check, rawr2}) => {
 
   
-  function addCard(e){  
+  function cardHandler(e){  
     e.preventDefault();
     console.log('Card Clicked!');
     if (num === 60){
@@ -14,23 +15,25 @@ const Card = ({cards, rawr, num, deckView, deckCards, bruh}) => {
 
   }
 
-  function deleteCard(e){  
+  function cardHandler2(e){  
     e.preventDefault();
-    console.log('Card Clicked2!');
-    
+    console.log('Card Clicked!');
+    if (num === 0){
+      alert("Cannot remove")
+    }else {
+      rawr2(cards._id)
+    }
 
   }
-
 
 return (
           <div>
             {
-              deckView? <img className='mt-2 btn ' onClick={deleteCard} src={cards.images.small} alt={cards.name}></img> 
-              : <img className='mt-2 btn ' onClick={addCard} src={cards.images.small} alt={cards.name}></img>
+              check? <img className='btn' onClick={cardHandler2} src={cards.card.images.small || ""} alt={cards.card.name || ""}></img> : <img className='mt-2 btn ' onClick={cardHandler} src={cards.images.small || ""} alt={cards.name}></img>
             }
             <p></p>
             {
-              deckView? <button className="center-1" onClick={deleteCard}>Delete</button> : <button onClick={addCard} className="center-1">Add</button>
+              check? <button className="center-1 btn btn-secondary" onClick={cardHandler2}>Delete</button> : <button  className="center-1 btn btn-secondary" onClick={cardHandler}>Add</button>
             }
           </div>
     )}

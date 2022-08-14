@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useState} from 'react'
 import { useHistory } from "react-router-dom"
 
-const MyDeckCard = ({deck, rawr}) => {
+const MyDeckCard = ({deck, rawr, rawr2, edit}) => {
   const history = useHistory()
 
   const [decks, setDeck] = useState({
@@ -18,6 +18,8 @@ const MyDeckCard = ({deck, rawr}) => {
   function onClick1(e){
     e.preventDefault();
     rawr(deck)
+    rawr2()
+    edit(true)
     history.push("/editDeck")
 
   }

@@ -4,9 +4,10 @@ import mongoose from "mongoose"
 
 const app = express()
 //Misc
-app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.json({limit: '100mb', extended: true}))
+app.use(express.urlencoded({limit: '100mb', extended: true}))
 app.use(cors())
+
 
 //Mongoose Connection
 mongoose.set('useFindAndModify', false);
@@ -245,9 +246,7 @@ app.post("/deleteDeck", (req, res) => {
 app.post("/createDeck", (req, res) => {
     const { name, userId, cards, username, description, standard, cardNum } = req.body
     Deck.findOne({name:name, userId:userId}, (err, deck) => {
-        if(deck){
-            res.send({message: "You already have a deck named this"})
-        } else if (name === "" || description === "" || standard === ""){
+        if (name === "" || description === "" || standard === ""){
             res.send({message: "You either have no name, description or standard"})
         }else {
             const deck = new Deck({
@@ -269,7 +268,17 @@ app.post("/createDeck", (req, res) => {
         }
     })
 })        
-
+app.post("/editDeck", (req, res) => {
+    const {name, userId, cards, username, description, standard, cardNum } = req.body
+    Deck.findOneAndUpdate({ userId: userId, name:name }, { name: name, username: username, userId: userId, cards:cards, description: description, standard: standard, cardNum: cardNum }, function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send("Update Complete")
+        }
+    })
+        
+});
 //Edit User
 app.post("/edit", (req, res) => {
     const {id, username, name, email, password, picture} = req.body
@@ -282,7 +291,17 @@ app.post("/edit", (req, res) => {
     })
         
 });
-
+//All Users
+app.get('/allUsers', (req, res) => {
+    User.find({})
+    .then((data) => {
+        console.log('All Users: ', data);
+        res.json(data);
+    })
+    .catch((error) => {
+        console.log('error: ', error);
+    });
+})
 //Login & Register
 app.post("/login", (req, res)=> {
     const { email, password} = req.body
@@ -309,7 +328,7 @@ app.post("/register", (req, res)=> {
                 username,
                 email,
                 password,
-                picture: ''
+                picture: 'https://w7.pngwing.com/pngs/589/83/png-transparent-account-avatar-contact-people-profile-user-basic-icon.png'
             })
             user.save(err => {
                 if(err) {
@@ -322,7 +341,6 @@ app.post("/register", (req, res)=> {
     })
     
 }) 
-
 //Listining at LocalHost:9002
 app.listen(9002,() => {
     console.log("BE started at port 9002")

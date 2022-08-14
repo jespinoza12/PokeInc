@@ -25,6 +25,9 @@ const Navbar = (setLoginUser, picture, userId) => {
         <li class="nav-item">
           <a class="nav-link color-me" href="/allForums">All Forums</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link color-me" href="/allUsers">Users</a>
+        </li>
         </ul>
         <ul class="navbar-nav center">
         <Dropdown>

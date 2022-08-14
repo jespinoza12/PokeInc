@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import DeckView from "../viewForum/DeckView";
+import DeckView from "../viewForum/DeckView"
 import Comments from "../comments/comments";
 import axios from "axios";
 
