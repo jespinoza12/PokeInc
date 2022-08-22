@@ -82,7 +82,7 @@ const Posts =  new mongoose.model("Post", postSchema)
 app.get('/allPosts', (req, res) => {
     Posts.find({})
     .then((data) => {
-        console.log('All Posts: ', data);
+        // console.log('All Posts: ', data);
         res.json(data);
     })
     .catch((error) => {
@@ -140,7 +140,7 @@ app.post("/dislike", (req, res) => {
 app.get('/allC', (req, res) => {
     Comments.find({})
     .then((data) => {
-        console.log('All Comments: ', data);
+        // console.log('All Comments: ', data);
         res.json(data);
     })
     .catch((error) => {
@@ -175,7 +175,7 @@ app.post('/addC', (req, res) => {
 app.get('/allForums', (req, res) => {
     Forum.find({})
     .then((data) => {
-        console.log('All Data: ', data);
+        // console.log('All Data: ', data);
         res.json(data);
     })
     .catch((error) => {
@@ -224,7 +224,7 @@ app.post("/deleteForum", (req, res) => {
 app.get('/allDecks', (req, res) => {
     Deck.find({})
     .then((data) => {
-        console.log('All Data: ', data);
+        // console.log('All Data: ', data);
         res.json(data);
     })
     .catch((error) => {
@@ -295,7 +295,7 @@ app.post("/edit", (req, res) => {
 app.get('/allUsers', (req, res) => {
     User.find({})
     .then((data) => {
-        console.log('All Users: ', data);
+        // console.log('All Users: ', data);
         res.json(data);
     })
     .catch((error) => {

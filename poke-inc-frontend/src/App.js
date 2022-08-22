@@ -192,6 +192,10 @@ function App() {
     console.log(`DeckName: ${deckname}`)
   }, [deckname]);
   useEffect(() => {
+    console.log(`PageNum: ${pageNum}`)
+
+  }, [pageNum]);
+  useEffect(() => {
     console.log(`Standard: ${deckStandard}`)
   }, [deckStandard]);
   useEffect(() => {
@@ -309,6 +313,7 @@ function App() {
         }),
 
       );
+      setHidden(true)
       setVarient("danger")
       setMessage("Card Deleted")
       setNum(num - 1)
@@ -601,7 +606,8 @@ function App() {
                     value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
                   <div class="pagination center mt-2">
                     <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
-                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                    <h3 className='center '>&nbsp; Page: <input className='inputSize' type='text' placeholder=''
+                    value={pageNum} onChange={(e) => setPageNum(e.target.value)} /> &nbsp; </h3>
                     <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
                   </div>
                   <div class="btn-group" role="group" aria-label="Basic example">
@@ -641,7 +647,14 @@ function App() {
                 <p>Number of cards {num}/60</p>
                 <p>Note: Update Before Creation</p>
                 <div className='center'>
-                  <label className='center'>&nbsp; Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label>
+                  <label className='center'>&nbsp; Standard: 
+                    <select className='.custom-select' value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
+                      <option>Standard</option>
+                      <option>Expanded</option>
+                      <option>Legacy</option>
+                      <option>Unlimited</option>
+                    </select>
+                  </label>
                   <label className='center'>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
                   <p></p>
                   <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
@@ -777,8 +790,15 @@ function App() {
                   <p>Number of cards {num}/60</p>
                   <p>Note: Update Before Creation</p>
                   <div className='center'>
-                    <label className='center' hidden={hidden}>&nbsp; Standard: <input value={deckStandard} placeholder='standard' onChange={(e) => setDeckStandard(e.target.value)}></input></label>
-                    <label className='center'  hidden={hidden}>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
+                  <label className='center'>&nbsp; Standard: 
+                    <select value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
+                      <option>Standard</option>
+                      <option>Expanded</option>
+                      <option>Legacy</option>
+                      <option>Unlimited</option>
+                    </select>
+                  </label>                    
+                  <label className='center'  hidden={hidden}>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
                     <p></p>
                     <label  hidden={hidden}>&nbsp; Name: </label> <input  hidden={hidden} type='text' placeholder='name filter'
                       value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />

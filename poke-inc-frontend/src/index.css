@@ -12,6 +12,12 @@ code {
     monospace;
 }
 
+.inputSize{
+  width: 120px;
+}
+
+
+
 
 @font-face {
   font-family: 'Pokemon';
