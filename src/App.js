@@ -571,7 +571,7 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="https://jespinoza12.github.io/PokeInc/">
+          <Route path="/PokeInc/">
             {
               user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
                 : <Login setLoginUser={setLoginUser} />
