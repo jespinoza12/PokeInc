@@ -4,6 +4,8 @@ import mongoose from "mongoose"
 
 const app = express()
 //Misc
+app.use(express.static(path.join(__dirname, 'build')))
+
 app.use(express.json({limit: '100mb', extended: true}))
 app.use(express.urlencoded({limit: '100mb', extended: true}))
 app.use(cors())
