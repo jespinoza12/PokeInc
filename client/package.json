@@ -1,6 +1,6 @@
 {
   "name": "pokeinc",
-  "homepage": "https://jespinoza12.github.io/PokeInc",
+  "homepage": "https://poke-inc.herokuapp.com/",
   "version": "0.1.0",
   "engines": {
     "node": "16.x"
