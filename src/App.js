@@ -571,19 +571,19 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/PokeInc/">
+          <Route exact path="/">
             {
               user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
-          <Route path="/PokeInc/login">
+          <Route path="/login">
             <Login setLoginUser={setLoginUser} rawr={getForums} />
           </Route>
-          <Route path="/PokeInc/register">
+          <Route path="/register">
             <Register />
           </Route>
-          <Route path="/PokeInc/home">
+          <Route path="/home">
             {
               <div>
                 {
@@ -592,7 +592,7 @@ function App() {
               </div>
             }
           </Route>
-          <Route path={"/PokeInc/collection"}>
+          <Route path={"/collection"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
               <Navbar user={picture} userId={userId1} />
@@ -626,16 +626,16 @@ function App() {
               </div>
             </div>
           </Route>
-          <Route path="/PokeInc/profile">
+          <Route path="/profile">
             {
               user && user._id ? <Profile user={user} />
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
-          <Route path="/PokeInc/cardInfo">
+          <Route path="/cardInfo">
             <CardInfo card={clickedCard} picture={picture} userId={userId1} />
           </Route>
-          <Route path="/PokeInc/createDeck">
+          <Route path="/createDeck">
             <div className='pokeFont'>
               <Navbar picture={picture} userId={userId1} />
               <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
@@ -693,7 +693,7 @@ function App() {
               </div>
             </div>
           </Route>
-          <Route path="/PokeInc/allDecks">
+          <Route path="/allDecks">
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -705,7 +705,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path='/PokeInc/myDecks'>
+          <Route path='/myDecks'>
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -717,7 +717,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/deckInfo">
+          <Route path="/deckInfo">
             <div className='pokeFont'>
               <h1 className='center'>Deck Name: {clickedDeck.name}</h1>
               <Navbar picture={picture} userId={userId1} />
@@ -726,7 +726,7 @@ function App() {
               <DeckInfo deck={clickedDeck} />
             </div>
           </Route>
-          <Route path="/PokeInc/createForum">
+          <Route path="/createForum">
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -736,7 +736,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/forumInfo">
+          <Route path="/forumInfo">
             <div className='pokeFont'>
               <Navbar />
               {
@@ -745,7 +745,7 @@ function App() {
 
             </div>
           </Route>
-          <Route path="/PokeInc/allForums">
+          <Route path="/allForums">
             <div className='pokeFont'>
               <Navbar />
               {
@@ -753,7 +753,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/myForums">
+          <Route path="/myForums">
             <div className='pokeFont'>
               <Navbar />
               {
@@ -761,7 +761,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/createPost">
+          <Route path="/createPost">
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -771,14 +771,14 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/myPage">
+          <Route path="/myPage">
             <div className='pokeFont'>
               <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
               <Navbar />
               <PostList posts={myPosts} rawr = {getDeck}/>
             </div>
           </Route>
-          <Route path="/PokeInc/editDeck">
+          <Route path="/editDeck">
             <div className='pokeFont'>
                 <Navbar picture={picture} userId={userId1} />
                 <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
@@ -836,7 +836,7 @@ function App() {
                 </div>
               </div>
           </Route>
-          <Route path="/PokeInc/allUsers">
+          <Route path="/allUsers">
             <div className='pokeFont'>
               <Navbar/>
               <input className='center-1' placeholder='search by username' name="userFilter" onChange={(e) => setUserFilter(e.target.value)} ></input>
@@ -845,7 +845,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route path="/PokeInc/usersPage">
+          <Route path="/usersPage">
             <div className='pokeFont'>
               <h1 className='center'>Welcome, to {clickedUser.username}'s page</h1>
               <Navbar />

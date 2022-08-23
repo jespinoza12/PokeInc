@@ -8,7 +8,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Navbar = (setLoginUser, picture, userId) => {
   picture = localStorage.getItem("picture")
-  const path = `/PokeInc/myDecks`
+  const path = `/myDecks`
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
@@ -17,16 +17,16 @@ const Navbar = (setLoginUser, picture, userId) => {
           <a class="nav-link color-me" href="/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/collection">All Cards</a>
+          <a class="nav-link color-me" href="/collection">All Cards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allDecks">All Decks</a>
+          <a class="nav-link color-me" href="/allDecks">All Decks</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allForums">All Forums</a>
+          <a class="nav-link color-me" href="/allForums">All Forums</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allUsers">Users</a>
+          <a class="nav-link color-me" href="/allUsers">Users</a>
         </li>
         </ul>
         <ul class="navbar-nav center">
@@ -35,29 +35,29 @@ const Navbar = (setLoginUser, picture, userId) => {
             <img class="width1 rounded-circle" src={picture} alt=""/>
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
-          <Dropdown.Item href="/PokeInc/createPost">
+          <Dropdown.Item href="/createPost">
               Post
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/createForum">
+            <Dropdown.Item href="/createForum">
               Create Forum
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/createDeck">
+            <Dropdown.Item href="/createDeck">
               Create Deck
             </Dropdown.Item>
             <Dropdown.Item href={path}>
               My Decks
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/myForums">
+            <Dropdown.Item href="/myForums">
               My Forums
             </Dropdown.Item>
             <NavDropdown.Divider varient="secondary" />
-            <Dropdown.Item href="/PokeInc/myPage">
+            <Dropdown.Item href="/myPage">
               My Profile Page
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/profile">
+            <Dropdown.Item href="/profile">
               Profile Settings
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/">
+            <Dropdown.Item href="/">
               Logout
             </Dropdown.Item>
           </Dropdown.Menu>
