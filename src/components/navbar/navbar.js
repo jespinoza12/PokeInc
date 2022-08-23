@@ -16,7 +16,7 @@ const Navbar = (setLoginUser, picture, userId) => {
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link color-me" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</a>
+          <button class="nav-link color-me" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
         </li>
         <li class="nav-item">
           <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/collection"}>All Cards</a>
