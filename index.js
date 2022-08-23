@@ -1,6 +1,8 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+const path = require('path')
+const port = process.env.PORT || 5000
 
 const app = express()
 //Misc
@@ -81,7 +83,7 @@ const Comments =  new mongoose.model("Comments", commentSchema)
 const Posts =  new mongoose.model("Post", postSchema)
 
 //Posts
-app.get('/allPosts', (req, res) => {
+app.get('/backend/allPosts', (req, res) => {
     Posts.find({})
     .then((data) => {
         // console.log('All Posts: ', data);
@@ -91,7 +93,7 @@ app.get('/allPosts', (req, res) => {
         console.log('error: ', error);
     });
 })
-app.post('/createPost', (req, res) => {
+app.post('/backend/createPost', (req, res) => {
     const {caption, authorId, username, created, deck, hashtags} = req.body
     Forum.findOne({caption:caption, authorId: authorId}, (err, post) => {
         if(post){
@@ -117,7 +119,7 @@ app.post('/createPost', (req, res) => {
 })
 
 //Comment
-app.post("/like", (req, res) => {
+app.post("/backend/like", (req, res) => {
     const {id, likes} = req.body
     const increased =  likes + 1
     Comments.findByIdAndUpdate({ _id: id }, { likes: increased }, function (err, result) {
@@ -128,7 +130,7 @@ app.post("/like", (req, res) => {
         }
     })
 });
-app.post("/dislike", (req, res) => {
+app.post("/backend/dislike", (req, res) => {
     const {id, dislikes} = req.body
     const decreased =  dislikes + 1
     Comments.findByIdAndUpdate({ _id: id }, { dislikes: decreased }, function (err, result) {
@@ -139,7 +141,7 @@ app.post("/dislike", (req, res) => {
         }
     })
 });
-app.get('/allC', (req, res) => {
+app.get('/backend/allC', (req, res) => {
     Comments.find({})
     .then((data) => {
         // console.log('All Comments: ', data);
@@ -149,7 +151,7 @@ app.get('/allC', (req, res) => {
         console.log('error: ', error);
     });
 })
-app.post('/addC', (req, res) => {
+app.post('/backend/addC', (req, res) => {
     const {fid, commenterId, commenter, comment, likes, dislikes} = req.body
     Comments.find({}, (err) => {
             const comment1 = new Comments({
@@ -174,7 +176,7 @@ app.post('/addC', (req, res) => {
 
 
 //Forums
-app.get('/allForums', (req, res) => {
+app.get('/backend/allForums', (req, res) => {
     Forum.find({})
     .then((data) => {
         // console.log('All Data: ', data);
@@ -184,7 +186,7 @@ app.get('/allForums', (req, res) => {
         console.log('error: ', error);
     });
 })
-app.post('/createForum', (req, res) => {
+app.post('/backend/createForum', (req, res) => {
     const {name, authorId, username, created, deck, content} = req.body
     Forum.findOne({name:name, authorId: authorId}, (err, forum) => {
         if(forum){
@@ -208,7 +210,7 @@ app.post('/createForum', (req, res) => {
         }
     })
 })
-app.post("/deleteForum", (req, res) => {
+app.post("/backend/deleteForum", (req, res) => {
     const {forumId} = req.body
     Forum.findOne({_id: forumId}, (err, forum) => {
         if (forum){
@@ -221,9 +223,8 @@ app.post("/deleteForum", (req, res) => {
     })
 }) 
 
-
 //Decks
-app.get('/allDecks', (req, res) => {
+app.get('/backend/allDecks', (req, res) => {
     Deck.find({})
     .then((data) => {
         // console.log('All Data: ', data);
@@ -233,7 +234,7 @@ app.get('/allDecks', (req, res) => {
         console.log('error: ', error);
     });
 })
-app.post("/deleteDeck", (req, res) => {
+app.post("/backend/deleteDeck", (req, res) => {
     const {deckId} = req.body
     Deck.findOne({_id: deckId}, (err, deck) => {
         if (deck){
@@ -245,7 +246,7 @@ app.post("/deleteDeck", (req, res) => {
         }
     })
 }) 
-app.post("/createDeck", (req, res) => {
+app.post("/backend/createDeck", (req, res) => {
     const { name, userId, cards, username, description, standard, cardNum } = req.body
     Deck.findOne({name:name, userId:userId}, (err, deck) => {
         if (name === "" || description === "" || standard === ""){
@@ -270,7 +271,7 @@ app.post("/createDeck", (req, res) => {
         }
     })
 })        
-app.post("/editDeck", (req, res) => {
+app.post("/backend/editDeck", (req, res) => {
     const {name, userId, cards, username, description, standard, cardNum } = req.body
     Deck.findOneAndUpdate({ userId: userId, name:name }, { name: name, username: username, userId: userId, cards:cards, description: description, standard: standard, cardNum: cardNum }, function (err, result) {
         if (err) {
@@ -282,19 +283,26 @@ app.post("/editDeck", (req, res) => {
         
 });
 //Edit User
-app.post("/edit", (req, res) => {
+app.post("/backend/edit", (req, res) => {
     const {id, username, name, email, password, picture} = req.body
-    User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: password, email: email, picture: picture }, function (err, result) {
-        if (err) {
-            res.send(err)
-        } else {
-            res.send("Update Complete")
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            res.send({message: "Email Already Exists"})
+        }else if (username.length > 12){
+            res.send({message: "Username can only be 12 characters"})
+        }else {
+            User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: password, email: email, picture: picture }, function (err, result) {
+                if (err) {
+                    res.send(err)
+                } else {
+                    res.send("Update Complete")
+                }
+            })
         }
     })
-        
 });
 //All Users
-app.get('/allUsers', (req, res) => {
+app.get('/backend/allUsers', (req, res) => {
     User.find({})
     .then((data) => {
         // console.log('All Users: ', data);
@@ -305,7 +313,7 @@ app.get('/allUsers', (req, res) => {
     });
 })
 //Login & Register
-app.post("/login", (req, res)=> {
+app.post("/backend/login", (req, res)=> {
     const { email, password} = req.body
     User.findOne({ email: email}, (err, user) => {
         if(user){
@@ -319,11 +327,13 @@ app.post("/login", (req, res)=> {
         }
     })
 }) 
-app.post("/register", (req, res)=> {
+app.post("/backend/register", (req, res)=> {
     const { name, email, password, username} = req.body
     User.findOne({email: email}, (err, user) => {
         if(user){
             res.send({message: "Email Already Exists"})
+        }else if (username.length > 12){
+            res.send({message: "Username can only be 12 characters"})
         } else {
             const user = new User({
                 name,

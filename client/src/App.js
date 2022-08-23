@@ -324,7 +324,7 @@ function App() {
   const createDeck = () => {
     console.log(Deck)
     if (canCreate === true) {
-      axios.post("http://localhost:9002/createDeck", Deck)
+      axios.post("https://poke-inc.herokuapp.com/backend/createDeck", Deck)
         .then(res => {
           setMessage(res.data.message)
           setHidden(false)
@@ -338,7 +338,7 @@ function App() {
   const editDeck = () => {
     console.log(Deck)
     if (canCreate === true) {
-      axios.post("http://localhost:9002/editDeck", Deck)
+      axios.post("https://poke-inc.herokuapp.com/backend/editDeck", Deck)
         .then(res => {
           setMessage(res.data.message)
           setHidden(false)
@@ -373,7 +373,7 @@ function App() {
   }
   //Get all Decks
   const getAllDecks = () => {
-    axios.get('http://localhost:9002/allDecks')
+    axios.get('https://poke-inc.herokuapp.com/backend/allDecks')
       .then((response) => {
         setDecks(response.data)
         console.log(decks)
@@ -386,7 +386,7 @@ function App() {
   }
   //Gets all decks and filters for decks connected to users id
   const getMyDecks = () => {
-    axios.get('http://localhost:9002/allDecks')
+    axios.get('https://poke-inc.herokuapp.com/backend/allDecks')
       .then((response) => {
         var tempDecks = response.data.filter((deck) => {
           return deck.userId === localStorage.getItem('user')
@@ -415,7 +415,7 @@ function App() {
   }
   const getForums = () => {
     setLoading(true)
-    axios.get('http://localhost:9002/allForums')
+    axios.get('https://poke-inc.herokuapp.com/backend/allForums')
       .then((response) => {
         setForums(response.data)
         console.log(forums)
@@ -434,7 +434,7 @@ function App() {
   const getComments = () => {
     setLoading(true)
 
-    axios.get('http://localhost:9002/allC')
+    axios.get('https://poke-inc.herokuapp.com/backend/allC')
       .then((response) => {
         var tempDecks = response.data.filter((comment) => {
           return comment.fid === localStorage.getItem('forum')
@@ -454,7 +454,7 @@ function App() {
   const getMyForums = () => {
     setLoading(true)
 
-    axios.get('http://localhost:9002/allForums')
+    axios.get('https://poke-inc.herokuapp.com/backend/allForums')
       .then((response) => {
         var tempDecks = response.data.filter((forum) => {
           return forum.authorId === localStorage.getItem('user')
@@ -498,7 +498,7 @@ function App() {
     }
   }
   const getPosts = () => {
-    axios.get('http://localhost:9002/allPosts')
+    axios.get('https://poke-inc.herokuapp.com/backend/allPosts')
       .then((response) => {
         setPosts(response.data)
         var tempPosts = response.data.filter((post) => {
@@ -514,7 +514,7 @@ function App() {
       });
   }
   const getAllUsers = () => {
-    axios.get('http://localhost:9002/allUsers')
+    axios.get('https://poke-inc.herokuapp.com/backend/allUsers')
       .then((response) => {
         setUsers(response.data)
         console.log(response.data)
@@ -526,7 +526,7 @@ function App() {
       });
   }
   const filterUsers = () => {
-    axios.get('http://localhost:9002/allUsers')
+    axios.get('https://poke-inc.herokuapp.com/backend/allUsers')
       .then((response) => {
         var tempUsers = response.data.filter((user) => {
           return user.username.toLowerCase().includes(userFilter.toLowerCase())
@@ -542,7 +542,7 @@ function App() {
   }
   const getClickedUserPost = () => {
     setLoading(true)
-    axios.get('http://localhost:9002/allPosts')
+    axios.get('https://poke-inc.herokuapp.com/backend/allPosts')
       .then((response) => {
         var tempPosts = response.data.filter((post) => {
           return post.authorId === clickedUser._id

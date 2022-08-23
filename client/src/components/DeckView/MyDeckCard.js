@@ -29,7 +29,7 @@ const MyDeckCard = ({deck, rawr, rawr2, edit}) => {
         })
         const {deckId} = decks
         if (deckId){
-          axios.post("http://localhost:9002/deleteDeck", decks)
+          axios.post("https://poke-inc.herokuapp.com/backend/deleteDeck", decks)
           window.location.reload()
         }else{
           console.log("Oops")

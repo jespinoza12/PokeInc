@@ -31,7 +31,7 @@ const DeckCard = ({deck, rawr}) => {
       cardNum: deck.cardNum
     })
     e.preventDefault();
-      axios.post("http://localhost:9002/createDeck", Deck)
+      axios.post("https://poke-inc.herokuapp.com/backend/createDeck", Deck)
         .then(res => {
           console.log("bruh")
           console.log(res.data)

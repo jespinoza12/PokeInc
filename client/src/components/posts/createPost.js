@@ -46,7 +46,7 @@ const CreatePost = ({decks, rawr, sdeck}) => {
     const createForum = () => {
         const { caption, hashtags } = post
         if( caption && hashtags){
-            axios.post("http://localhost:9002/createPost", post)
+            axios.post("https://poke-inc.herokuapp.com/backend/createPost", post)
             .then( res => {
                 // alert(res.data.message)
                 setMessage(res.data.message)
