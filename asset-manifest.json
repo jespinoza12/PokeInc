@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/PokeInc/static/css/main.2ede4f9f.chunk.css",
-    "main.js": "/PokeInc/static/js/main.ee716ae9.chunk.js",
-    "main.js.map": "/PokeInc/static/js/main.ee716ae9.chunk.js.map",
+    "main.js": "/PokeInc/static/js/main.de4341da.chunk.js",
+    "main.js.map": "/PokeInc/static/js/main.de4341da.chunk.js.map",
     "runtime-main.js": "/PokeInc/static/js/runtime-main.ced673b6.js",
     "runtime-main.js.map": "/PokeInc/static/js/runtime-main.ced673b6.js.map",
     "static/css/2.8bab41f0.chunk.css": "/PokeInc/static/css/2.8bab41f0.chunk.css",
-    "static/js/2.c79f77e0.chunk.js": "/PokeInc/static/js/2.c79f77e0.chunk.js",
-    "static/js/2.c79f77e0.chunk.js.map": "/PokeInc/static/js/2.c79f77e0.chunk.js.map",
+    "static/js/2.5aa7ac55.chunk.js": "/PokeInc/static/js/2.5aa7ac55.chunk.js",
+    "static/js/2.5aa7ac55.chunk.js.map": "/PokeInc/static/js/2.5aa7ac55.chunk.js.map",
     "index.html": "/PokeInc/index.html",
     "static/css/2.8bab41f0.chunk.css.map": "/PokeInc/static/css/2.8bab41f0.chunk.css.map",
     "static/css/main.2ede4f9f.chunk.css.map": "/PokeInc/static/css/main.2ede4f9f.chunk.css.map",
-    "static/js/2.c79f77e0.chunk.js.LICENSE.txt": "/PokeInc/static/js/2.c79f77e0.chunk.js.LICENSE.txt",
+    "static/js/2.5aa7ac55.chunk.js.LICENSE.txt": "/PokeInc/static/js/2.5aa7ac55.chunk.js.LICENSE.txt",
     "static/media/index.css": "/PokeInc/static/media/Pokemon.13473224.ttf",
     "static/media/gif.a06b66a4.gif": "/PokeInc/static/media/gif.a06b66a4.gif"
   },
   "entrypoints": [
     "static/js/runtime-main.ced673b6.js",
     "static/css/2.8bab41f0.chunk.css",
-    "static/js/2.c79f77e0.chunk.js",
+    "static/js/2.5aa7ac55.chunk.js",
     "static/css/main.2ede4f9f.chunk.css",
-    "static/js/main.ee716ae9.chunk.js"
+    "static/js/main.de4341da.chunk.js"
   ]
 }
