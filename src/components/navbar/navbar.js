@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Homepage from "../homepage/homepage";
 
 
 const Navbar = (setLoginUser, picture, userId) => {
@@ -14,7 +15,7 @@ const Navbar = (setLoginUser, picture, userId) => {
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/home">Home</a>
+          <a class="nav-link color-me" href="/PokeInc/home"  onclick="window.open('../homepage/homepage', '_self');" >Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link color-me" href="/PokeInc/collection">All Cards</a>
