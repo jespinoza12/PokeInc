@@ -14,7 +14,7 @@ const Navbar = (setLoginUser, picture, userId) => {
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
-      <ul class="navbar-nav me-auto btn-group">
+      <ul class="navbar-nav me-auto btn-group m-3">
           <button class="nav-link color-me btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Cards</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allDecks")}>All Deck</button>

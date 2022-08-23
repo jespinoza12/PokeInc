@@ -12,7 +12,7 @@ const MyDeckCard = ({deck, rawr, rawr2, edit}) => {
   function onClick(e){  
     e.preventDefault();
     rawr(deck)
-    history.push("/PokeInc/deckInfo")
+    history.push(process.env.PUBLIC_URL + "/deckInfo")
 
   }
   function onClick1(e){
@@ -20,7 +20,7 @@ const MyDeckCard = ({deck, rawr, rawr2, edit}) => {
     rawr(deck)
     rawr2()
     edit(true)
-    history.push("/PokeInc/editDeck")
+    history.push(process.env.PUBLIC_URL + "/editDeck")
 
   }
   function onClick2(e){

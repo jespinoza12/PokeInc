@@ -9,7 +9,7 @@ const Card = ({cards, rawr}) => {
   console.log('Login Form Submitted!');
   console.log(cards);
   rawr(cards);
-  history.push("/PokeInc/cardInfo")
+  history.push(process.env.PUBLIC_URL + "/cardInfo")
 
   }
 

@@ -12,7 +12,7 @@ const User = ({users, rawr, rawr2}) => {
   console.log('User Clicked');
   rawr(users);
 //   rawr2();
-  history.push("/PokeInc/usersPage")
+  history.push(process.env.PUBLIC_URL + "/usersPage")
 
   }
 

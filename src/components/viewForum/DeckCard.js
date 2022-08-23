@@ -7,7 +7,7 @@ const DeckCard = ({deck, rawr}) => {
   function onClick(e){  
     e.preventDefault();
     rawr(deck)
-    history.push("/PokeInc/deckInfo")
+    history.push(process.env.PUBLIC_URL + "/deckInfo")
 
   }
 

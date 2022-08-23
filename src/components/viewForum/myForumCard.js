@@ -12,7 +12,7 @@ const MyForumCard = ({forum, rawr}) => {
     e.preventDefault();
     localStorage.setItem('forum', forum._id)
     rawr(forum)
-    history.push("/forumInfo")
+    history.push(process.env.PUBLIC_URL + "/forumInfo")
 
   }
 
