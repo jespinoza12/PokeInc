@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/PokeInc/static/css/main.2ede4f9f.chunk.css",
-    "main.js": "/PokeInc/static/js/main.c9a10883.chunk.js",
-    "main.js.map": "/PokeInc/static/js/main.c9a10883.chunk.js.map",
+    "main.js": "/PokeInc/static/js/main.ee716ae9.chunk.js",
+    "main.js.map": "/PokeInc/static/js/main.ee716ae9.chunk.js.map",
     "runtime-main.js": "/PokeInc/static/js/runtime-main.ced673b6.js",
     "runtime-main.js.map": "/PokeInc/static/js/runtime-main.ced673b6.js.map",
     "static/css/2.8bab41f0.chunk.css": "/PokeInc/static/css/2.8bab41f0.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.8bab41f0.chunk.css",
     "static/js/2.c79f77e0.chunk.js",
     "static/css/main.2ede4f9f.chunk.css",
-    "static/js/main.c9a10883.chunk.js"
+    "static/js/main.ee716ae9.chunk.js"
   ]
 }
