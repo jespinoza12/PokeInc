@@ -14,22 +14,19 @@ const Navbar = (setLoginUser, picture, userId) => {
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
-      <ul class="navbar-nav me-auto">
+      <ul class="navbar-nav me-auto btn-group">
         <li class="nav-item">
-          <button class="nav-link color-me" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
+          <button class="nav-link color-me btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
         </li>
         <li class="nav-item">
-          <button class="nav-link color-me" onClick={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Cards</button>
+          <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Cards</button>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Decks</a>
-        </li>
+        <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allDecks")}>All Deck</button></li>
         <li class="nav-item">
-          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/allForums"}>All Forums</a>
-        </li>
+        <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allForums")}>All Cards</button>        </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/allUsers"}>Users</a>
-        </li>
+        <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/All Users")}>All Cards</button>        </li>
         </ul>
         <ul class="navbar-nav center">
         <Dropdown>
@@ -37,13 +34,13 @@ const Navbar = (setLoginUser, picture, userId) => {
             <img class="width1 rounded-circle" src={picture} alt=""/>
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
-          <Dropdown.Item href={process.env.PUBLIC_URL +"/createPost"}>
+          <Dropdown.Item href={process.env.PUBLIC_URL +"/createPost"} onClick={()=>history.push(process.env.PUBLIC_URL + "/createPost")}>
               Post
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/createForum"}>
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/createForum"} onClick={()=>history.push(process.env.PUBLIC_URL + "/createForum")}>
               Create Forum
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL +"/createDeck"}>
+            <Dropdown.Item href={process.env.PUBLIC_URL +"/createDeck"} onClick={()=>history.push(process.env.PUBLIC_URL + "/createDeck")}>
               Create Deck
             </Dropdown.Item>
             <Dropdown.Item href={process.env.PUBLIC_URL + "/myDecks"}>
