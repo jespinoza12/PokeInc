@@ -9,12 +9,13 @@ import Homepage from "../homepage/homepage";
 
 const Navbar = (setLoginUser, picture, userId) => {
   picture = localStorage.getItem("picture")
+  let history = useHistory()
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/home"}>Home</a>
+          <a class="nav-link color-me" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/collection"}>All Cards</a>
