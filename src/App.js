@@ -16,7 +16,7 @@ import DeckView from './components/DeckView/DeckView'
 import DeckView1 from './components/DeckView/MyDeckView'
 import ForumInfo from './components/viewForum/forumInfo';
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
