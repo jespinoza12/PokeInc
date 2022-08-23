@@ -30,27 +30,27 @@ const Navbar = (setLoginUser, picture, userId) => {
             <Dropdown.Item>
               <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/createPost")}>Create Post</button>
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/createForum"} onClick={()=>history.push(process.env.PUBLIC_URL + "/createForum")}>
-              Create Forum
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/createForum")}>Create Forum</button>
             </Dropdown.Item>
-            <Dropdown.Item  onClick={()=>history.push(process.env.PUBLIC_URL + "/createDeck")}>
-              Create Deck
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/createDeck")}>Create Deck</button>
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/myDecks"}>
-              My Decks
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/myDecks")}>My Decks</button>
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/myForums"}>
-              My Forums
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/myForums")}>My Forums</button>
             </Dropdown.Item>
             <NavDropdown.Divider varient="secondary" />
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/myPage"}>
-              My Profile Page
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/myPage")}>My Profile Page</button>
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/profile"}>
-              Profile Settings
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/profile")}>Profile Settings</button>
             </Dropdown.Item>
-            <Dropdown.Item href={process.env.PUBLIC_URL + "/"}>
-              Logout
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/")}>Logout</button>
             </Dropdown.Item>
           </Dropdown.Menu>
       </Dropdown>
