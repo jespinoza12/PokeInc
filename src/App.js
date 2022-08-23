@@ -16,7 +16,7 @@ import DeckView from './components/DeckView/DeckView'
 import DeckView1 from './components/DeckView/MyDeckView'
 import ForumInfo from './components/viewForum/forumInfo';
 import { useEffect, useState } from 'react';
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import pokemon from 'pokemontcgsdk'
 import Navbar from './components/navbar/navbar';
 import logo from './images/gif.gif'
@@ -571,19 +571,19 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/PokeInc/#">
+          <Route exact path={process.env.PUBLIC_URL + "/"}>
             {
               user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
-          <Route exact path="/PokeInc/login">
+          <Route exact path={process.env.PUBLIC_URL + "/login"}>
             <Login setLoginUser={setLoginUser} rawr={getForums} />
           </Route>
-          <Route exact path="/PokeInc/register">
+          <Route exact path={process.env.PUBLIC_URL + "/register"}>
             <Register />
           </Route>
-          <Route exact path="/PokeInc/home">
+          <Route exact path={process.env.PUBLIC_URL + "/home"}>
             {
               <div>
                 {
@@ -592,7 +592,7 @@ function App() {
               </div>
             }
           </Route>
-          <Route exact path={"/PokeInc/collection"}>
+          <Route exact path={process.env.PUBLIC_URL + "/collection"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome to the Pokemon Collection</h1>
               <Navbar user={picture} userId={userId1} />
@@ -626,16 +626,16 @@ function App() {
               </div>
             </div>
           </Route>
-          <Route exact path="/PokeInc/profile">
+          <Route exact path={process.env.PUBLIC_URL + "/profile"}>
             {
               user && user._id ? <Profile user={user} />
                 : <Login setLoginUser={setLoginUser} />
             }
           </Route>
-          <Route exact path="/PokeInc/cardInfo">
+          <Route exact path={process.env.PUBLIC_URL + "/cardInfo"}>
             <CardInfo card={clickedCard} picture={picture} userId={userId1} />
           </Route>
-          <Route exact path="/PokeInc/createDeck">
+          <Route exact path={process.env.PUBLIC_URL + "/createDeck"}>
             <div className='pokeFont'>
               <Navbar picture={picture} userId={userId1} />
               <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
@@ -693,7 +693,7 @@ function App() {
               </div>
             </div>
           </Route>
-          <Route exact path="/PokeInc/allDecks">
+          <Route exact path={process.env.PUBLIC_URL + "/allDecks"}>
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -705,7 +705,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path='/PokeInc/myDecks'>
+          <Route exact path={process.env.PUBLIC_URL + '/myDecks'}>
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -717,7 +717,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/deckInfo">
+          <Route exact path={process.env.PUBLIC_URL + "/deckInfo"}>
             <div className='pokeFont'>
               <h1 className='center'>Deck Name: {clickedDeck.name}</h1>
               <Navbar picture={picture} userId={userId1} />
@@ -726,7 +726,7 @@ function App() {
               <DeckInfo deck={clickedDeck} />
             </div>
           </Route>
-          <Route exact path="/PokeInc/createForum">
+          <Route exact path={process.env.PUBLIC_URL + "/createForum"}>
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -736,7 +736,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/forumInfo">
+          <Route exact path={process.env.PUBLIC_URL + "/forumInfo"}>
             <div className='pokeFont'>
               <Navbar />
               {
@@ -745,7 +745,7 @@ function App() {
 
             </div>
           </Route>
-          <Route exact path="/PokeInc/allForums">
+          <Route exact path={process.env.PUBLIC_URL + "/allForums"}>
             <div className='pokeFont'>
               <Navbar />
               {
@@ -753,7 +753,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/myForums">
+          <Route exact path={process.env.PUBLIC_URL + "/myForums"}>
             <div className='pokeFont'>
               <Navbar />
               {
@@ -761,7 +761,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/createPost">
+          <Route exact path={process.env.PUBLIC_URL +"/createPost"}>
             <div className='pokeFont'>
               {
                 isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
@@ -771,14 +771,14 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/myPage">
+          <Route exact path={process.env.PUBLIC_URL +"/myPage"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
               <Navbar />
               <PostList posts={myPosts} rawr = {getDeck}/>
             </div>
           </Route>
-          <Route exact path="/PokeInc/editDeck">
+          <Route exact path={process.env.PUBLIC_URL + "/editDeck"}>
             <div className='pokeFont'>
                 <Navbar picture={picture} userId={userId1} />
                 <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
@@ -836,7 +836,7 @@ function App() {
                 </div>
               </div>
           </Route>
-          <Route exact path="/PokeInc/allUsers">
+          <Route exact path={process.env.PUBLIC_URL + "/allUsers" }>
             <div className='pokeFont'>
               <Navbar/>
               <input className='center-1' placeholder='search by username' name="userFilter" onChange={(e) => setUserFilter(e.target.value)} ></input>
@@ -845,7 +845,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path="/PokeInc/usersPage">
+          <Route exact path={process.env.PUBLIC_URL + "/usersPage"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome, to {clickedUser.username}'s page</h1>
               <Navbar />
