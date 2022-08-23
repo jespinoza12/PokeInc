@@ -41,7 +41,7 @@ const Post = ({posts, rawr}) => {
     const addComment = () => {
         const { comment, fid } = user;
         localStorage.setItem("post", posts._id);
-        if (comment && fid) {
+        if (comment, fid) {
         axios.post("http://localhost:9002/addC", user).then((res) => {
             alert(res.data.message);
             localStorage.setItem("post", posts._id);
