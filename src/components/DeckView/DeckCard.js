@@ -17,7 +17,7 @@ const DeckCard = ({deck, rawr}) => {
   function onClick(e){  
     e.preventDefault();
     rawr(deck)
-    history.push("/deckInfo")
+    history.push("/PokeInc/deckInfo")
 
   }
   function copyDeck(e){  

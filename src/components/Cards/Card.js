@@ -9,7 +9,7 @@ const Card = ({cards, rawr}) => {
   console.log('Login Form Submitted!');
   console.log(cards);
   rawr(cards);
-  history.push("/cardInfo")
+  history.push("/PokeInc/cardInfo")
 
   }
 
