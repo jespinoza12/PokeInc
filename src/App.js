@@ -771,7 +771,7 @@ function App() {
               }
             </div>
           </Route>
-          <Route exact path={process.env.PUBLIC_URL +"/myPage"}>
+          <Route exact path={process.env.PUBLIC_URL + "/myPage"}>
             <div className='pokeFont'>
               <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
               <Navbar />

@@ -9,25 +9,24 @@ import Homepage from "../homepage/homepage";
 
 const Navbar = (setLoginUser, picture, userId) => {
   picture = localStorage.getItem("picture")
-  const path = `/myDecks`
 
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/home"  >Home</a>
+          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/home"}>Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/collection">All Cards</a>
+          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/collection"}>All Cards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allDecks">All Decks</a>
+          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/allDecks"}>All Decks</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allForums">All Forums</a>
+          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/allForums"}>All Forums</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link color-me" href="/PokeInc/allUsers">Users</a>
+          <a class="nav-link color-me" href={process.env.PUBLIC_URL + "/allUsers"}>Users</a>
         </li>
         </ul>
         <ul class="navbar-nav center">
@@ -36,29 +35,29 @@ const Navbar = (setLoginUser, picture, userId) => {
             <img class="width1 rounded-circle" src={picture} alt=""/>
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
-          <Dropdown.Item href="/PokeInc/createPost">
+          <Dropdown.Item href={process.env.PUBLIC_URL +"/createPost"}>
               Post
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/createForum">
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/createForum"}>
               Create Forum
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/createDeck">
+            <Dropdown.Item href={process.env.PUBLIC_URL +"/createDeck"}>
               Create Deck
             </Dropdown.Item>
-            <Dropdown.Item href={path}>
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/myDecks"}>
               My Decks
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/myForums">
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/myForums"}>
               My Forums
             </Dropdown.Item>
             <NavDropdown.Divider varient="secondary" />
-            <Dropdown.Item href="/PokeInc/myPage">
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/myPage"}>
               My Profile Page
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/profile">
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/profile"}>
               Profile Settings
             </Dropdown.Item>
-            <Dropdown.Item href="/PokeInc/">
+            <Dropdown.Item href={process.env.PUBLIC_URL + "/"}>
               Logout
             </Dropdown.Item>
           </Dropdown.Menu>
