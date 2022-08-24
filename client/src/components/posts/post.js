@@ -57,6 +57,7 @@ const Post = ({posts, rawr}) => {
     };
 
     const getComments = () => {
+        localStorage.setItem("post", posts._id);
         axios
         .get("https://poke-inc.herokuapp.com/backend/allC")
         .then((response) => {
@@ -78,21 +79,6 @@ const Post = ({posts, rawr}) => {
         });
     };
 
-    const getComments1 = () => {
-        axios
-        .get("https://poke-inc.herokuapp.com/backend/allC")
-        .then((response) => {
-            var tempDecks = response.data.filter((comment) => {
-            return comment.fid === localStorage.getItem("post");
-            });
-            setComments(tempDecks);
-        })
-        .catch((error) => {
-            console.log(error);
-            alert("Error retrieving data!!!");
-            alert(error);
-        });
-    };
 
     return (
         <div className="postBox center-1">
