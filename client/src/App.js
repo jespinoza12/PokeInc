@@ -72,6 +72,8 @@ function App() {
   pokemon.configure({ apiKey: 'ca37f52b-e2ad-4d7c-885a-2ddd6838eb63' })
   //Gets data whenever page is changed
   useEffect(() => {
+    window.location.reload()
+
     if (filter === "Energy") {
       getAllEnergy()
     } else if (filter === "Pokemon") {
