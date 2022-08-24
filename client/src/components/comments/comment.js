@@ -39,7 +39,7 @@ return (
           <div className='bg-dark text-white pokeFont m-2'>
              <div class="card-body center-1">
                 <p>Author: {comment.commenter}</p>
-                <p>Comment: {comment.comment}</p>
+                <p className='center'>Comment: {comment.comment}</p>
                 <button onClick={like}>Like</button>
                 <button onClick={dislike}>Dislike</button>
                 <p>Likes: {likes.toString()} &nbsp;
