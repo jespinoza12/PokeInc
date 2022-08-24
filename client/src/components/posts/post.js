@@ -112,6 +112,7 @@ const Post = ({posts, rawr}) => {
             <p>Posted by: {posts.username}</p>
             <p>Date: {posts.created}</p>
         <div className="center-1 center ">
+            <p>Comment:</p>
             <textarea
             onChange={handleChange}
             name="comment"
