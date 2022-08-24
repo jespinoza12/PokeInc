@@ -28,6 +28,10 @@ const Post = ({posts, rawr}) => {
             console.log(e);
         }
     }, [posts.deck]);
+    
+    useEffect(() => {
+        getComments1()
+    }, [])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -72,6 +76,7 @@ const Post = ({posts, rawr}) => {
             alert(error);
         });
     };
+
     const getComments1 = () => {
         axios
         .get("https://poke-inc.herokuapp.com/backend/allC")
@@ -104,9 +109,6 @@ const Post = ({posts, rawr}) => {
             ></textarea>
             <p></p>
             <button className="btn btn-secondary" onClick={addComment}>
-            Update
-            </button>
-            <button className="btn btn-secondary" onClick={getComments1}>
             Comment
             </button>
             <p></p>
