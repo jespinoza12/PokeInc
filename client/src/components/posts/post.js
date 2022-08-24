@@ -31,14 +31,14 @@ const Post = ({posts, rawr}) => {
 
     useEffect(() => {
         setUser({
-            comment: "",
+            comment: user.comment,
             fid: localStorage.getItem("post"),
             commenterId: localStorage.getItem("user"),
             commenter: localStorage.getItem("username"),
-            likes: 0,
-            dislikes: 0,
+            likes: user.likes,
+            dislikes: user.dislikes,
         });
-    }, []);
+    }, [], [handleChange]);
 
 
     const handleChange = (e) => {
