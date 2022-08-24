@@ -12,12 +12,18 @@ const Navbar = (setLoginUser, picture, userId) => {
   picture = localStorage.getItem("picture")
   let history = useHistory()
 
+  function onClickLogout(){  
+    e.preventDefault();
+    history.push(process.env.PUBLIC_URL + "/")
+    window.location.reload()
+  }
+
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto btn-group m-3">
           <button class="nav-link color-me btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Cards</button>
-          <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allDecks")}>All Deck</button>
+          <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allDecks")}>All Decks</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allForums")}>All Forums</button>       
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allUsers")}>Users</button>
         </ul>
@@ -50,7 +56,7 @@ const Navbar = (setLoginUser, picture, userId) => {
               <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/profile")}>Profile Settings</button>
             </Dropdown.Item>
             <Dropdown.Item>
-              <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/")}>Logout</button>
+              <button class="btn btn-secondary btn" onClick={onClickLogout}>Logout</button>
             </Dropdown.Item>
           </Dropdown.Menu>
       </Dropdown>
