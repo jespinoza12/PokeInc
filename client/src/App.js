@@ -107,10 +107,6 @@ function App() {
     setPicture(localStorage.getItem('picture'))
     //eslint-disable-next-line
   }, [user]);
-  useEffect(() => {
-    window.location.reload()
-    //eslint-disable-next-line
-  }, []);
   //Increases Page num
   const increasePageNum = () => {
     const increasedPageNum = pageNum + 1
