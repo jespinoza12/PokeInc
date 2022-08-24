@@ -38,6 +38,7 @@ const Post = ({posts, rawr}) => {
             likes: user.likes,
             dislikes: user.dislikes,
         });
+        console.log(user)
     }, []);
 
     const update = (e) => {
@@ -46,9 +47,10 @@ const Post = ({posts, rawr}) => {
             fid: localStorage.getItem("post"),
             commenterId: localStorage.getItem("user"),
             commenter: localStorage.getItem("username"),
-            likes: user.likes,
-            dislikes: user.dislikes,
+            likes: 0,
+            dislikes: 0,
         });
+        console.log(user)
     };
 
 
