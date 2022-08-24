@@ -41,13 +41,13 @@ const Post = ({posts, rawr}) => {
     const addComment = () => {
         const { comment, fid } = user;
         localStorage.setItem("post", posts._id);
-        if (comment, fid) {
+        if (comment) {
         axios.post("https://poke-inc.herokuapp.com/backend/addC", user).then((res) => {
             alert(res.data.message);
             localStorage.setItem("post", posts._id);
         });
         } else {
-        alert("invlid input");
+            alert("invlid input");
         }
     };
 

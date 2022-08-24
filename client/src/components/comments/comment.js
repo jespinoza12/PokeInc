@@ -39,7 +39,7 @@ return (
                 <p>Author: {comment.commenter}</p>
                 <p>Comment: {comment.comment}</p>
                 <button onClick={like}>Like</button>
-                <button>Dislike</button>
+                <button onClick={dislike}>Dislike</button>
                 <p>Likes: {likes.toString()} &nbsp;
                    Dislikes: {dislikes.toString()}</p>
              </div>
