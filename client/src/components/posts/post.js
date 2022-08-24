@@ -6,6 +6,7 @@ import axios from "axios";
 const Post = ({posts, rawr}) => {
   
     const [commentList, setComments] = useState([]);
+    const [check, setCheck] = useState(false)
     const [deck, setDeck] = useState(false);
     const [hidden, setHidden] = useState(true);
     const [user, setUser] = useState({
@@ -32,7 +33,7 @@ const Post = ({posts, rawr}) => {
     useEffect(() => {
         setUser({
             comment: user.comment,
-            fid: localStorage.getItem("post"),
+            fid: "",
             commenterId: localStorage.getItem("user"),
             commenter: localStorage.getItem("username"),
             likes: user.likes,
@@ -50,6 +51,7 @@ const Post = ({posts, rawr}) => {
             likes: 0,
             dislikes: 0,
         });
+        setCheck(true)
         console.log(user)
     };
 
@@ -60,6 +62,7 @@ const Post = ({posts, rawr}) => {
         ...user,
         [name]: value,
         });
+        setCheck(false)
         localStorage.setItem("post", posts._id);
         console.log(user);
     };
@@ -115,6 +118,9 @@ const Post = ({posts, rawr}) => {
             value={user.comment}
             ></textarea>
             <p></p>
+            {
+                check ? <button className="btn btn-secondary" onClick={addComment}>Comment</button>: <p></p>
+            }
             <button className="btn btn-secondary" onClick={addComment}>
             Comment
             </button>
