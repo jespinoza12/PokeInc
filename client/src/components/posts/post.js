@@ -30,8 +30,16 @@ const Post = ({posts, rawr}) => {
     }, [posts.deck]);
 
     useEffect(() => {
-        getComments1()
-    }, [])
+        setUser({
+            comment: "",
+            fid: localStorage.getItem("post"),
+            commenterId: localStorage.getItem("user"),
+            commenter: localStorage.getItem("username"),
+            likes: 0,
+            dislikes: 0,
+        });
+    }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -69,7 +77,6 @@ const Post = ({posts, rawr}) => {
                 setHidden(false)
             }else if (hidden === false){
                 setHidden(true)
-
             }
         })
         .catch((error) => {
@@ -79,21 +86,6 @@ const Post = ({posts, rawr}) => {
         });
     };
 
-    const getComments1 = () => {
-        axios
-        .get("https://poke-inc.herokuapp.com/backend/allC")
-        .then((response) => {
-            var tempDecks = response.data.filter((comment) => {
-            return comment.fid === localStorage.getItem("post");
-            });
-            setComments(tempDecks);
-        })
-        .catch((error) => {
-            console.log(error);
-            alert("Error retrieving data!!!");
-            alert(error);
-        });
-    };
 
     return (
         <div className="postBox center-1">
