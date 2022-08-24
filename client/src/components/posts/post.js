@@ -38,7 +38,18 @@ const Post = ({posts, rawr}) => {
             likes: user.likes,
             dislikes: user.dislikes,
         });
-    }, [], [handleChange]);
+    }, []);
+
+    const update = (e) => {
+        setUser({
+            comment: user.comment,
+            fid: localStorage.getItem("post"),
+            commenterId: localStorage.getItem("user"),
+            commenter: localStorage.getItem("username"),
+            likes: user.likes,
+            dislikes: user.dislikes,
+        });
+    };
 
 
     const handleChange = (e) => {
@@ -104,6 +115,9 @@ const Post = ({posts, rawr}) => {
             <p></p>
             <button className="btn btn-secondary" onClick={addComment}>
             Comment
+            </button>
+            <button className="btn btn-secondary" onClick={update}>
+            Update
             </button>
             <p></p>
             {
