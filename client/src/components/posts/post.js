@@ -101,6 +101,22 @@ const Post = ({posts, rawr}) => {
             alert(error);
         });
     };
+    const getComments1 = () => {
+        localStorage.setItem("post", posts._id);
+        axios
+        .get("https://poke-inc.herokuapp.com/backend/allC")
+        .then((response) => {
+            var tempDecks = response.data.filter((comment) => {
+            return comment.fid === localStorage.getItem("post");
+            });
+            setComments(tempDecks);
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("Error retrieving data!!!");
+            alert(error);
+        });
+    };
 
 
     return (
@@ -132,7 +148,7 @@ const Post = ({posts, rawr}) => {
             <div className="forumBox center-1 " >
             <h1>Comments</h1>
             {
-                hidden ? "" : <Comments comments={commentList} getComments={getComments} />
+                hidden ? "" : <Comments comments={commentList} getComments={getComments1} />
             }
             </div>
         </div>

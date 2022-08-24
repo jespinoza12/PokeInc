@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from "axios"
 
-const Comment = ({comment,getComment }) => {
+const Comment = ({comment, getComment}) => {
     console.log(comment)
     var likes = comment.likes
     var dislikes = comment.dislikes
