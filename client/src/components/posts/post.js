@@ -72,6 +72,21 @@ const Post = ({posts, rawr}) => {
             alert(error);
         });
     };
+    const getComments1 = () => {
+        axios
+        .get("https://poke-inc.herokuapp.com/backend/allC")
+        .then((response) => {
+            var tempDecks = response.data.filter((comment) => {
+            return comment.fid === localStorage.getItem("post");
+            });
+            setComments(tempDecks);
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("Error retrieving data!!!");
+            alert(error);
+        });
+    };
 
     return (
         <div className="postBox center-1">
@@ -89,12 +104,15 @@ const Post = ({posts, rawr}) => {
             ></textarea>
             <p></p>
             <button className="btn btn-secondary" onClick={addComment}>
+            Update
+            </button>
+            <button className="btn btn-secondary" onClick={getComments1}>
             Comment
             </button>
             <p></p>
             {
                 hidden ? <button className="btn btn-secondary" onClick={getComments}>
-                View Comments/Update
+                View Comments
                 </button> : <button className="btn btn-secondary" onClick={getComments}>
                 Hide Comments
                 </button>
