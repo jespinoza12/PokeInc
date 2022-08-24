@@ -18,7 +18,7 @@ const Navbar = (setLoginUser, picture, userId) => {
           <button class="nav-link color-me btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/home")}>Home</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/collection")}>All Cards</button>
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allDecks")}>All Deck</button>
-          <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allForums")}>All Cards</button>       
+          <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allForums")}>All Forums</button>       
           <button class="btn btn-secondary btn" onClick={()=>history.push(process.env.PUBLIC_URL + "/allUsers")}>Users</button>
         </ul>
         <ul class="navbar-nav center">
