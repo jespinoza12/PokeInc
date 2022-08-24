@@ -132,7 +132,7 @@ const Post = ({posts, rawr}) => {
             <div className="forumBox center-1 " >
             <h1>Comments</h1>
             {
-                hidden ? "" : <Comments comments={commentList}  />
+                hidden ? "" : <Comments comments={commentList} getComments={getComments} />
             }
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from "axios"
 
-const Comment = ({comment}) => {
+const Comment = ({comment,getComment }) => {
     console.log(comment)
     var likes = comment.likes
     var dislikes = comment.dislikes
@@ -19,6 +19,7 @@ const Comment = ({comment}) => {
                 // alert(res.data)
                 console.log("Disliked")
             })
+        getComment()
 
     }
 
@@ -30,6 +31,7 @@ const Comment = ({comment}) => {
                 console.log("liked")
 
             })
+        getComment()
     }
 
 
