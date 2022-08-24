@@ -28,7 +28,7 @@ const Post = ({posts, rawr}) => {
             console.log(e);
         }
     }, [posts.deck]);
-    
+
     useEffect(() => {
         getComments1()
     }, [])
@@ -39,6 +39,7 @@ const Post = ({posts, rawr}) => {
         ...user,
         [name]: value,
         });
+        localStorage.setItem("post", posts._id);
         console.log(user);
     };
 
