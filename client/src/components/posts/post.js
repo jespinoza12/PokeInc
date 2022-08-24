@@ -119,15 +119,8 @@ const Post = ({posts, rawr}) => {
             ></textarea>
             <p></p>
             {
-                check ? <button className="btn btn-secondary" onClick={addComment}>Comment</button>: <p></p>
+                check ? <button className="btn btn-secondary" onClick={addComment}>Comment</button>: <button className="btn btn-secondary" onClick={update}>Update</button>
             }
-            <button className="btn btn-secondary" onClick={addComment}>
-            Comment
-            </button>
-            <button className="btn btn-secondary" onClick={update}>
-            Update
-            </button>
-            <p></p>
             {
                 hidden ? <button className="btn btn-secondary" onClick={getComments}>
                 View Comments
