@@ -61,7 +61,14 @@ function App() {
   const [clickedDeck, setClickedDeck] = useState([])
   const [clickedForum, setClickForum] = useState([])
   const [isLoading, setLoading] = useState(false);
-  const [Deck, setDeck1] = useState({});
+  const [Deck, setDeck1] = useState({
+    name: "",
+    userId: localStorage.getItem("user"),
+    username: localStorage.getItem("username"),
+    cards: [],
+    standard: "",
+    description: "",
+    cardNum: ""});
   const [posts, setPosts] = useState([])
   const [usersPosts, setUPosts] = useState([])
   const [myPosts, setMyPosts] = useState([])
@@ -197,6 +204,7 @@ function App() {
   }, [pageNum]);
   useEffect(() => {
     console.log(`Standard: ${deckStandard}`)
+
   }, [deckStandard]);
   useEffect(() => {
     if (editCheck === false){
