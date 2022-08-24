@@ -15,8 +15,8 @@ const Profile = ({setLoginUser, user}) => {
         name: user.name,
         username: user.username,
         email: user.email,
-        password: user.password,
-        reEnterPassword: user.password,
+        password: "",
+        reEnterPassword: "",
         picture: user.picture
     })
 
