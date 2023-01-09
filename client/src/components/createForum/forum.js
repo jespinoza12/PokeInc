@@ -48,7 +48,7 @@ const Forum = ({decks, rawr, sdeck}) => {
     const createForum = () => {
         const { name, content } = user
         if( name && content){
-            axios.post("http://localhost:9002/backend/createForum", user)
+            axios.post("https://poke-inc.herokuapp.com/backend/createForum", user)
             .then( res => {
                 // alert(res.data.message)
                 setMessage(res.data.message)

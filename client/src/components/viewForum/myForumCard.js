@@ -23,7 +23,7 @@ const MyForumCard = ({forum, rawr}) => {
     })
     const {forumId} = forums
     if (forumId){
-      axios.post("http://localhost:9002/backend/deleteForum", forums)
+      axios.post("https://poke-inc.herokuapp.com/backend/deleteForum", forums)
       window.location.reload()
     }else{
       console.log("Oops")

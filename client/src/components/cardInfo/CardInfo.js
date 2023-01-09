@@ -25,7 +25,7 @@ const CardInfo = ({ card, picture, userCards }) => {
     const addToCollection = () => {
         const { card, id } = collection
         if( id && card){
-            axios.post("http://localhost:9002/backend/updateCollection", collection)
+            axios.post("https://poke-inc.herokuapp.com/backend/updateCollection", collection)
             .then( res => {
                alert(res.data)
             })

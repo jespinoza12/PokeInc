@@ -30,7 +30,7 @@ const Register = () => {
     const register = () => {
         const { name, email,username, password, reEnterPassword } = user
         if( name && email && username && password && (password === reEnterPassword)){
-            axios.post("http://localhost:9002/backend/register", user)
+            axios.post("https://poke-inc.herokuapp.com/backend/register", user)
             .then( res => {
                 setHidden(false)
                 setMessage(res.data.message)

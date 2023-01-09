@@ -40,7 +40,7 @@
     const addComment = () => {
         const { comment, fid } = user;
         if (comment.length <= 280 && fid) {
-        axios.post("http://localhost:9002/backend/addC", user).then((res) => {
+        axios.post("https://poke-inc.herokuapp.com/backend/addC", user).then((res) => {
             alert(res.data.message);
             localStorage.setItem("forum", forum._id);
         });
@@ -51,7 +51,7 @@
 
     const getComments = () => {
         axios
-        .get("http://localhost:9002/backend/allC")
+        .get("https://poke-inc.herokuapp.com/backend/allC")
         .then((response) => {
             var tempDecks = response.data.filter((comment) => {
             return comment.fid === localStorage.getItem("forum");

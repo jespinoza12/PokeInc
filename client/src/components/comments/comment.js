@@ -13,7 +13,7 @@ const Comment = ({comment, getComment}) => {
 
     const dislike = () => {
         dislikes += 1
-        axios.post("http://localhost:9002/backend/dislike", user)
+        axios.post("https://poke-inc.herokuapp.com/backend/dislike", user)
             .then(res => {
                 // alert(res.data)
                 console.log("Disliked")
@@ -24,7 +24,7 @@ const Comment = ({comment, getComment}) => {
 
     const like = () => {
         likes += 1
-        axios.post("http://localhost:9002/backend/like", user)
+        axios.post("https://poke-inc.herokuapp.com/backend/like", user)
             .then(res => {
                 // alert(res.data)
                 console.log("liked")

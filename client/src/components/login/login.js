@@ -24,7 +24,7 @@ const Login = ({ setLoginUser, LoggedIn, rawr}) => {
     }
 
     const login = () => {
-        axios.post("http://localhost:9002/backend/login", user)
+        axios.post("https://poke-inc.herokuapp.com/backend/login", user)
         .then(res => {
             setLoginUser(res.data.user)
             setMessage(res.data.message)

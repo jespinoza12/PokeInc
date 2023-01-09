@@ -33,7 +33,7 @@ const Profile = ({setLoginUser, user}) => {
     const editUser = () => {
         const {id, name, email, username, password, reEnterPassword, picture, description} = User
         if(picture && id && name && email && username && password && description && (password === reEnterPassword)){
-            axios.post("http://localhost:9002/backend/edit", User)
+            axios.post("https://poke-inc.herokuapp.com/backend/edit", User)
             .then( res => {
                 // alert(res.data)
                 setMessage(res.data)
