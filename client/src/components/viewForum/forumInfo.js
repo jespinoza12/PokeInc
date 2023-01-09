@@ -5,6 +5,7 @@
     import axios from "axios";
 
     const ForumInfo = ({ forum, rawr, comments }) => {
+    const [check, setCheck] = useState(false)
     const [commentList, setComments] = useState([]);
     const [deck, setDeck] = useState(false);
     const [user, setUser] = useState({
@@ -34,24 +35,23 @@
         ...user,
         [name]: value,
         });
-        console.log(user);
     };
 
     const addComment = () => {
         const { comment, fid } = user;
-        if (comment && fid) {
-        axios.post("https://poke-inc.herokuapp.com/backend/addC", user).then((res) => {
+        if (comment.length <= 280 && fid) {
+        axios.post("http://localhost:9002/backend/addC", user).then((res) => {
             alert(res.data.message);
             localStorage.setItem("forum", forum._id);
         });
         } else {
-        alert("invlid input");
+            alert("Must only have up to 280 characters");
         }
     };
 
     const getComments = () => {
         axios
-        .get("https://poke-inc.herokuapp.com/backend/allC")
+        .get("http://localhost:9002/backend/allC")
         .then((response) => {
             var tempDecks = response.data.filter((comment) => {
             return comment.fid === localStorage.getItem("forum");
@@ -91,7 +91,7 @@
             View Comments/Update
             </button>
             <div className="forumBox center-1">
-            <Comments comments={commentList} />
+            <Comments comments={commentList} getComments={getComments} />
             </div>
         </div>
         </div>

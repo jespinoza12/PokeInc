@@ -8,6 +8,7 @@ import Forum from "./components/createForum/forum"
 import Login from "./components/login/login"
 import Register from "./components/register/register"
 import Cards from "./components/Cards/Cards"
+import MyCards from './components/Cards/myCards';
 import DeckInfo from './components/DeckInfo/deckInfo';
 import CardInfo from "./components/cardInfo/CardInfo"
 import CreateDeck from "./components/deckCreation/Deck"
@@ -26,6 +27,7 @@ import CreatePost from './components/posts/createPost';
 import PostList from './components/posts/postList';
 function App() {
   //State Variable
+  const [userCards, setUserCards] = useState([])
   const [users, setUsers] = useState([])
   const [fusers, setfUsers] = useState([])
   const [editCheck, setEditCheck] = useState(false)
@@ -46,7 +48,7 @@ function App() {
   const [deckFlavor, setDeckDescription] = useState("")
   const [picture, setPicture] = useState("")
   const [mydecks, setMyDecks] = useState([])
-  const [deckStandard, setDeckStandard] = useState("")
+  const [deckStandard, setDeckStandard] = useState("standard")
   const [decks, setDecks] = useState([])
   const [cards, setCards] = useState([])
   const [num, setNum] = useState(0)
@@ -66,7 +68,7 @@ function App() {
     userId: localStorage.getItem("user"),
     username: localStorage.getItem("username"),
     cards: [],
-    standard: "",
+    standard: "standard",
     description: "",
     cardNum: ""});
   const [posts, setPosts] = useState([])
@@ -86,7 +88,6 @@ function App() {
     } else if (filter === "Trainer") {
       getAllTrainer()
     } else {
-      updateDeck()
       getClickedUserPost()
       getPosts()
       getAllUsers()
@@ -99,6 +100,8 @@ function App() {
       getFilteredCards()
       getCardsByType()
     }
+    getMyCards()
+    updateDeck()
     setEditCheck(false)
     getPosts()
     getComments()
@@ -129,6 +132,8 @@ function App() {
       setPageNum(decreasedPageNum)
     }
   }
+
+
   //Post Filter
   useEffect(() => {
     console.log(`Post Filter: ${[postNameFilter]}`)
@@ -142,7 +147,6 @@ function App() {
       setPageNum(1)
       setFiltered(true);
       getFilteredCards();
-      console.log(cards)
     }
     //eslint-disable-next-line
   }, [postNameFilter]);
@@ -163,7 +167,6 @@ function App() {
       setPageNum(1)
       setFiltered(true);
       getFilteredCards();
-      console.log(cards)
     }
     //eslint-disable-next-line
   }, [nameFilter]);
@@ -180,7 +183,6 @@ function App() {
       getCardsByType();
       setPageNum(1)
       setFiltered(true);
-      console.log(cards)
     }
     //eslint-disable-next-line
   }, [typeFilter]);
@@ -220,7 +222,6 @@ function App() {
       .then(data => {
         setLoading(false)
         setCards(data.data)
-        console.log(data.data)
       })
   }
   //Gets Filtered Cards
@@ -230,7 +231,6 @@ function App() {
       .then(result => {
         setFilteredCards(result.data)
         setLoading(false)
-        console.log(result.data)
 
       })
   }
@@ -239,7 +239,6 @@ function App() {
     setLoading(true)
     pokemon.card.where({ q: "types:" + typeFilter.toLowerCase(), pageSize: 50, page: pageNum })
       .then(result => {
-        console.log(result.data)
         setLoading(false)
         setFilteredCards(result.data)
       })
@@ -251,7 +250,6 @@ function App() {
 
     pokemon.card.where({ q: "supertype:Pokémon", pageSize: 50, page: pageNum })
       .then(result => {
-        console.log(result.data)
         setLoading(false)
         setFilteredCards(result.data)
         setFiltered(true);
@@ -265,7 +263,6 @@ function App() {
 
     pokemon.card.where({ q: "supertype:Energy", pageSize: 50, page: pageNum })
       .then(result => {
-        console.log(result.data)
         setLoading(false)
         setFilteredCards(result.data)
         setFiltered(true);
@@ -278,7 +275,6 @@ function App() {
     setFilter("Trainer")
     pokemon.card.where({ q: "supertype:Trainer", pageSize: 50, page: pageNum })
       .then(result => {
-        console.log(result.data)
         setLoading(false)
         setFilteredCards(result.data)
         setFiltered(true);
@@ -301,7 +297,6 @@ function App() {
     } else {
       setI(i + 1)
       setDeck(current => [...current, { _id: i, card }]);
-      console.log(deck)
       setCanCreate(false)
       setHidden(false)
       setMessage("Card Added")
@@ -325,14 +320,12 @@ function App() {
       setVarient("danger")
       setMessage("Card Deleted")
       setNum(num - 1)
-      console.log(deck)
     }
   }
   //Creates Deck
   const createDeck = () => {
-    console.log(Deck)
     if (canCreate === true) {
-      axios.post("https://poke-inc.herokuapp.com/backend/createDeck", Deck)
+      axios.post("http://localhost:9002/backend/createDeck", Deck)
         .then(res => {
           setMessage(res.data.message)
           setHidden(false)
@@ -344,9 +337,8 @@ function App() {
     }
   }
   const editDeck = () => {
-    console.log(Deck)
     if (canCreate === true) {
-      axios.post("https://poke-inc.herokuapp.com/backend/editDeck", Deck)
+      axios.post("http://localhost:9002/backend/editDeck", Deck)
         .then(res => {
           setMessage(res.data.message)
           setHidden(false)
@@ -373,7 +365,6 @@ function App() {
       description: deckFlavor,
       cardNum: num
     })
-    console.log(Deck)
     setCanCreate(true);
     setMessage("Deck Updated")
     setVarient("success")
@@ -381,10 +372,9 @@ function App() {
   }
   //Get all Decks
   const getAllDecks = () => {
-    axios.get('https://poke-inc.herokuapp.com/backend/allDecks')
+    axios.get('http://localhost:9002/backend/allDecks')
       .then((response) => {
         setDecks(response.data)
-        console.log(decks)
         console.log('Data has been received!!');
       })
       .catch((error) => {
@@ -394,13 +384,12 @@ function App() {
   }
   //Gets all decks and filters for decks connected to users id
   const getMyDecks = () => {
-    axios.get('https://poke-inc.herokuapp.com/backend/allDecks')
+    axios.get('http://localhost:9002/backend/allDecks')
       .then((response) => {
         var tempDecks = response.data.filter((deck) => {
           return deck.userId === localStorage.getItem('user')
         })
         setMyDecks(tempDecks)
-        console.log(mydecks)
         console.log('Data has been received!!');
       })
       .catch((error) => {
@@ -412,7 +401,7 @@ function App() {
   const clearDeck = () => {
     setDeck([])
     setDeckName("")
-    setDeckStandard("")
+    setDeckStandard("standard")
     setNameFilter("")
     setFilter("")
     setTypeFilter("")
@@ -423,10 +412,9 @@ function App() {
   }
   const getForums = () => {
     setLoading(true)
-    axios.get('https://poke-inc.herokuapp.com/backend/allForums')
+    axios.get('http://localhost:9002/backend/allForums')
       .then((response) => {
         setForums(response.data)
-        console.log(forums)
         console.log('Data has been received!!');
         setLoading(false)
       })
@@ -442,14 +430,13 @@ function App() {
   const getComments = () => {
     setLoading(true)
 
-    axios.get('https://poke-inc.herokuapp.com/backend/allC')
+    axios.get('http://localhost:9002/backend/allC')
       .then((response) => {
         var tempDecks = response.data.filter((comment) => {
           return comment.fid === localStorage.getItem('forum')
         })
         setComments(tempDecks)
         console.log('Data has been received!!');
-        console.log(comments);
         setLoading(false)
       })
       .catch((error) => {
@@ -462,14 +449,13 @@ function App() {
   const getMyForums = () => {
     setLoading(true)
 
-    axios.get('https://poke-inc.herokuapp.com/backend/allForums')
+    axios.get('http://localhost:9002/backend/allForums')
       .then((response) => {
         var tempDecks = response.data.filter((forum) => {
           return forum.authorId === localStorage.getItem('user')
         })
         setMyForums(tempDecks)
         console.log('Data has been received!!');
-        console.log(myforums);
         setLoading(false)
       })
       .catch((error) => {
@@ -506,14 +492,13 @@ function App() {
     }
   }
   const getPosts = () => {
-    axios.get('https://poke-inc.herokuapp.com/backend/allPosts')
+    axios.get('http://localhost:9002/backend/allPosts')
       .then((response) => {
         setPosts(response.data)
         var tempPosts = response.data.filter((post) => {
           return post.authorId === localStorage.getItem('user')
         })
         setMyPosts(tempPosts)
-        console.log(posts)
         console.log('Data has been received!!');
       })
       .catch((error) => {
@@ -522,10 +507,9 @@ function App() {
       });
   }
   const getAllUsers = () => {
-    axios.get('https://poke-inc.herokuapp.com/backend/allUsers')
+    axios.get('http://localhost:9002/backend/allUsers')
       .then((response) => {
         setUsers(response.data)
-        console.log(response.data)
         console.log('Data has been received!!');
       })
       .catch((error) => {
@@ -533,14 +517,28 @@ function App() {
         console.log('Error retrieving data!!!');
       });
   }
+
+  const getMyCards = () => {
+    axios.get('http://localhost:9002/backend/allUsers')
+      .then((response) => {
+        var tempPosts = response.data.filter((user) => {
+          return user._id === localStorage.getItem('user')
+        })
+        setUserCards(tempPosts)
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('Error retrieving data!!!');
+      });
+  }
+  
   const filterUsers = () => {
-    axios.get('https://poke-inc.herokuapp.com/backend/allUsers')
+    axios.get('http://localhost:9002/backend/allUsers')
       .then((response) => {
         var tempUsers = response.data.filter((user) => {
           return user.username.toLowerCase().includes(userFilter.toLowerCase())
         })
         setfUsers(tempUsers)
-        console.log(tempUsers)
         console.log('Data has been received!!');
       })
       .catch((error) => {
@@ -550,13 +548,12 @@ function App() {
   }
   const getClickedUserPost = () => {
     setLoading(true)
-    axios.get('https://poke-inc.herokuapp.com/backend/allPosts')
+    axios.get('http://localhost:9002/backend/allPosts')
       .then((response) => {
         var tempPosts = response.data.filter((post) => {
           return post.authorId === clickedUser._id
         })
         setUPosts(tempPosts)
-        console.log(tempPosts)
         console.log('Data has been received!!');
         setLoading(false)
       })
@@ -575,248 +572,105 @@ function App() {
   }
   
   
-  return (
-    <div className="App">
-      <Router>
-        <Switch>
-          <Route exact path={process.env.PUBLIC_URL + "/"}>
-            {
-              user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
-                : <Login setLoginUser={setLoginUser} />
-            }
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/login"}>
-            <Login setLoginUser={setLoginUser} rawr={getForums} />
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/register"}>
-            <Register />
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/home"}>
-            {
-              <div>
+  
+  if (localStorage.getItem('loggedIn') === null){
+    return (
+      <div>
+        <Router>
+            <Switch>
+              <Route exact path={process.env.PUBLIC_URL + "/"}>
                 {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts={posts} rawr={getDeck} />
+                  user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
+                    : <Login setLoginUser={setLoginUser} />
                 }
-              </div>
-            }
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/collection"}>
-            <div className='pokeFont'>
-              <h1 className='center'>Welcome to the Pokemon Collection</h1>
-              <Navbar user={picture} userId={userId1} />
-              <h2 className='center'>Filters</h2>
-              <div className='filters center'>
-                <div className='center'>
-                  <label>Name: </label> <input type='text' placeholder='name filter'
-                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                  <p> </p>
-                  <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
-                    value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                  <div class="pagination center mt-2">
-                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
-                    <h3 className='center '>&nbsp; Page: <input className='inputSize' type='text' placeholder=''
-                    value={pageNum} onChange={(e) => setPageNum(e.target.value)} /> &nbsp; </h3>
-                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
-                  </div>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
-                  </div>
+              </Route>
+              <Route exact path={process.env.PUBLIC_URL + "/login"}>
+                <Login setLoginUser={setLoginUser} rawr={getForums} />
+              </Route>
+              <Route exact path={process.env.PUBLIC_URL + "/register"}>
+                <Register />
+              </Route>
+            </Switch>
+        </Router>
+      </div>
+    )
+  }else {
+    return (
+      <div className="App">
+        <Router>
+          <Switch>
+            <Route exact path={process.env.PUBLIC_URL + "/"}>
+              {
+                user && user._id ? <Homepage setLoginUser={setLoginUser} user={user} userId={userId1} posts={posts} rawr={getDeck} />
+                  : <Login setLoginUser={setLoginUser} />
+              }
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/login"}>
+              <Login setLoginUser={setLoginUser} rawr={getForums} />
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/register"}>
+              <Register />
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/home"}>
+                <div>
+                  {
+                    isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Homepage setLoginUser={setLoginUser} picture={picture} userId={userId1} posts={posts} rawr={getDeck} />
+                  }
+                </div> 
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/myCollection"}>
+              <div className='pokeFont'>
+                <Navbar user={picture} userId={userId1} />
+                <div>
+                  <h1 className='center'>Your Cards</h1>
+                  {
+                    isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                      filtered ? <MyCards setLoginUser={setLoginUser} card={userCards} rawr={getCard} />
+                        : <MyCards setLoginUser={setLoginUser} card={userCards} rawr={getCard}/>
+                  }
                 </div>
               </div>
-              <div>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                    filtered ? <Cards setLoginUser={setLoginUser} card={filteredCards} rawr={getCard} />
-                      : <Cards setLoginUser={setLoginUser} card={cards} rawr={getCard} />
-                }
-              </div>
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/profile"}>
-            {
-              user && user._id ? <Profile user={user} />
-                : <Login setLoginUser={setLoginUser} />
-            }
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/cardInfo"}>
-            <CardInfo card={clickedCard} picture={picture} userId={userId1} />
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/createDeck"}>
-            <div className='pokeFont'>
-              <Navbar picture={picture} userId={userId1} />
-              <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
-                {message}
-              </Alert>
-              <h1 className='center'>Create A Deck</h1>
-              <div className='filters center'>
-                <p></p>
-                <p>Number of cards {num}/60</p>
-                <p>Note: Update Before Creation</p>
-                <div className='center'>
-                  <label className='center'>&nbsp; Standard: 
-                    <select className='.custom-select' value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
-                      <option>Standard</option>
-                      <option>Expanded</option>
-                      <option>Legacy</option>
-                      <option>Unlimited</option>
-                    </select>
-                  </label>
-                  <label className='center'>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
-                  <p></p>
-                  <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
-                    value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                  <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
-                    value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
-                  <p></p>
-                  <p className='center'>Deck Description</p>
-                  <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
-                  <p></p>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
-                    <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
-                  </div>
-                  <p></p>
-                  <p className='center'>
-                    <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
-                    <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
-                    <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Create Deck</button>
-                  </p>
-                  <div class="pagination center mt-2">
-                    <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
-                    <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
-                    <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
-                  </div>
-                  <button onClick={changeCards} className="btn-sm btn-dark">View/Hide Deck</button>
-                </div>
-              </div>
-              <div>
-                {
-                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                    filtered ? <CreateDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
-                      : <CreateDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
-                }
-              </div>
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/allDecks"}>
-            <div className='pokeFont'>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/profile"}>
               {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                  <div>
-                    <h1 className='center'>All Decks</h1>
-                    <Navbar picture={picture} userId={userId1} />
-                    <DeckView decks={decks} rawr={getDeck} />
-                  </div>
+                user && user._id ? <Profile user={user} />
+                  : <Login setLoginUser={setLoginUser} />
               }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + '/myDecks'}>
-            <div className='pokeFont'>
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                  <div>
-                    <h1 className='center'>My Decks</h1>
-                    <Navbar picture={picture} userId={userId1} />
-                    <DeckView1 decks={mydecks} rawr={getDeck} rawr2={updateDeck1} edit = {setEditCheck}/>
-                  </div>
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/deckInfo"}>
-            <div className='pokeFont'>
-              <h1 className='center'>Deck Name: {clickedDeck.name}</h1>
-              <Navbar picture={picture} userId={userId1} />
-              <h1 className='center'>Created By: {clickedDeck.username}</h1>
-              <p className='center'>Description: {clickedDeck.description}</p>
-              <DeckInfo deck={clickedDeck} />
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/createForum"}>
-            <div className='pokeFont'>
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                  <div>
-                    <Forum decks={mydecks} rawr={getDeck} sdeck={clickedDeck} />
-                  </div>
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/forumInfo"}>
-            <div className='pokeFont'>
-              <Navbar />
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <ForumInfo forum={clickedForum} rawr={getDeck} comments={comments} />
-              }
-
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/allForums"}>
-            <div className='pokeFont'>
-              <Navbar />
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={forums} rawr={setForum} myforum={false} />
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/myForums"}>
-            <div className='pokeFont'>
-              <Navbar />
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={myforums} rawr={setForum} myforum={true} />
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL +"/createPost"}>
-            <div className='pokeFont'>
-              {
-                isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                  <div>
-                    <CreatePost decks={decks} rawr={getDeck} sdeck={clickedDeck} />
-                  </div>
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/myPage"}>
-            <div className='pokeFont'>
-              <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
-              <Navbar />
-              <PostList posts={myPosts} rawr = {getDeck}/>
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/editDeck"}>
-            <div className='pokeFont'>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/cardInfo"}>
+              <CardInfo card={clickedCard} picture={picture} userId={userId1} />
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/createDeck"}>
+              <div className='pokeFont'>
                 <Navbar picture={picture} userId={userId1} />
                 <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
                   {message}
                 </Alert>
-                <h1 className='center'>Edit {clickedDeck.name}</h1>
+                <h1 className='center'>Create A Deck</h1>
                 <div className='filters center'>
                   <p></p>
                   <p>Number of cards {num}/60</p>
                   <p>Note: Update Before Creation</p>
                   <div className='center'>
-                  <label className='center'>&nbsp; Standard: 
-                    <select value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
-                      <option>Standard</option>
-                      <option>Expanded</option>
-                      <option>Legacy</option>
-                      <option>Unlimited</option>
-                    </select>
-                  </label>                    
-                  <label className='center'  hidden={hidden}>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
+                    <label className='center'>&nbsp; Standard: 
+                      <select className='.custom-select' value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
+                        <option>Standard</option>
+                        <option>Expanded</option>
+                        <option>Legacy</option>
+                        <option>Unlimited</option>
+                      </select>
+                    </label>
+                    <label className='center'>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
                     <p></p>
-                    <label  hidden={hidden}>&nbsp; Name: </label> <input  hidden={hidden} type='text' placeholder='name filter'
+                    <label>&nbsp; Name: </label> <input type='text' placeholder='name filter'
                       value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
-                    <label  hidden={hidden} className='m-2'>Type: </label> <input type='text'  hidden={hidden} placeholder='type filter'
+                    <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
                       value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
                     <p></p>
                     <p className='center'>Deck Description</p>
                     <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
                     <p></p>
-                    <div class="btn-group" role="group" aria-label="Basic example"  hidden={hidden}>
+                    <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
                       <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
                       <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
@@ -825,50 +679,244 @@ function App() {
                     <p className='center'>
                       <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
                       <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
-                      <button type="button" class="btn btn-secondary m-2" onClick={editDeck}>Finish Editing</button>
+                      <button type="button" class="btn btn-secondary m-2" onClick={createDeck}>Create Deck</button>
                     </p>
-                    <div class="pagination center mt-2" hidden={hidden}>
-                      <button onClick={decreasePageNum} className="btn-sm btn-dark">Previous Page</button>
+                    <div class="pagination center mt-2">
+                      <button onClick={decreasePageNum} className="btn btn-sm btn-dark">Previous Page</button>
                       <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
-                      <button onClick={increasePageNum} className="btn-sm btn-dark">Next Page</button>
+                      <button onClick={increasePageNum} className="btn btn-sm btn-dark">Next Page</button>
                     </div>
-                    <button onClick={changeCards} className="btn-sm btn-dark">View/Hide Deck</button>
+                    <button onClick={changeCards} className="btn btn-sm btn-dark">View/Hide Deck</button>
                   </div>
                 </div>
                 <div>
                   {
                     isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
-                      filtered ? <EditDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
-                        : <EditDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
+                      filtered ? <CreateDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
+                        : <CreateDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
                   }
                 </div>
               </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/allUsers" }>
-            <div className='pokeFont'>
-              <Navbar/>
-              <input className='center-1' placeholder='search by username' name="userFilter" onChange={(e) => setUserFilter(e.target.value)} ></input>
-              {
-                filtered ? <UserList users={fusers} rawr = {getUser}  rawr2 = {getClickedUserPost}/> : <UserList users={users} rawr = {getUser} rawr2 = {getClickedUserPost}/>
-              }
-            </div>
-          </Route>
-          <Route exact path={process.env.PUBLIC_URL + "/usersPage"}>
-            <div className='pokeFont'>
-              <h1 className='center'>Welcome, to {clickedUser.username}'s page</h1>
-              <Navbar />
-              {
-                isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <PostList posts={usersPosts} rawr = {getDeck} />
-              }
-         
-            </div>
-          </Route>
-        </Switch>
-      </Router>
-      <div class="footer">
-        <p>@Copyright Julian Enrique Espinoza 2022</p>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/allDecks"}>
+              <div className='pokeFont'>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                    <div>
+                      <Navbar picture={picture} userId={userId1} />
+                      <DeckView decks={decks} rawr={getDeck} />
+                    </div>
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + '/myDecks'}>
+              <div className='pokeFont'>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                    <div>
+                      <Navbar picture={picture} userId={userId1} />
+                      <DeckView1 decks={mydecks} rawr={getDeck} rawr2={updateDeck1} edit = {setEditCheck}/>
+                    </div>
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/deckInfo"}>
+              <div className='pokeFont'>
+                <h1 className='center'>Deck Name: {clickedDeck.name}</h1>
+                <Navbar picture={picture} userId={userId1} />
+                <h1 className='center'>Created By: {clickedDeck.username}</h1>
+                <p className='center'>Description: {clickedDeck.description}</p>
+                <DeckInfo deck={clickedDeck} />
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/createForum"}>
+              <div className='pokeFont'>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                    <div>
+                      <Forum decks={mydecks} rawr={getDeck} sdeck={clickedDeck} />
+                    </div>
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/forumInfo"}>
+              <div className='pokeFont'>
+                <Navbar />
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <ForumInfo forum={clickedForum} rawr={getDeck} comments={comments} />
+                }
+
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/allForums"}>
+              <div className='pokeFont'>
+                <Navbar />
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={forums} rawr={setForum} myforum={false} />
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/myForums"}>
+              <div className='pokeFont'>
+                <Navbar />
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> : <Forums forums={myforums} rawr={setForum} myforum={true} />
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL +"/createPost"}>
+              <div className='pokeFont'>
+                {
+                  isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                    <div>
+                      <CreatePost decks={decks} rawr={getDeck} sdeck={clickedDeck} />
+                    </div>
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/myPage"}>
+              <div className='pokeFont'>
+                <h1 className='center'>Welcome, {localStorage.getItem('username')}</h1>
+                <Navbar />
+                <div class="text-center mt-3 bg-dark text-light ">
+                      <div class="text-center">
+                          <img src={localStorage.getItem("picture")} width="100" class="rounded-circle"/>
+                      </div>
+                      <h5 class="mt-2 mb-0">{localStorage.getItem("username")}</h5>    
+                      <div class="px-4 mt-1">
+                          <p class="fonts">{localStorage.getItem("description")}</p>
+                      </div>
+                  </div>
+                <PostList posts={myPosts} rawr = {getDeck}/>
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/editDeck"}>
+              <div className='pokeFont'>
+                  <Navbar picture={picture} userId={userId1} />
+                  <Alert key={varient} variant={varient} hidden={hidden} className="center fixed-bottom width " onClose={() => setHidden(true)} dismissible>
+                    {message}
+                  </Alert>
+                  <h1 className='center'>Edit {clickedDeck.name}</h1>
+                  <div className='filters center'>
+                    <p></p>
+                    <p>Number of cards {num}/60</p>
+                    <p>Note: Update Before Creation</p>
+                    <div className='center'>
+                    <label className='center'>&nbsp; Standard: 
+                      <select value={deckStandard} onChange={(e) => setDeckStandard(e.target.value)} >
+                        <option>Standard</option>
+                        <option>Expanded</option>
+                        <option>Legacy</option>
+                        <option>Unlimited</option>
+                      </select>
+                    </label>                    
+                    <label className='center'>&nbsp; Deck Name: <input placeholder='Deck name' value={deckname} onChange={(e) => setDeckName(e.target.value)}></input></label>
+                      <p></p>
+                      <label  hidden={check}>&nbsp; Name: </label> <input  hidden={check} type='text' placeholder='name filter'
+                        value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                      <label  hidden={check} className='m-2'>Type: </label> <input type='text'  hidden={check} placeholder='type filter'
+                        value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                      <p></p>
+                      <p className='center'>Deck Description</p>
+                      <textarea value={deckFlavor} onChange={(e) => setDeckDescription(e.target.value)}></textarea>
+                      <p></p>
+                      <div class="btn-group" role="group" aria-label="Basic example"  hidden={hidden}>
+                        <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                      </div>
+                      <p></p>
+                      <p className='center'>
+                        <button type="button" class="btn btn-secondary m-2" onClick={clearDeck}>Clear Deck</button>
+                        <button type="button" class="btn btn-secondary m-2" onClick={updateDeck}>Update Deck</button>
+                        <button type="button" class="btn btn-secondary m-2" onClick={editDeck}>Finish Editing</button>
+                      </p>
+                      <div class="pagination center mt-2" hidden={hidden}>
+                        <button onClick={decreasePageNum} className="btn btn-sm btn-dark">Previous Page</button>
+                        <h3 className='center'>&nbsp; Page: {pageNum} &nbsp; </h3>
+                        <button onClick={increasePageNum} className="btn btn-sm btn-dark">Next Page</button>
+                      </div>
+                      <button onClick={changeCards} className="btn btn-sm btn-dark">View/Hide Deck</button>
+                    </div>
+                  </div>
+                  <div>
+                    {
+                      isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                        filtered ? <EditDeck setLoginUser={setLoginUser} check={check} card={filteredCards} rawr={addCardToDeck} rawr2={deleteCardFromDeck} user={user} deckname={deckname} deckCards={deck} num={num} />
+                          : <EditDeck setLoginUser={setLoginUser} card={cards} check={check} rawr={addCardToDeck} user={userId1} rawr2={deleteCardFromDeck} deckname={deckname} deckCard={deck} num={num} />
+                    }
+                  </div>
+                </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/allUsers" }>
+              <div className='pokeFont'>
+                <Navbar/>
+                <input className='center-1' placeholder='search by username' name="userFilter" onChange={(e) => setUserFilter(e.target.value)} ></input>
+                {
+                  filtered ? <UserList users={fusers} rawr = {getUser}  rawr2 = {getClickedUserPost}/> : <UserList users={users} rawr = {getUser} rawr2 = {getClickedUserPost}/>
+                }
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/usersPage"}>
+              <div className='pokeFont'>
+                <h1 className='center'>Welcome, to {clickedUser.username}'s page</h1>
+                <Navbar />
+                <div class="text-center mt-3 bg-dark text-light ">
+                      <div class="text-center">
+                          <img src={clickedUser.picture} width="100" class="rounded-circle"/>
+                      </div>
+                      <h5 class="mt-2 mb-0">{clickedUser.username}</h5>    
+                      <div class="px-4 mt-1">
+                          <p class="fonts">{clickedUser.description}</p>
+                      </div>
+                  </div>
+                {
+                  isLoading ?  <img className='pokeBall center-1' src={logo} alt="loading..." /> : <PostList posts={usersPosts} rawr = {getDeck} />
+                }
+          
+              </div>
+            </Route>
+            <Route exact path={process.env.PUBLIC_URL + "/collection" }>
+              <div className='pokeFont'>
+                  <Navbar user={picture} userId={userId1} />
+                  <h2 className='center'>Filters</h2>
+                  <div className='filters center'>
+                    <div className='center'>
+                      <label>Name: </label> <input type='text' placeholder='name filter'
+                        value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+                      <p> </p>
+                      <label className='m-2'>Type: </label> <input type='text' placeholder='type filter'
+                        value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} />
+                      <div class="pagination center mt-2">
+                        <button onClick={decreasePageNum} className="btn btn-sm btn-dark">Previous Page</button>
+                        <h3 className='center '>&nbsp; Page: <input className='inputSize' type='text' placeholder=''
+                        value={pageNum} onChange={(e) => setPageNum(e.target.value)} /> &nbsp; </h3>
+                        <button onClick={increasePageNum} className="btn btn-sm btn-dark">Next Page</button>
+                      </div>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" onClick={getAllPokemon}>Pokemon</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllTrainer}>Trainer</button>
+                        <button type="button" class="btn btn-secondary" onClick={getAllEnergy}>Energy</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {
+                      isLoading ? <img className='pokeBall center-1' src={logo} alt="loading..." /> :
+                        filtered ? <Cards setLoginUser={setLoginUser} card={filteredCards} rawr={getCard} cards={userCards} />
+                          : <Cards setLoginUser={setLoginUser} card={cards} rawr={getCard} cards={userCards.mycollection}  />
+                    }
+                  </div>
+                </div>
+            </Route>
+          </Switch>
+        </Router>
+        <div class="footer">
+          <p>@Copyright Julian Enrique Espinoza 2022</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
+
 export default App;

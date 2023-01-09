@@ -24,6 +24,7 @@ const CreatePost = ({decks, rawr, sdeck}) => {
         deck: [{
             cards: sdeck.cards,
             name: sdeck.name,
+            username: sdeck.username,
             standard: sdeck.standard,
             description: sdeck.description,
             cardNum: sdeck.cardNum,
@@ -38,7 +39,6 @@ const CreatePost = ({decks, rawr, sdeck}) => {
             ...post,
             [name]: value
         })
-        console.log(post)
     }
 
     
@@ -46,7 +46,7 @@ const CreatePost = ({decks, rawr, sdeck}) => {
     const createForum = () => {
         const { caption, hashtags } = post
         if( caption && hashtags){
-            axios.post("https://poke-inc.herokuapp.com/backend/createPost", post)
+            axios.post("http://localhost:9002/backend/createPost", post)
             .then( res => {
                 // alert(res.data.message)
                 setMessage(res.data.message)
@@ -69,6 +69,7 @@ const CreatePost = ({decks, rawr, sdeck}) => {
             deck: [{
             cards: sdeck.cards,
             name: sdeck.name,
+            username: sdeck.username,
             standard: sdeck.standard,
             description: sdeck.description,
             cardNum: sdeck.cardNum,

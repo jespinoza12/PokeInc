@@ -1,9 +1,8 @@
-import React from 'react'
-import Card from "./Card"
+import React, { useEffect, useState } from 'react'
+import Card from "./myCard"
 import "./card.css"
 
-const Cards = ({card, rawr, cards}) => {
-  
+const MyCards = ({card, rawr, cards}) => {
 
 return (
     card.map((card) => (
@@ -14,4 +13,4 @@ return (
     </div>
   ))
   )}
-export default Cards
+export default MyCards

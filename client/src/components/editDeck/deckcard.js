@@ -29,7 +29,7 @@ const Card = ({cards, rawr, num, check, rawr2}) => {
 return (
           <div>
             {
-              check? <img className='btn' onClick={cardHandler2} src={cards.card.images.small || ""} alt={cards.card.name || ""}></img> : <img className='mt-2 btn ' onClick={cardHandler} src={cards.images.small || ""} alt={cards.name}></img>
+              check? <img className='btn' onClick={cardHandler2} src={cards.card?.images.small} alt={cards.card?.name || ""}></img> : <img className='mt-2 btn ' onClick={cardHandler} src={cards.images?.small || ""} alt={cards?.name}></img>
             }
             <p></p>
             {

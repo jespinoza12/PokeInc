@@ -15,6 +15,7 @@ const Navbar = (setLoginUser, picture, userId) => {
   function onClickLogout(e){  
     e.preventDefault();
     history.push(process.env.PUBLIC_URL + "/")
+    localStorage.clear()
     window.location.reload()
   }
 
@@ -58,7 +59,11 @@ const Navbar = (setLoginUser, picture, userId) => {
     history.push(process.env.PUBLIC_URL + "/myForums")
     window.location.reload()
   }
-
+  function onClickMyCollection(e){  
+    e.preventDefault();
+    history.push(process.env.PUBLIC_URL + "/myCollection")
+    window.location.reload()
+  }
   return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark width border sticky-nav">
       <ul class="navbar-nav me-auto btn-group m-3">
@@ -88,6 +93,9 @@ const Navbar = (setLoginUser, picture, userId) => {
             </Dropdown.Item>
             <Dropdown.Item>
               <button class="btn btn-secondary btn" onClick={onClickMyForums}>My Forums</button>
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <button class="btn btn-secondary btn" onClick={onClickMyCollection}>Card Collection</button>
             </Dropdown.Item>
             <NavDropdown.Divider varient="secondary" />
             <Dropdown.Item>

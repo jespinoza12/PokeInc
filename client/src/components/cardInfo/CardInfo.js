@@ -1,11 +1,37 @@
 import React from 'react'
 import logo from "./pokeball.png"
 import "./cardInfo.css"
+import {useState, useEffect} from 'react'
 import Navbar from '../navbar/navbar'
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from 'axios';
 
-const CardInfo = ({ card, picture }) => {
+const CardInfo = ({ card, picture, userCards }) => {
+    
+    const [collection, setCollection] = useState({
+        id: localStorage.getItem('user'),
+        card: card
+    })
 
+    useEffect(() => {
+        setCollection({
+            id: localStorage.getItem('user'),
+            card: card
+        })
+      }, []);
+
+
+
+    const addToCollection = () => {
+        const { card, id } = collection
+        if( id && card){
+            axios.post("http://localhost:9002/backend/updateCollection", collection)
+            .then( res => {
+               alert(res.data)
+            })
+        } else {
+        }
+    }
 
     return (
         <body className='body pokeFont'>
@@ -47,6 +73,7 @@ const CardInfo = ({ card, picture }) => {
                                 </label>
                                 <p></p>
                                 <a class="btn btn-primary" href="/collection">&#8678; Back</a>
+                                <button className='btn btn-secondary' onClick={addToCollection}>Add Card to Collection</button>
                             </p>
                         </p>
                     </div>

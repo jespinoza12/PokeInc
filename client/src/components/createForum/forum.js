@@ -26,6 +26,7 @@ const Forum = ({decks, rawr, sdeck}) => {
         deck: [{
             cards: sdeck.cards,
             name: sdeck.name,
+            username: sdeck.username,
             standard: sdeck.standard,
             description: sdeck.description,
             cardNum: sdeck.cardNum,
@@ -40,7 +41,6 @@ const Forum = ({decks, rawr, sdeck}) => {
             ...user,
             [name]: value
         })
-        console.log(user)
     }
 
     
@@ -48,7 +48,7 @@ const Forum = ({decks, rawr, sdeck}) => {
     const createForum = () => {
         const { name, content } = user
         if( name && content){
-            axios.post("https://poke-inc.herokuapp.com/backend/createForum", user)
+            axios.post("http://localhost:9002/backend/createForum", user)
             .then( res => {
                 // alert(res.data.message)
                 setMessage(res.data.message)
@@ -70,6 +70,7 @@ const Forum = ({decks, rawr, sdeck}) => {
             content: user.content,
             deck: [{
             cards: sdeck.cards,
+            username: sdeck.username,
             name: sdeck.name,
             standard: sdeck.standard,
             description: sdeck.description,

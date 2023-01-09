@@ -17,7 +17,8 @@ const Profile = ({setLoginUser, user}) => {
         email: user.email,
         password: "",
         reEnterPassword: "",
-        picture: user.picture
+        picture: user.picture,
+        description: user.description
     })
 
     const handleChange = e => {
@@ -30,18 +31,20 @@ const Profile = ({setLoginUser, user}) => {
 
 
     const editUser = () => {
-        const {id, name, email, username, password, reEnterPassword, picture} = User
-        if(picture && id && name && email && username && password && (password === reEnterPassword)){
-            axios.post("https://poke-inc.herokuapp.com/backend/edit", User)
+        const {id, name, email, username, password, reEnterPassword, picture, description} = User
+        if(picture && id && name && email && username && password && description && (password === reEnterPassword)){
+            axios.post("http://localhost:9002/backend/edit", User)
             .then( res => {
                 // alert(res.data)
                 setMessage(res.data)
                 setHidden(false)
                 setVarient("success")
+                localStorage.setItem('username', username)
+                localStorage.setItem('description', description)
             })
         } else {
             setVarient("danger")
-            setMessage("Oopsie, that not supposed to happen, try again")
+            setMessage("Please make sure to change your password or re enter your current password")
             setHidden(false)
         }
     }
@@ -69,6 +72,10 @@ const Profile = ({setLoginUser, user}) => {
                         <input type="email" name="email" value={User.email} placeholder={user.email} onChange={handleChange}/>
                         &nbsp;
                     </label>
+                </p>
+                <p className="center">
+                    <p>Description</p>
+                    <textarea type="description" name="description" value={User.description} placeholder={user.description} onChange={handleChange}/>                    
                 </p>
                 <p className="center">
                     <label> Password &nbsp;

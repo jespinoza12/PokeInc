@@ -24,7 +24,7 @@ const Login = ({ setLoginUser, LoggedIn, rawr}) => {
     }
 
     const login = () => {
-        axios.post("https://poke-inc.herokuapp.com/backend/login", user)
+        axios.post("http://localhost:9002/backend/login", user)
         .then(res => {
             setLoginUser(res.data.user)
             setMessage(res.data.message)
@@ -34,6 +34,9 @@ const Login = ({ setLoginUser, LoggedIn, rawr}) => {
                 localStorage.setItem('login', true)
                 localStorage.setItem('username', res.data.user.username)
                 localStorage.setItem('picture', res.data.user.picture)
+                localStorage.setItem('description', res.data.user.description)
+                localStorage.setItem('loggedIn', "true")
+
             }catch (err){
                 console.log(err)
             }

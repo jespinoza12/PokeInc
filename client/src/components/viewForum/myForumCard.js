@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useHistory } from "react-router-dom"
 
 const MyForumCard = ({forum, rawr}) => {
@@ -22,7 +23,7 @@ const MyForumCard = ({forum, rawr}) => {
     })
     const {forumId} = forums
     if (forumId){
-      axios.post("https://poke-inc.herokuapp.com/backend/deleteForum", forums)
+      axios.post("http://localhost:9002/backend/deleteForum", forums)
       window.location.reload()
     }else{
       console.log("Oops")
@@ -31,7 +32,7 @@ const MyForumCard = ({forum, rawr}) => {
 }
 
 return (
-          <div className='bg-dark text-white pokeFont m-2'>
+          <div className='card bg-dark text-white'>
              <div class="card-body">
                 <h4>{forum.name}</h4>
                 <p>Author: {forum.username}</p>

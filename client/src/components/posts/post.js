@@ -39,7 +39,6 @@ const Post = ({posts, rawr}) => {
             likes: user.likes,
             dislikes: user.dislikes,
         });
-        console.log(user)
     }, []);
 
     const update = (e) => {
@@ -52,7 +51,6 @@ const Post = ({posts, rawr}) => {
             dislikes: 0,
         });
         setCheck(true)
-        console.log(user)
     };
 
 
@@ -64,26 +62,25 @@ const Post = ({posts, rawr}) => {
         });
         setCheck(false)
         localStorage.setItem("post", posts._id);
-        console.log(user);
     };
 
     const addComment = () => {
         const { comment, fid } = user;
         localStorage.setItem("post", posts._id);
-        if (comment) {
-        axios.post("https://poke-inc.herokuapp.com/backend/addC", user).then((res) => {
-            alert(res.data.message);
-            localStorage.setItem("post", posts._id);
-        });
+        if (comment.length <= 280) {
+            axios.post("http://localhost:9002/backend/addC", user).then((res) => {
+                alert(res.data.message);
+                localStorage.setItem("post", posts._id);
+            });
         } else {
-            alert("invlid input");
+            alert("Can only have 280 characters");
         }
     };
 
     const getComments = () => {
         localStorage.setItem("post", posts._id);
         axios
-        .get("https://poke-inc.herokuapp.com/backend/allC")
+        .get("http://localhost:9002/backend/allC")
         .then((response) => {
             var tempDecks = response.data.filter((comment) => {
             return comment.fid === localStorage.getItem("post");
@@ -104,7 +101,7 @@ const Post = ({posts, rawr}) => {
     const getComments1 = () => {
         localStorage.setItem("post", posts._id);
         axios
-        .get("https://poke-inc.herokuapp.com/backend/allC")
+        .get("http://localhost:9002/backend/allC")
         .then((response) => {
             var tempDecks = response.data.filter((comment) => {
             return comment.fid === localStorage.getItem("post");
@@ -120,9 +117,9 @@ const Post = ({posts, rawr}) => {
 
 
     return (
-        <div className="postBox center-1">
+        <div className="postBox center-1 text-break">
             <div className="center bg-dark text-light">
-            <h1 className="center">{posts.caption}</h1>
+            <h3 className="center">{posts.caption}</h3>
             <p className="center m-2">{posts.hashtags}</p>
             {deck ? <DeckView decks={posts.deck} rawr={rawr} /> : "No Deck"}
             <p>Posted by: {posts.username}</p>

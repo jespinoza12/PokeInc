@@ -1,10 +1,15 @@
-import express from "express"
-import cors from "cors"
-import mongoose from "mongoose"
-const path = require('path')
-const port = process.env.PORT || 5000
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors')
+const bcrypt = require('bcrypt');
 
 const app = express()
+const port = process.env.PORT || 9002
+const path = require('path')
+const saltRounds = 10;
+
+
+
 //Misc
 app.use(express.static(path.join(__dirname, 'build')))
 
@@ -29,6 +34,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     picture: String,
+    description: String,
+    mycollection: [],
 
 })
 const deckSchema = new mongoose.Schema({
@@ -75,12 +82,17 @@ const postSchema = new mongoose.Schema({
     created: String,
 })
 
+
 //Collections
 const User = new mongoose.model("User", userSchema)
 const Deck = new mongoose.model("Decks", deckSchema)
 const Forum = new mongoose.model("Forum", forumSchema)
 const Comments =  new mongoose.model("Comments", commentSchema)
 const Posts =  new mongoose.model("Post", postSchema)
+
+
+
+
 
 //Posts
 app.get('/backend/allPosts', (req, res) => {
@@ -117,7 +129,6 @@ app.post('/backend/createPost', (req, res) => {
         }
     })
 })
-
 //Comment
 app.post("/backend/like", (req, res) => {
     const {id, likes} = req.body
@@ -171,8 +182,6 @@ app.post('/backend/addC', (req, res) => {
             })
     })
 })
-
-//Edit
 
 
 //Forums
@@ -280,24 +289,26 @@ app.post("/backend/editDeck", (req, res) => {
             res.send("Update Complete")
         }
     })
-        
+    
 });
 //Edit User
 app.post("/backend/edit", (req, res) => {
-    const {id, username, name, email, password, picture} = req.body
+    const {id, username, name, email, password, picture, description} = req.body
     User.findOne({email: email}, (err, user) => {
-        if(user){
-            res.send({message: "Email Already Exists"})
-        }else if (username.length > 12){
+        if (username.length > 12){
             res.send({message: "Username can only be 12 characters"})
         }else {
-            User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: password, email: email, picture: picture }, function (err, result) {
-                if (err) {
-                    res.send(err)
-                } else {
-                    res.send("Update Complete")
-                }
-            })
+            bcrypt.genSalt(saltRounds, function(err, salt) {  
+                bcrypt.hash(password, salt, function(err, hash) {
+                    User.findByIdAndUpdate({ _id: id }, { name: name, username: username, password: hash, email: email, picture: picture, description: description }, function (err, result) {
+                        if (err) {
+                            res.send(err)
+                        } else {
+                            res.send("Update Complete")
+                        }
+                    })
+                });
+              });
         }
     })
 });
@@ -312,18 +323,36 @@ app.get('/backend/allUsers', (req, res) => {
         console.log('error: ', error);
     });
 })
+
+
 //Login & Register
+app.post("/backend/updateCollection", (req, res) => {
+    const {id, card} = req.body
+        User.findByIdAndUpdate({ _id: id }, {$push: {mycollection: card}}, function (err, result) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.send("Card Added")
+            }
+        })
+    }
+);
 app.post("/backend/login", (req, res)=> {
     const { email, password} = req.body
     User.findOne({ email: email}, (err, user) => {
         if(user){
-            if(password === user.password ) {
-                res.send({message: "Login Successfull", user: user})
-            } else {
-                res.send({ message: "Password didn't match"})
-            }
+                bcrypt.compare(password, user.password, function(err, result) {  // Compare
+                  // if passwords match
+                  if (result) {
+                    res.send({message: "Login Successfull", user: user})
+                  }
+                  // if passwords do not match
+                  else {
+                    res.send({ message: "Email or Password Incorrect"})
+                  }
+                });
         } else {
-            res.send({message: "User not registered"})
+            res.send({message: "Please register!!"})
         }
     })
 }) 
@@ -331,29 +360,38 @@ app.post("/backend/register", (req, res)=> {
     const { name, email, password, username} = req.body
     User.findOne({email: email}, (err, user) => {
         if(user){
-            res.send({message: "Email Already Exists"})
+            res.send({message: "A User with this email already Exists"})
         }else if (username.length > 12){
             res.send({message: "Username can only be 12 characters"})
         } else {
-            const user = new User({
-                name,
-                username,
-                email,
-                password,
-                picture: 'https://w7.pngwing.com/pngs/589/83/png-transparent-account-avatar-contact-people-profile-user-basic-icon.png'
-            })
-            user.save(err => {
-                if(err) {
-                    res.send(err)
-                } else {
-                    res.send( { message: "Successfully Registered, Please login now." })
-                }
-            })
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+                bcrypt.hash(password, salt, function(err, hash) {
+                    const user = new User({
+                        name,
+                        username,
+                        email,
+                        password: hash,
+                        picture: 'https://w7.pngwing.com/pngs/589/83/png-transparent-account-avatar-contact-people-profile-user-basic-icon.png',
+                        description:"Welcome to my page",
+                        mycollection: [],
+                    })
+                    user.save(err => {
+                        if(err) {
+                            res.send(err)
+                        } else {
+                            res.send( { message: "Successfully Registered, Please login now." })
+                        }
+                    })
+                });
+              });
         }
     })
-    
 }) 
-//Listining at LocalHost:9002
-app.listen(9002,() => {
-    console.log("BE started at port 9002")
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
+
+app.listen(port, _ => {
+  console.log(`server started on port ${port}`)
 })

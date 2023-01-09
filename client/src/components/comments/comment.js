@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import axios from "axios"
 
 const Comment = ({comment, getComment}) => {
-    console.log(comment)
     var likes = comment.likes
     var dislikes = comment.dislikes
     const [user] = useState({
@@ -14,7 +13,7 @@ const Comment = ({comment, getComment}) => {
 
     const dislike = () => {
         dislikes += 1
-        axios.post("https://poke-inc.herokuapp.com/backend/dislike", user)
+        axios.post("http://localhost:9002/backend/dislike", user)
             .then(res => {
                 // alert(res.data)
                 console.log("Disliked")
@@ -25,7 +24,7 @@ const Comment = ({comment, getComment}) => {
 
     const like = () => {
         likes += 1
-        axios.post("https://poke-inc.herokuapp.com/backend/like", user)
+        axios.post("http://localhost:9002/backend/like", user)
             .then(res => {
                 // alert(res.data)
                 console.log("liked")
@@ -36,10 +35,10 @@ const Comment = ({comment, getComment}) => {
 
 
 return (
-          <div className='bg-dark text-white pokeFont m-2'>
-             <div class="card-body center-1">
+          <div className='bg-dark text-white pokeFont m-2 text-break'>
+             <div class="card-body center-1 text-break">
                 <p>Author: {comment.commenter}</p>
-                <p className='center'>Comment: {comment.comment}</p>
+                <p className='wrap'>Comment: {comment.comment}</p>
                 <button onClick={like}>Like</button>
                 <button onClick={dislike}>Dislike</button>
                 <p>Likes: {likes.toString()} &nbsp;

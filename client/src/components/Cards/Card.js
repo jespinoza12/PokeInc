@@ -7,7 +7,6 @@ const Card = ({cards, rawr}) => {
   function cardHandler(e){  
   e.preventDefault();
   console.log('Login Form Submitted!');
-  console.log(cards);
   rawr(cards);
   history.push(process.env.PUBLIC_URL + "/cardInfo")
 

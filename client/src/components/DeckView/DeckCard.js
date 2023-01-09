@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import { useHistory } from "react-router-dom"
 import axios from 'axios'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./DeckView.css"
 const DeckCard = ({deck, rawr}) => {
   const history = useHistory()
   var random = Math.random();
@@ -40,7 +42,7 @@ const DeckCard = ({deck, rawr}) => {
   }
 
 return (
-          <div className='card bg-dark text-white pokeFont center'>
+          <div className='card bg-dark text-white center cardWidth' >
              <div class="card-body">
                     <h5 class="card-title">{deck.name}</h5>
                     <label>Creator:<p>{deck.username}</p></label>
@@ -54,7 +56,6 @@ return (
                     <div className='btn-group'>
                       <button className='btn btn-secondary' onClick={onClick}>View Deck</button>
                       <button className='btn btn-secondary' onClick={copyDeck}>Copy Deck</button>
-
                     </div>
              </div>
           </div>

@@ -13,7 +13,7 @@ const ForumCard = ({forum, rawr}) => {
   }
 
 return (
-          <div className='bg-dark text-white pokeFont m-2'>
+          <div className='bg-dark text-white card'>
              <div class="card-body">
                 <h4>{forum.name}</h4>
                 <p>Author: {forum.username}</p>
